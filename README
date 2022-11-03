@@ -1,4 +1,4 @@
-## What is Socorro?
+# What is Socorro?
 
 Socorro is a plane-wave density functional theory code for
 solid-state electronic structure calculations.
@@ -14,29 +14,29 @@ tests      simple test problems
 tools      pre- and post-processing tools  
 units      scripts and input for testing Socorro  
 
-## Availability:
+# Availability:
 
 The official home of Socorro and related information can
-be found on https://dft.sandia.gov/. Offical development
-of Socorro occurs on GitLab.
+be found at https://dft.sandia.gov/. Offical development
+of Socorro occurs on GitHub/GitLab.
 
-## License:
+# License:
 
 Socorro is an open-source project distributed under the
 modified Berkeley Software Distribution (BSD) License.
 See doc/LICENSE.md for details.
 
-## Installing:
+# Installing:
 
 Please refer to doc/INSTALL.md for detailed instructions on
 how to install Socorro and the required external libraries.
 
-## Usage and Examples:
+# Usage and Examples:
 
 Please refer to (i) doc/GUIDE.md for a summary of Socorro's
 capababilites and options, and (ii) tests with example input.
 
-## Contributing:
+# Contributing:
 
 Please refer to doc/CONTRIBUTING.md for detailed instructions on
 modifying and extending Socorro with new features and bug fixes.
