@@ -30,3 +30,13 @@ See doc/LICENSE.md for details.
 
 Please refer to doc/INSTALL.md for detailed instructions on
 how to install Socorro and the required external libraries.
+
+## Usage and Examples:
+
+Please refer to (i) doc/GUIDE.md for a summary of Socorro's
+capababilites and options, and (ii) tests with example input.
+
+## Contributing:
+
+Please refer to doc/CONTRIBUTING.md for detailed instructions on
+modifying and extending Socorro with new features and bug fixes.
