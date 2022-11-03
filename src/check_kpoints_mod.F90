@@ -43,7 +43,7 @@
 
       contains
 
-! Public routines
+! *** Public routines
 
       subroutine check_kpoints_()
 !doc$ subroutine check_kpoints()

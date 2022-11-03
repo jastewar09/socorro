@@ -90,5 +90,3 @@ Just type
 and hope for the best.  This will build socorro and 
 also the routine taginfo located in tools/taginfo.
 
-
-

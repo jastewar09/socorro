@@ -1,12 +1,13 @@
 Socorro (13 May 2022)
 
-   Started on 03 06 2022 at 20:44:32
+   Started on 19 08 2022 at 19:02:31
 
 Runtime environment:
 
    1 configuration is running
 
    2 MPI processes are working on this configuration
+   1 OMP thread is working per MPI process
 
    1 spin group is running
    2 MPI processes are working on this spin group
@@ -133,7 +134,7 @@ Electrons object construction:
    Reciprocal-space projectors
      using pdots blocksize = 6
 
-   MPI remap
+   SJP remap
 
    Block Davidson solver:
 
@@ -180,21 +181,21 @@ Config object construction:
      ---------------------------------------
      cell energy           = -3.736392991
 
+Runtime task breakdown:
 
-Timer Breakdown                                           Calls      CPU Time (s)     Wall Time (s)
----------------------------------------------   ---------------   ---------------   ---------------
-config_sc: constructor                                        2              3.46              1.73
-eigensolver: diagonalize_gen                                 48              0.00              0.00
-electrons_sc: constructor                                     2              0.19              0.09
-electrons_sc: update                                         14              0.38              0.19
-fft: distributed                                            174              0.32              0.16
-fft: serial                                                 450              0.16              0.08
-fields_sc: constructor                                        2              0.08              0.04
-fields_sc: update                                            16              0.67              0.33
-multibasis: band_remap                                      434              0.01              0.00
-multivector: gather_wf                                        2              0.00              0.00
-multivector: scatter_wf                                      50              0.00              0.00
-multivector: zgemm                                          502              0.02              0.01
-operators: apply_hamiltonian                                 66              0.19              0.10
-operators: zgemm                                            278              0.01              0.00
-Socorro: total time                                           2              3.47              1.73
+   Timer                                                     Calls      CPU Time (s)     Wall Time (s)
+   ---------------------------------------------   ---------------   ---------------   ---------------
+   operators: zgemm                                            276              0.01              0.00
+   operators: apply_hamiltonian                                 64              0.16              0.08
+   multivector: zgemm                                          500              0.01              0.01
+   multivector: scatter_wf                                      48              0.00              0.00
+   multibasis: band_remap                                      432              0.02              0.01
+   fields_sc: update                                            16              0.31              0.16
+   fields_sc: constructor                                        2              0.04              0.02
+   fft: serial                                                 448              0.15              0.07
+   fft: distributed                                            172              0.18              0.09
+   electrons_sc: update                                         14              0.27              0.14
+   electrons_sc: constructor                                     2              0.13              0.06
+   eigensolver: diagonalize_gen                                 48              0.00              0.00
+   config_sc: constructor                                        2              2.35              1.18
+   Socorro: total time                                           2              2.35              1.18

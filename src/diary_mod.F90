@@ -18,8 +18,8 @@
       use error_mod
       use io_mod
       use kind_mod
-      use path_mod
       use mpi_mod
+      use path_mod
       use utils_mod
       use version_mod
 

@@ -24,7 +24,7 @@
       use electrons_sc_mod
       use multivector_mod
 
-!     One datatype is defined here: type(xc_obj).  
+!     One datatype is defined here: type(xc_obj).
 
 !     xc_mod is a wrapper for exchange-correlation routines that operate on grid data.
 

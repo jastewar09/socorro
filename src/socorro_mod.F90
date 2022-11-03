@@ -50,7 +50,7 @@
 
       contains
 
-! Public routines
+! *** Public routines
 
       subroutine socorro_()
 !doc$ subroutine socorro()

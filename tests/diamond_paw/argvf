@@ -1,12 +1,14 @@
-kgroups  1
+! *** Test
 
-atomic_representation  paw
-atomic_occupations_C  1.0000  3.0000
-theta_points_C  8
-phi_points_C    4
+kgroups                 1
 
-functional    lda
-correlation   pw
+atomic_representation   paw
+atomic_occupations_C    1.000 3.000
+theta_points_C          8
+phi_points_C            4
+
+functional              lda
+correlation             pw
 
 wf_cutoff     25.0d0
 den_cutoff   100.0d0  

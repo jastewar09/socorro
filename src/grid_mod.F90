@@ -44,7 +44,6 @@
       integer, parameter :: MATLAB     = 0  ! Matlab format
       integer, parameter :: AMIRA      = 1  ! Amira/Avizo structured grid format
       integer, parameter :: VTK        = 2  ! Visualization Toolkit format
-      
 
       type, public :: grid_rep
         integer :: ref
@@ -54,7 +53,7 @@
         type(layout_obj) :: layout
         real(double), dimension(:,:,:), pointer :: rdata
         complex(double), dimension(:,:,:), pointer :: cdata
-      end type 
+      end type
 
       type, public :: grid_obj
         private

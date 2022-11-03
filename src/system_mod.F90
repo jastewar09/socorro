@@ -58,7 +58,7 @@
         integer :: nc, ng
 
         ! start the mpi system
-        call mpi__start()      
+        call mpi__start()
 
         ! read the arguments file
         call arg_start()

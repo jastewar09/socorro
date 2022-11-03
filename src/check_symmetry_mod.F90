@@ -48,7 +48,7 @@
 
       contains
 
-! Public routines
+! *** Public routines
 
       subroutine check_symmetry_()
 !doc$ subroutine check_kpoints()

@@ -1,4 +1,4 @@
-include ../../make.conf
+#include ../../make.conf
 
 LATEX=latex
 DVIPS=dvips

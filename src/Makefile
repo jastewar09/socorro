@@ -66,7 +66,7 @@ purge	:
 
 # ----- Library compilation ------------------------------------------ #
 
-lib-%   :
+lib-%	:
 	@ if [ -e ../lib/$(LIB_DIR)/Install.py ] ; then \
 	  echo -e "Installing ../lib/$(@:lib-%=%)\n" ; \
 	  ( cd ../lib/$(LIB_DIR) ; $(PYTHON) Install.py $(args) ) ; \

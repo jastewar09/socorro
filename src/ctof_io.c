@@ -89,7 +89,7 @@ void FTN(rewindf)(FILE **fd)
 
 // Routine get the size of the current file
 
-longlongint FTN(cfilesize)(const char *fname) 
+longlongint FTN(cfilesize)(const char *fname)
 {
   struct stat buf;
   longlongint fs;
@@ -158,7 +158,7 @@ int FTN(machinebyteorder)()
 
 /* ------------------------------------------------------------------ */
 
-// Routine to swap bytes     
+// Routine to swap bytes
 
 void FTN(swapbytes)(char *baseptr, longint *dsize, longint *nelem)
 {

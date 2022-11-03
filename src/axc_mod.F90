@@ -18,7 +18,7 @@
       use xc_type_mod
       use axc_density_mod
 
-!     One datatype is defined here: type(axc_obj).  
+!     One datatype is defined here: type(axc_obj).
 
 !     axc_mod is a wrapper for exchange-correlation routines that operate on atomic data.
 
