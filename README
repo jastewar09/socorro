@@ -13,3 +13,20 @@ src        source files
 tests      simple test problems  
 tools      pre- and post-processing tools  
 units      scripts and input for testing Socorro  
+
+## Availability:
+
+The official home of Socorro and related information can
+be found on https://dft.sandia.gov/. Offical development
+of Socorro occurs on GitLab.
+
+## License:
+
+Socorro is an open-source project distributed under the
+modified Berkeley Software Distribution (BSD) License.
+See doc/LICENSE.md for details.
+
+## Installing:
+
+Please refer to doc/INSTALL.md for detailed instructions on
+how to install Socorro and the required external libraries.
