@@ -1,42 +1,48 @@
-# What is Socorro?
+# What is Socorro
+------------------------------------------------------------------------
 
-Socorro is a plane-wave density functional theory code for
-solid-state electronic structure calculations.
+Socorro is a plane-wave density functional theory code for solid-state
+electronic structure calculations.
 
 This distribution contains the following files and directories:
 
-bench      benchmark problems  
-cores      pseudopotential files  
-doc        documentation  
-lib        external libraries  
-src        source files  
-tests      simple test problems  
-tools      pre- and post-processing tools  
-units      scripts and input for testing Socorro  
+bench      benchmark problems
+cores      pseudopotential files
+doc        documentation
+lib        external libraries
+src        source files
+tests      simple test problems
+tools      pre- and post-processing tools
+units      scripts and input for testing parts of Socorro
 
-# Availability:
+# Availability 
+------------------------------------------------------------------------
 
-The official home of Socorro and related information can
-be found at https://dft.sandia.gov/. Offical development
-of Socorro occurs on GitHub/GitLab.
+The official home of Socorro and related information can be
+found at: https://dft.sandia.gov/. Isolated development of
+Socorro is occuring through GitHub/GitLab.
 
-# License:
+# License 
+------------------------------------------------------------------------
 
 Socorro is an open-source project distributed under the
 modified Berkeley Software Distribution (BSD) License.
 See doc/LICENSE.md for details.
 
-# Installing:
+# Installing
+------------------------------------------------------------------------
 
 Please refer to doc/INSTALL.md for detailed instructions on
-how to install Socorro and the required external libraries.
+how to compile Socorro and the required external libraries.
 
-# Usage and Examples:
+# Usage and Examples
+------------------------------------------------------------------------
 
-Please refer to (i) doc/GUIDE.md for a summary of Socorro's
-capababilites and options, and (ii) tests with example input.
+Please refer to (i) doc/GUIDE.md for a summary of Socorro's options
+and capababilites, and (ii) tests/ for various example input files.
 
-# Contributing:
+# Contributing to Socorro
+------------------------------------------------------------------------
 
 Please refer to doc/CONTRIBUTING.md for detailed instructions on
-modifying and extending Socorro with new features and bug fixes.
+extending and modifying Socorro's features, or reporting bugs and fixes.
