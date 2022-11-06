@@ -22,7 +22,7 @@
 !                - provides routines for synchronizing the process error states and the configuration error states.
 !                - currently does not provide routines for resetting the error states (once true, always true).
 
-!     Note: mpif.h is included here to gain access to MPI routines and thereby allow mpi_mod to use error_mod.
+!     Note: mpi is included here to gain access to MPI routines and thereby allow mpi_mod to use error_mod.
 
       use kind_mod
       use mpi
@@ -32,20 +32,20 @@
 !cod$
       implicit none ; private
 
-      ! error file status
+      ! Error file status
 
       integer, parameter :: EF_OFF = 0
-      integer, parameter :: EF_ON  = 1
+      integer, parameter :: EF_ON = 1
 
-      ! error file mode
+      ! Error file mode
 
-      integer, parameter :: EH_NONE  = 0
-      integer, parameter :: EH_ALL   = 1
+      integer, parameter :: EH_NONE = 0
+      integer, parameter :: EH_ALL = 1
       integer, parameter :: EH_FIRST = 2
 
+      integer :: error_unit          ! unit number of the process error file
       integer :: file_mode           ! mode of error file handling
       integer :: file_status         ! status of process error files
-      integer :: error_unit          ! unit number of the process error file
       logical :: kp_error_state      ! kgroup process error state
       logical :: k_error_state       ! whole kgroup error state
       integer :: kgroup_comm         ! MPI kgroup communicator
