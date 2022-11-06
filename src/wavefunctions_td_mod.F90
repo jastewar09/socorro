@@ -219,7 +219,7 @@
              nb = size(wfr_es%eigs)
              allocate( coefficients(nb,nb) )
 
-             if (mpi_isroot(KGROUP)) then
+             if (mpi_first(KGROUP)) then
 
                 allocate( eigs(nb), weights(nb), phases(nb,nb), coeff(nb,nb), overlap(nb,nb) )
 
