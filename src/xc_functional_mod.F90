@@ -101,7 +101,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional1d_mod::xcq_analytic_1d")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcq_analytic_1d")) continue
 
       end subroutine
 
@@ -162,7 +162,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional1d_mod::xcd_analytic_1d")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcd_analytic_1d")) continue
 
       end subroutine
 
@@ -223,7 +223,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional1d_mod::xce_analytic_1d")) continue
+        if (error(FLERR,"Exit functional1d_mod::xce_analytic_1d")) continue
 
       end subroutine
 
@@ -286,7 +286,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional_mod::xcq_analytic_3d")) continue
+        if (error(FLERR,"Exit functional_mod::xcq_analytic_3d")) continue
 
       end subroutine
 
@@ -349,7 +349,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional_mod::xcd_analytic_3d")) continue
+        if (error(FLERR,"Exit functional_mod::xcd_analytic_3d")) continue
 
       end subroutine
 
@@ -412,7 +412,7 @@
 100     if (associated( ns )) deallocate( ns )
         if (associated( zeta )) deallocate( zeta )
 
-        if (error("Exit functional_mod::xce_analytic_3d")) continue
+        if (error(FLERR,"Exit functional_mod::xce_analytic_3d")) continue
 
       end subroutine
 
@@ -600,7 +600,7 @@
 
         end do
 
-100     if (error("Exit functional1d_mod::xcq_lsda_pw_1d_i")) continue
+100     if (error(FLERR,"Exit functional1d_mod::xcq_lsda_pw_1d_i")) continue
 
       end subroutine
 
@@ -1008,7 +1008,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -1048,7 +1048,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xcq_am05_pz_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcq_am05_pz_1d_i")) continue
 
       end subroutine
 
@@ -1111,7 +1111,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -1148,7 +1148,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xcq_am05_pw_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcq_am05_pw_1d_i")) continue
 
       end subroutine
 
@@ -1400,7 +1400,7 @@
 
         end do
 
-100     if (error("Exit functional1d_mod::xcd_lsda_pw_1d_i")) continue
+100     if (error(FLERR,"Exit functional1d_mod::xcd_lsda_pw_1d_i")) continue
 
       end subroutine
 
@@ -1804,7 +1804,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -1843,7 +1843,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xcd_am05_pz_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcd_am05_pz_1d_i")) continue
 
       end subroutine
 
@@ -1906,7 +1906,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -1942,7 +1942,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xcd_am05_pw_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xcd_am05_pw_1d_i")) continue
 
       end subroutine
 
@@ -2166,7 +2166,7 @@
 
         end do
 
-100     if (error("Exit functional1d_mod::xce_lsda_pw_1d_i")) continue
+100     if (error(FLERR,"Exit functional1d_mod::xce_lsda_pw_1d_i")) continue
 
       end subroutine
 
@@ -2508,7 +2508,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -2538,7 +2538,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xce_am05_pz_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xce_am05_pz_1d_i")) continue
 
       end subroutine
 
@@ -2599,7 +2599,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -2625,7 +2625,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional1d_mod::xce_am05_pw_1d_i")) continue
+        if (error(FLERR,"Exit functional1d_mod::xce_am05_pw_1d_i")) continue
 
       end subroutine
 
@@ -2890,7 +2890,7 @@
         end do
         end do
 
-100     if (error("Exit functional_mod::xcq_lsda_pw_3d_i")) continue
+100     if (error(FLERR,"Exit functional_mod::xcq_lsda_pw_3d_i")) continue
 
       end subroutine
 
@@ -3316,7 +3316,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -3358,7 +3358,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xcq_am05_pz_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xcq_am05_pz_3d_i")) continue
 
       end subroutine
 
@@ -3423,7 +3423,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -3462,7 +3462,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xcq_am05_pw_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xcq_am05_pw_3d_i")) continue
 
       end subroutine
 
@@ -3730,7 +3730,7 @@
         end do
         end do
 
-100     if (error("Exit functional_mod::xcd_lsda_pw_3d_i")) continue
+100     if (error(FLERR,"Exit functional_mod::xcd_lsda_pw_3d_i")) continue
 
       end subroutine
 
@@ -4152,7 +4152,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -4193,7 +4193,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xcd_am05_pz_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xcd_am05_pz_3d_i")) continue
 
       end subroutine
 
@@ -4258,7 +4258,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -4296,7 +4296,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xcd_am05_pw_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xcd_am05_pw_3d_i")) continue
 
       end subroutine
 
@@ -4532,7 +4532,7 @@
         end do
         end do
 
-100     if (error("Exit functional_mod::xce_lsda_pw_3d_i")) continue
+100     if (error(FLERR,"Exit functional_mod::xce_lsda_pw_3d_i")) continue
 
       end subroutine
 
@@ -4892,7 +4892,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -4924,7 +4924,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xce_am05_pz_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xce_am05_pz_3d_i")) continue
 
       end subroutine
 
@@ -4987,7 +4987,7 @@
               x2 = x2 - x5
               if (abs(x5) < 2.48e-14_double*(1.0_double + abs(x2))) goto 100
             end do
-            if (error(abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
+            if (error(FLERR,abs(x5) >= 2.48e-14_double*(1.0_double + abs(x2)),"ERROR: AM05 iteration failed")) goto 200
           end if
 100       if (s < 1.0e-14_double) then
             x3 = 1.0_double
@@ -5015,7 +5015,7 @@
         end do
 
 200     call sync_config_process_errors()
-        if (error("Exit functional_mod::xce_am05_pw_3d_i")) continue
+        if (error(FLERR,"Exit functional_mod::xce_am05_pw_3d_i")) continue
 
       end subroutine
 

@@ -162,7 +162,7 @@
 
         call glean(thy(ext))
 
-        if (error("Exit gen_density_mod::constructor_gd_1")) continue
+        if (error(FLERR,"Exit gen_density_mod::constructor_gd_1")) continue
 
       end function
 
@@ -188,7 +188,7 @@
 100     call glean(thy(gden))
         call glean(thy(aden))
 
-        if (error("Exit gen_density_mod::constructor_gd_2")) continue
+        if (error(FLERR,"Exit gen_density_mod::constructor_gd_2")) continue
 
       end function
 
@@ -367,7 +367,7 @@
 100     call glean(thy(gd1))
         call glean(thy(gd2))
 
-        if (error("Exit gen_density_mod::distance_gd")) continue
+        if (error(FLERR,"Exit gen_density_mod::distance_gd")) continue
 
       end function
 
@@ -387,7 +387,7 @@
 
         call my(gd)
 
-        if (error(x_scope(gd%o%gden) /= SGROUP,"ERROR: grid density scope is not SGROUP")) goto 100
+        if (error(FLERR,x_scope(gd%o%gden) /= SGROUP,"ERROR: grid density scope is not SGROUP")) goto 100
 
         msg = mpi_mysgroup()
 
@@ -411,7 +411,7 @@
 
 100     call glean(thy(gd))
 
-        if (error("Exit gen_density_mod::spin_information_gd")) continue
+        if (error(FLERR,"Exit gen_density_mod::spin_information_gd")) continue
 
       end subroutine
 
@@ -438,7 +438,7 @@
 100     call glean(thy(gd))
         call glean(thy(ext))
 
-        if (error("Exit gen_density_mod::merge_gd")) continue
+        if (error(FLERR,"Exit gen_density_mod::merge_gd")) continue
 
       end subroutine
 
@@ -509,7 +509,7 @@
 100     call glean(thy(gd))
         call glean(thy(ext))
 
-        if (error("Exit gen_density_mod::merge_symmetrize_filter_gd")) continue
+        if (error(FLERR,"Exit gen_density_mod::merge_symmetrize_filter_gd")) continue
 
       end subroutine
 

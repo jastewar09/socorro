@@ -241,10 +241,10 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: problem opening file = "//x_name(f))) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: problem opening file = "//x_name(f))) goto 100
         if (i_access(f)) read(x_unit(f), *, iostat=ios) pd%o%id
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to pp id line")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to pp id line")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,pd%o%id)
         if (i_access( diaryfile() )) then
         !write(x_unit(diaryfile()), '(/,"Valence of atom is =", a12)') pd%o%id
@@ -271,12 +271,12 @@
           nullify ( pd%o%nl )
 
           read (pd%o%id, *, iostat=ios) pd%o%valence
-          if (error(ios /= 0, "ERROR: failed string conversion to double")) goto 100
+          if (error(FLERR,ios /= 0, "ERROR: failed string conversion to double")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,pd%o%valence)
 
           if (i_access(f)) read(unit=x_unit(f),fmt=*,iostat=ios) format_string
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read format_string")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read format_string")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,format_string)
 
           select case (trim(format_string))
@@ -295,13 +295,13 @@
           case (LOG_WT_CC_STRING)
             call read_log_wt_cc_i(pd%o,f) ; if (error()) goto 100
           case default
-            if (error(.true.,"ERROR: unrecognized format_string")) goto 100
+            if (error(FLERR,.true.,"ERROR: unrecognized format_string")) goto 100
           end select
 
         end if
 
         pd%o%name = tag
-        if (error(len_trim(pd%o%name) > 6,"ERROR: Atom name has more than six characters")) goto 100
+        if (error(FLERR,len_trim(pd%o%name) > 6,"ERROR: Atom name has more than six characters")) goto 100
 
         pr_tag = "projector_radius_"//pd%o%name
         call arg(trim(pr_tag),pd%o%r_opt,found)
@@ -311,7 +311,7 @@
 
 100     call glean(thy(f))
 
-        if (error("Exit ncp_data_mod::constructor_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::constructor_pd")) continue
 
       end function
 
@@ -452,13 +452,13 @@
 !cod$
         call my(pd)
         if (pd%o%id == 'Goedecker') then
-           if (error((i < 1) .or. (i > size(pd%o%nl)),"ERROR: i is out of bounds"))then
+           if (error(FLERR,(i < 1) .or. (i > size(pd%o%nl)),"ERROR: i is out of bounds"))then
            goto 100
            else
               l = i-1
          end if
         else
-         if (error((i < 1) .or. (i > size(pd%o%l)),"ERROR: i is out of bounds"))then 
+         if (error(FLERR,(i < 1) .or. (i > size(pd%o%l)),"ERROR: i is out of bounds"))then 
               goto 100
          else 
           l = pd%o%l(i)
@@ -466,7 +466,7 @@
         end if
         
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::pd_lcomp")) continue
+        if (error(FLERR,"Exit ncp_data_mod::pd_lcomp")) continue
       end function
 
       function pd_lcomps(pd) result(l)
@@ -492,7 +492,7 @@
 
         call my(pd)
         if (pd%o%id == 'Goedecker') then
-           if (error((i < 1) .or. (i > size(pd%o%nl)), "ERROR: i is out of bounds")) then
+           if (error(FLERR,(i < 1) .or. (i > size(pd%o%nl)), "ERROR: i is out of bounds")) then
               goto 100
               else
                  c = pd%o%nl(i)%c
@@ -501,7 +501,7 @@
            c = 1
         end if
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::pd_l_channels")) continue
+        if (error(FLERR,"Exit ncp_data_mod::pd_l_channels")) continue
       end function
 
       function pd_kbparam(pd,i) result(kb)
@@ -518,13 +518,13 @@
         if (pd%o%id == 'Goedecker') then
            kb = 0.0_double
         else
-        if (error((i < 1) .or. (i > size(pd%o%l)),"ERROR: i is out of bounds")) then
+        if (error(FLERR,(i < 1) .or. (i > size(pd%o%l)),"ERROR: i is out of bounds")) then
            goto 100
         end if
         kb = pd%o%kb(i)
         end if
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::pd_kbparam")) continue
+        if (error(FLERR,"Exit ncp_data_mod::pd_kbparam")) continue
       end function
 
       function pd_kbparams(pd) result(kb)
@@ -612,11 +612,11 @@
 
 !cod$
         call my(pd)
-        if (error(.not.associated( pd%o%w_max ),"ERROR: w_max is not associated")) goto 100
-        if (error((i < 1) .or. (i > size(pd%o%w_max)),"ERROR: i is out of bounds")) goto 100
+        if (error(FLERR,.not.associated( pd%o%w_max ),"ERROR: w_max is not associated")) goto 100
+        if (error(FLERR,(i < 1) .or. (i > size(pd%o%w_max)),"ERROR: i is out of bounds")) goto 100
         e = pd%o%w_max(i)
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::pd_error")) continue
+        if (error(FLERR,"Exit ncp_data_mod::pd_error")) continue
       end function
 
       subroutine diary_rs_projectors_pd(pd)
@@ -678,7 +678,7 @@
         call my(pd)
         f = radial_f_value_i(pd%o,pd%o%r*pd%o%vd,g,0)
         call glean(thy(pd))
-        if (error("Exit ncp_data_mod::valence_f_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::valence_f_value_pd")) continue
       end function
 
       function local_f_value_pd(pd,g,z) result(f)
@@ -726,7 +726,7 @@
         end if
         end if
         call glean(thy(pd))
-        if (error("Exit ncp_data_mod::local_f_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::local_f_value_pd")) continue
       end function
 
       function core_f_value_pd(pd,g) result(f)
@@ -742,7 +742,7 @@
         call my(pd)
         f = radial_f_value_i(pd%o,pd%o%r*pd%o%cd,g,0)
         call glean(thy(pd))
-        if (error("Exit ncp_data_mod::core_f_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::core_f_value_pd")) continue
       end function
 
       function local_stress_f_value_pd(pd,g,z) result(f)
@@ -787,7 +787,7 @@
         end if
         end if
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::local_stress_f_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::local_stress_f_value_pd")) continue
       end function
 
       function core_stress_f_value_pd(pd,g) result(f)
@@ -803,7 +803,7 @@
         call my(pd)
         f = sum(pd%o%r**3*pd%o%cd*spherical_bessel(g*pd%o%r,1,.true.))
         call glean(thy(pd))
-        if (error("Exit ncp_data_mod::core_stress_f_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::core_stress_f_value_pd")) continue
       end function
 
       subroutine pd_apply_projector_kbf(pd, pdots, il)
@@ -869,7 +869,7 @@
         end do
         end if
         call glean(thy(pd))
-        if (error("Exit ncp_data_mod::projector_f_values_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::projector_f_values_pd")) continue
       end function
 
       function projector_stress_f_values_pd(pd,g,l,c) result(f)
@@ -896,7 +896,7 @@
         end do
         end if
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::projector_stress_f_values_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::projector_stress_f_values_pd")) continue
       end function
 
       function projector_r_value_pd(pd,r,l,gi_cut,go_cut) result(v)
@@ -914,7 +914,7 @@
 !doc$
         logical :: gi_cut_change, go_cut_change
         call my(pd)
-        if (error(r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
+        if (error(FLERR,r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
         if (.not.associated( pd%o%nlpo )) then
           pd%o%gi_cut = gi_cut
           pd%o%go_cut = go_cut
@@ -934,7 +934,7 @@
         end if
         v = nonlocal_radial_r_value_i(pd%o,r,l) ; if (error()) goto 100
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::projector_r_value_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::projector_r_value_pd")) continue
       end function
 
       function projector_r_gradients_pd(pd,r,l) result(g)
@@ -949,11 +949,11 @@
 
 !doc$
         call my(pd)
-        if (error(r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
-        if (error(.not.associated( pd%o%nlpo ),"ERROR: real-space projectors not yet optimized")) goto 100
+        if (error(FLERR,r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
+        if (error(FLERR,.not.associated( pd%o%nlpo ),"ERROR: real-space projectors not yet optimized")) goto 100
         g = nonlocal_radial_r_gradients_i(pd%o,r,l) ; if (error()) goto 100
 100     call glean(thy(pd))
-        if (error("Exit ncp_data_mod::projector_r_gradients_pd")) continue
+        if (error(FLERR,"Exit ncp_data_mod::projector_r_gradients_pd")) continue
       end function
 
 ! local routines
@@ -966,7 +966,7 @@
         integer :: ios
         if (i_access(f)) read(x_unit(f),*, IOSTAT=ios) pdr%zatom, pdr%valence
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: problem opening file = "//x_name(f))) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: problem opening file = "//x_name(f))) goto 100
         if (i_comm(f)) then
            call broadcast(FILE_SCOPE,pdr%zatom)
            call broadcast(FILE_SCOPE,pdr%valence)
@@ -979,7 +979,7 @@
         end if
         if (i_access(f)) read(x_unit(f),'(F15.8, I5)', ADVANCE='NO', IOSTAT=ios) pdr%rloc, nloc
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: reading non advancing input = "//x_name(f))) goto 100 
+        if (error(FLERR,ios /= 0,"ERROR: reading non advancing input = "//x_name(f))) goto 100 
         if (i_comm(f)) then
            call broadcast(FILE_SCOPE,pdr%rloc)
            call broadcast(FILE_SCOPE,nloc)
@@ -993,7 +993,7 @@
         do inonloc = 1,pdr%nnonloc      
            if (i_access(f)) read(x_unit(f),'(F15.8, I5)', ADVANCE='NO', IOSTAT=ios) pdr%nl(inonloc)%r, pdr%nl(inonloc)%c
            if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-           if (error(ios /= 0,"ERROR: reading non advancing input of r and nl = "//x_name(f))) goto 100
+           if (error(FLERR,ios /= 0,"ERROR: reading non advancing input of r and nl = "//x_name(f))) goto 100
               if (i_comm(f)) then
                 call broadcast(FILE_SCOPE,pdr%nl(inonloc)%r)
                 call broadcast(FILE_SCOPE,pdr%nl(inonloc)%c)
@@ -1124,7 +1124,7 @@
         nullify( pdr%w_max )
         nullify( pdr%g )
         nullify( pdr%nlpo )
-100     if (error("Exit ncp_data_mod::read_simple_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::read_simple_i")) continue
       end subroutine
 
       subroutine read_linear_i(pdr,f)                          !--------------------------------------------(begin block)
@@ -1187,7 +1187,7 @@
         nullify( pdr%g )
         nullify( pdr%nlpo )
         call canonicalize_linear_i(pdr) ; if (error()) goto 100
-100     if (error("Exit ncp_data_mod::read_linear_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::read_linear_i")) continue
       end subroutine
 
       subroutine read_linear_cc_i(pdr,f)                       !--------------------------------------------------(begin block)
@@ -1253,7 +1253,7 @@
         nullify( pdr%g )
         nullify( pdr%nlpo )
         call canonicalize_linear_i(pdr) ; if (error()) goto 100
-100     if (error("Exit ncp_data_mod::read_linear_cc_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::read_linear_cc_i")) continue
       end subroutine
 
       subroutine canonicalize_linear_i(pdr)
@@ -1301,7 +1301,7 @@
 100     if (allocated( f )) deallocate( f )
         if (allocated( wt )) deallocate( wt )
 
-        if (error("Exit ncp_data_mod::canonicalize_linear_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::canonicalize_linear_i")) continue
 
       end subroutine
 
@@ -1370,7 +1370,7 @@
         nullify( pdr%nlpo )
         call canonicalize_log_i(pdr,dr) ; if (error()) goto 100
 100     if (allocated( dr )) deallocate( dr )
-        if (error("Exit ncp_data_mod::read_log_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::read_log_i")) continue
       end subroutine
 
       subroutine read_log_cc_i(pdr,f)                          !-------------------------------------------------------(begin block)
@@ -1441,7 +1441,7 @@
         nullify( pdr%nlpo )
         call canonicalize_log_i(pdr,dr) ; if (error()) goto 100
 100     if (allocated( dr )) deallocate( dr )
-        if (error("Exit ncp_data_mod::read_log_cc_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::read_log_cc_i")) continue
       end subroutine
 
       subroutine canonicalize_log_i(pdr,dr)
@@ -1486,7 +1486,7 @@
 100     if (allocated( f )) deallocate( f )
         if (allocated( wt )) deallocate( wt )
 
-        if (error("Exit ncp_data_mod::canonicalize_log_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::canonicalize_log_i")) continue
 
       end subroutine
 
@@ -1549,7 +1549,7 @@
         nullify( pdr%g )
         nullify( pdr%nlpo )
         call canonicalize_log_wt_i(pdr) ; if (error()) goto 100
-100     if (error("Exit ncp_data_mod::read_log_wt_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::read_log_wt_i")) continue
       end subroutine
 
       subroutine read_log_wt_cc_i(pdr,f)                       !--------------------------------------------------(begin block) 
@@ -1614,7 +1614,7 @@
         nullify( pdr%g )
         nullify( pdr%nlpo )
         call canonicalize_log_wt_i(pdr) ; if (error()) goto 100
-100     if (error("Exit ncp_data_mod::read_log_wt_cc_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::read_log_wt_cc_i")) continue
       end subroutine
 
       subroutine canonicalize_log_wt_i(pdr)
@@ -1660,7 +1660,7 @@
         if (allocated( f )) deallocate( f )
         if (allocated( wt )) deallocate( wt )
 
-        if (error("Exit ncp_data_mod::canonicalize_log_wt_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::canonicalize_log_wt_i")) continue
 
       end subroutine
 
@@ -1671,7 +1671,7 @@
         integer, intent(in) :: l
         real(double) :: f
         f = sum(pdc*spherical_bessel(g*pdr%r,l))
-        if (error("Exit ncp_data_mod::radial_f_value_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::radial_f_value_i")) continue
       end function
 
       function nonlocal_radial_f_value_i(pdr,g,l) result(f)
@@ -1714,7 +1714,7 @@
                  case(3)
                     f = 16*sqrt(2*(pdr%nl(1)%r**3)/105)*pi**(1.250000)*(15-10*g**2*pdr%nl(1)%r**2+g**4*pdr%nl(1)%r**4)/(3*exp((g*pdr%nl(1)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select      
            case(1)
               select case(c)
@@ -1725,7 +1725,7 @@
                  case(3)
                     f = 32*sqrt((pdr%nl(2)%r**5)/1155)*pi**(1.250000)*(35-14*g**2*pdr%nl(2)%r**2+g**4*pdr%nl(2)%r**4)/(3*exp((g*pdr%nl(2)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
            case(2)
               select case(c)
@@ -1734,14 +1734,14 @@
                  case(2)
                     f = 16*sqrt((2*pdr%nl(3)%r**7)/105)*pi**(1.250000)*(7-g**2*pdr%nl(3)%r**2)/(3*exp((g*pdr%nl(3)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
            case(3)
               select case(c)
                  case(1)
                     f = 16*sqrt((pdr%nl(4)%r**9)/105)*pi**(1.250000)/exp((g*pdr%nl(4)%r)**2/2)
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select      
         end select      
 100  end function  
@@ -1766,7 +1766,7 @@
           f(1) = sum(pdr%nlp(:,il)*pdr%r**l*spherical_bessel(g*pdr%r,l,.true.))
         end select
         f(2) = sum(pdr%nlp(:,il)*pdr%r**(l+2)*spherical_bessel(g*pdr%r,l+1,.true.))
-        if (error("Exit ncp_data_mod::nonlocal_stress_radial_f_valu_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::nonlocal_stress_radial_f_valu_i")) continue
       end function
 
       function hgh_nonlocal_stress_radial_f_value_i(pdr,g,l,c) result(f)
@@ -1788,7 +1788,7 @@
                  case(3)
                     f = 16*sqrt(2*(pdr%nl(1)%r**7)/105)*pi**(1.250000)*(35-14*g**2*pdr%nl(1)%r**2+g**4*pdr%nl(1)%r**4)/(3*exp((g*pdr%nl(1)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
            case(1)
               select case(c)
@@ -1799,7 +1799,7 @@
                  case(3)
                     f = 32*sqrt((pdr%nl(2)%r**9)/1155)*pi**(1.250000)*(63-18*g**2*pdr%nl(2)%r**2+g**4*pdr%nl(2)%r**4)/(3*exp((g*pdr%nl(2)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
            case(2)
               select case(c)
@@ -1808,14 +1808,14 @@
                  case(2)
                     f = 16*sqrt((2*pdr%nl(3)%r**11)/105)*pi**(1.250000)*(9-g**2*pdr%nl(3)%r**2)/(3*exp((g*pdr%nl(3)%r)**2/2))
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
            case(3)
               select case(c)
                  case(1)
                     f = 16*sqrt((pdr%nl(4)%r**13)/105)*pi**(1.250000)/exp((g*pdr%nl(4)%r)**2/2)
                  case default
-                    if (error(.true., "ERROR: Invalid angular momentum channel")) goto 100
+                    if (error(FLERR,.true., "ERROR: Invalid angular momentum channel")) goto 100
               end select
         end select
 100  end function
@@ -1840,7 +1840,7 @@
         case default
           v = sum(pdr%nlpo(:,il)*pdr%g**(l)*spherical_bessel(pdr%g*r,l,.true.)) ; if (error()) goto 100
         end select
-100     if (error("Exit ncp_data_mod::nonlocal_radial_r_value_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::nonlocal_radial_r_value_i")) continue
       end function
 
       function nonlocal_radial_r_gradients_i(pdr,r,l) result(g)
@@ -1863,7 +1863,7 @@
           g(1) = sum(pdr%nlpo(:,il)*pdr%g**(l)*spherical_bessel(pdr%g*r,l,.true.)) ; if (error()) goto 100
         end select
         g(2) = sum(pdr%nlpo(:,il)*pdr%g**(l+2)*spherical_bessel(pdr%g*r,l+1,.true.)) ; if (error()) goto 100
-100     if (error("Exit ncp_data_mod::nonlocal_radial_r_gradients_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::nonlocal_radial_r_gradients_i")) continue
       end function
 
       function radial_r_value_i(pdr,pdc,r,l) result(f)
@@ -1873,7 +1873,7 @@
         integer, intent(in) :: l
         real(double) :: f
         f = sum(pdc*spherical_bessel(pdr%g*r,l))
-        if (error("Exit ncp_data_mod::radial_r_value_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::radial_r_value_i")) continue
       end function
 
       subroutine optimize_nlp_i(pdr)
@@ -2009,7 +2009,7 @@
         if (allocated( wt )) deallocate( wt )
         if (allocated( wg )) deallocate( wg )
 
-        if (error("Exit ncp_data_mod::optimize_nlp_i")) continue
+        if (error(FLERR,"Exit ncp_data_mod::optimize_nlp_i")) continue
 
       end subroutine
 
@@ -2024,9 +2024,9 @@
           cp = cp - 1
         end do
         cp = cp + 1
-        if (error(cp == 1,"ERROR: cutoff point was not found")) goto 100
+        if (error(FLERR,cp == 1,"ERROR: cutoff point was not found")) goto 100
 
-100     if (error("Exit ncp_data_mod::cutoff_point_i")) continue
+100     if (error(FLERR,"Exit ncp_data_mod::cutoff_point_i")) continue
 
       end function
 

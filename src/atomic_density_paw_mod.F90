@@ -195,18 +195,18 @@
           ! Open the ATOMIC_DENSITY block
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_DENSITY")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_DENSITY block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_DENSITY block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
 
           ! Find the PAW tag
           if (i_access(restf)) tios = findfirsttag(restf,"PAW")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: PAW tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: PAW tag was not found")) goto 100
 
           ! Read the charge state
           if (i_access(restf)) tios = findfirsttag(restf,"CHARGE_STATE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
@@ -217,7 +217,7 @@
           ! Read the number of atoms
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_ATOMS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long
             ndata = 1
@@ -225,12 +225,12 @@
             na = s4
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,na)
-          if (error(na /= x_n_atoms(ad%o%ao),"ERROR: different numbers of atoms")) goto 100
+          if (error(FLERR,na /= x_n_atoms(ad%o%ao),"ERROR: different numbers of atoms")) goto 100
 
           ! Read the number of projectors.
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_PROJECTORS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_PROJECTORS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_PROJECTORS tag was not found")) goto 100
           allocate( nps(na), v4(na) )
           if (i_access(restf)) then
             dsize = sizeof_long
@@ -246,12 +246,12 @@
               exit
             end if
           end do
-          if (error(.not.np_ok,"ERROR: different numbers of projectors")) goto 100
+          if (error(FLERR,.not.np_ok,"ERROR: different numbers of projectors")) goto 100
 
           ! Set the file pointer at the beginning of the wij matrix elements
           if (i_access(restf)) tios = findfirsttag(restf,"WIJ_MATRIX_ELEMENTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: WIJ_MATRIX_ELEMENTS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: WIJ_MATRIX_ELEMENTS tag was not found")) goto 100
 
           ! Allocate space for the data
           n = 0
@@ -323,11 +323,11 @@
             if (.not.found) ad%o%charge_state = 0.0_double
           case ("integer_ratio")
             call arg("charge_state_ratio",csr,found)
-            if (error(.not.found,"ERROR: charge_state_ratio was not found")) goto 200
-            if (error(csr(2) == 0,"ERROR: denominator = 0")) goto 200
+            if (error(FLERR,.not.found,"ERROR: charge_state_ratio was not found")) goto 200
+            if (error(FLERR,csr(2) == 0,"ERROR: denominator = 0")) goto 200
             ad%o%charge_state = real(csr(1),double)/real(csr(2),double)
           case default
-            if (error(.true.,"ERROR: charge_state_mode was not recognized")) goto 200
+            if (error(FLERR,.true.,"ERROR: charge_state_mode was not recognized")) goto 200
           end select
 
 
@@ -355,7 +355,7 @@
         call glean(thy(ao))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_density_paw_mod::constructor_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::constructor_ad")) continue
 
       end function 
 
@@ -378,7 +378,7 @@
         call glean(thy(ao))
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::update_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::update_ad")) continue
 
       end subroutine
 
@@ -652,7 +652,7 @@
 100     call glean(thy(ad))
         call glean(thy(sg))
   
-        if (error("Exit atomic_density_paw_mod::symmetrize_ad")) continue        
+        if (error(FLERR,"Exit atomic_density_paw_mod::symmetrize_ad")) continue        
 
       end subroutine 
 
@@ -715,7 +715,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::merge_atomic_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::merge_atomic_density_ad")) continue
 
       end subroutine
 
@@ -780,7 +780,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::add_atomic_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::add_atomic_density_ad")) continue
 
       end subroutine
 
@@ -858,7 +858,7 @@
         call glean(thy(ad))
         call glean(thy(lay))
 
-        if (error("Exit atomic_density_paw_mod::atomic_hartree_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::atomic_hartree_density_ad")) continue
 
       end function
 
@@ -966,7 +966,7 @@
         call glean(thy(ad))
         call glean(thy(lay))
 
-        if (error("Exit atomic_density_paw_mod::guess_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::guess_density_ad")) continue
         
       end function
 
@@ -1108,7 +1108,7 @@
         call glean(thy(xcp))
         call glean(thy(ahd))
 
-        if (error("Exit atomic_density_paw_mod::atomic_forces_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::atomic_forces_ad")) continue
 
       end subroutine
 
@@ -1146,7 +1146,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::extract_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::extract_density_ad")) continue
 
       end subroutine
 
@@ -1206,7 +1206,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::insert_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::insert_density_ad")) continue
 
       end subroutine
 
@@ -1339,7 +1339,7 @@
         call glean(thy(ad))
         call glean(thy(nrestf))
 
-        if (error("Exit atomic_density_paw_mod::write_restart_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::write_restart_ad")) continue
       
       end subroutine
 
@@ -1379,7 +1379,7 @@
 
         end do
 
-        if (error("Exit atomic_density_paw_mod::form_wij_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::form_wij_i")) continue
 
       end subroutine
 
@@ -1439,7 +1439,7 @@
 
         end select
 
-        if (error("Exit atomic_density_paw_mod::form_wijs_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::form_wijs_i")) continue
 
       end subroutine 
 
@@ -1480,7 +1480,7 @@
 
         nullify( pawd )
 
-        if (error("Exit atomic_density_paw_mod::form_qlm_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::form_qlm_i")) continue
 
       end subroutine 
 
@@ -1506,7 +1506,7 @@
 
 100     if (allocated( energy )) deallocate( energy )
 
-        if (error("Exit atomic_density_paw_mod::form_energy_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::form_energy_i")) continue
 
       end subroutine 
 
@@ -1552,7 +1552,7 @@
 
         nullify( pawd )
 
-        if (error("Exit atomic_density_paw_mod::diagonal_terms_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::diagonal_terms_i")) continue
 
       end subroutine
 
@@ -1588,7 +1588,7 @@
         
         nullify( pawd )
 
-        if (error("Exit atomic_density_paw_mod::hartree_terms_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::hartree_terms_i")) continue
 
       end subroutine
 
@@ -1602,7 +1602,7 @@
           call accum_xc_i(adr,energy)
         end if
 
-        if (error("Exit atomic_density_paw_mod::xc_terms_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::xc_terms_i")) continue
 
       end subroutine
 
@@ -1699,7 +1699,7 @@
         nullify( pawd )
         nullify( ylmij )
 
-        if (error("Exit atomic_density_paw_mod::accum_xc_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::accum_xc_i")) continue
 
       end subroutine 
 
@@ -1841,7 +1841,7 @@
         nullify( dylmij_dt )
         nullify( dylmij_dp )
 
-        if (error("Exit atomic_density_paw_mod::accum_xc_grad_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::accum_xc_grad_i")) continue
 
       end subroutine 
   
@@ -1884,7 +1884,7 @@
 
         nullify( pawd )
 
-        if (error("Exit atomic_density_paw_mod::hat_terms_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::hat_terms_i")) continue
 
       end subroutine
 
@@ -1972,7 +1972,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit atomic_density_paw_mod::accumulate_energy_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::accumulate_energy_i")) continue
 
       end subroutine
 

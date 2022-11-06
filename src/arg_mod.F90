@@ -159,11 +159,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to logical") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_log") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to logical") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_log") ) continue
       end subroutine
 
       subroutine read_arg_str(name,value,found)
@@ -181,10 +181,10 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          value = buf
-100      if ( error("Exit arg_mod::read_arg_str") ) continue
+100      if ( error(FLERR,"Exit arg_mod::read_arg_str") ) continue
       end subroutine
 
       subroutine read_arg_int(name,value,found)
@@ -203,11 +203,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_int") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_int") ) continue
       end subroutine
 
       subroutine read_arg_int_1d(name,value,found)
@@ -226,11 +226,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer(:)") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_int_1d") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer(:)") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_int_1d") ) continue
       end subroutine
 
       subroutine read_arg_dpr(name,value,found)
@@ -249,11 +249,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_dpr") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_dpr") ) continue
       end subroutine
 
       subroutine read_arg_dpr_1d(name,value,found)
@@ -272,11 +272,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)(:)") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_dpr_1d") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)(:)") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_dpr_1d") ) continue
       end subroutine
 
       subroutine read_arg_dpc(name,value,found)
@@ -295,11 +295,11 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to complex") ) goto 100
-100      if ( error("Exit arg_mod::read_arg_dpc") ) continue
+         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to complex") ) goto 100
+100      if ( error(FLERR,"Exit arg_mod::read_arg_dpc") ) continue
       end subroutine
 
       subroutine read_arglc(name,value,found)
@@ -317,10 +317,10 @@
             found = fnd
             if ( .not.fnd ) goto 100
          else
-            if ( error(.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
          end if
          value = buf
-100      if ( error("Exit arg_mod::read_arglc") ) continue
+100      if ( error(FLERR,"Exit arg_mod::read_arglc") ) continue
       end subroutine
 
 ! *** Private routines

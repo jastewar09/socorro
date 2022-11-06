@@ -220,9 +220,9 @@
               oep%o%normalization = ZERO
             end if
           case ("dxcp")
-            if (error(oep%o%normalization == ZERO,"ERROR: DXCP oep_normalization is not permitted")) goto 100
+            if (error(FLERR,oep%o%normalization == ZERO,"ERROR: DXCP oep_normalization is not permitted")) goto 100
           case default
-            if (error(.true.,"ERROR: oep_normalization was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: oep_normalization was not recognized")) goto 100
           end select
         end if
 
@@ -237,7 +237,7 @@
           oep%o%optimizer = SIMPLE
           call simple_initialize_i(oep%o) ; if (error()) goto 100
         case default
-          if (error(.true.,"ERROR: oep_optimizer tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: oep_optimizer tag was not recognized")) goto 100
         end select
 
         ! get the oep preconditioner
@@ -246,10 +246,10 @@
         ! get solver parameters and initialize workspace
         call arg("oep_solver_dir",oep%o%solver_dir,found)
         if (.not.found) oep%o%solver_dir = 50
-        if (error(oep%o%solver_dir < 1,"ERROR: oep_solver_dir < 1")) goto 100
+        if (error(FLERR,oep%o%solver_dir < 1,"ERROR: oep_solver_dir < 1")) goto 100
         call arg("oep_solver_tol",oep%o%solver_tol,found)
         if (.not.found) oep%o%solver_tol = 1.0e-8_double
-        if (error(oep%o%solver_tol < 0.0_double,"ERROR: oep_solver_tol < 0")) goto 100
+        if (error(FLERR,oep%o%solver_tol < 0.0_double,"ERROR: oep_solver_tol < 0")) goto 100
         nullify( oep%o%initialized, oep%o%solutions )
 
 100     call glean(thy(lay))
@@ -262,7 +262,7 @@
         call glean(thy(scp))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit oep_mod::constructor_oep")) continue
+        if (error(FLERR,"Exit oep_mod::constructor_oep")) continue
 
       end function
 
@@ -330,7 +330,7 @@
         call glean(thy(xcp))
         call glean(thy(scp))
 
-        if (error("Exit oep_mod::update_oep")) continue
+        if (error(FLERR,"Exit oep_mod::update_oep")) continue
 
       end subroutine
 
@@ -441,7 +441,7 @@
 
         nullify( c1 )
 
-        if (error(.not.thermal_occupations(el),"ERROR: thermal occupations must be used with the OEP method")) goto 200
+        if (error(FLERR,.not.thermal_occupations(el),"ERROR: thermal occupations must be used with the OEP method")) goto 200
 
         call own_i(oep)
         oep%o%g = x_ghost()
@@ -542,7 +542,7 @@
         call glean(thy(xcp))
         call glean(thy(scp))
 
-        if (error("Exit oep_mod::step_oep")) continue
+        if (error(FLERR,"Exit oep_mod::step_oep")) continue
 
       end subroutine
 
@@ -908,7 +908,7 @@
         call glean(thy(xcp))
         call glean(thy(de_dv))
 
-        if (error("Exit oep_mod::solver_i")) continue
+        if (error(FLERR,"Exit oep_mod::solver_i")) continue
 
       end subroutine
 
@@ -926,7 +926,7 @@
         call arg("oep_cutoff",oepr%cutoff,found)
         if (.not.found) then
           call arg("wf_cutoff",oepr%cutoff,found)
-          if (error(.not.found,"ERROR: oep_cutoff was not identified")) goto 100
+          if (error(FLERR,.not.found,"ERROR: oep_cutoff was not identified")) goto 100
         end if
 
         call alloc(oepr%filter,lay,D_TYPE,SGROUP)
@@ -941,7 +941,7 @@
 
 100     call glean(thy(lay))
 
-        if (error("Exit oep_mod::form_filter_i")) continue
+        if (error(FLERR,"Exit oep_mod::form_filter_i")) continue
 
       end subroutine
 
@@ -1000,10 +1000,10 @@
             oepr%preconditioner = PC1
             call arg("oep_pc_factor",oepr%pc_factor,found)
             if (.not.found) oepr%pc_factor = 1.0_double
-            if (error(oepr%pc_factor <= 0.0_double,"ERROR: oep_pc_factor <= 0")) goto 100
+            if (error(FLERR,oepr%pc_factor <= 0.0_double,"ERROR: oep_pc_factor <= 0")) goto 100
             call arg("oep_pc_power",oepr%pc_power,found)
             if (.not.found) oepr%pc_power = 2.0_double
-            if (error(oepr%pc_power <= 0.0_double,"ERROR: oep_pc_power <= 0")) goto 100
+            if (error(FLERR,oepr%pc_power <= 0.0_double,"ERROR: oep_pc_power <= 0")) goto 100
             call fdel(r1,lay,D_TYPE,SGROUP)
             call filter(r1,lay,SGROUP)
             p = oepr%pc_power/2.0_double
@@ -1014,10 +1014,10 @@
             oepr%preconditioner = PC2
             call arg("oep_pc_factor",oepr%pc_factor,found)
             if (.not.found) oepr%pc_factor = 1.0_double
-            if (error(oepr%pc_factor <= 0.0_double,"ERROR: oep_pc_factor <= 0")) goto 100
+            if (error(FLERR,oepr%pc_factor <= 0.0_double,"ERROR: oep_pc_factor <= 0")) goto 100
             call arg("oep_pc_power",oepr%pc_power,found)
             if (.not.found) oepr%pc_power = 2.0_double
-            if (error(oepr%pc_power <= 0.0_double,"ERROR: oep_pc_power <= 0")) goto 100
+            if (error(FLERR,oepr%pc_power <= 0.0_double,"ERROR: oep_pc_power <= 0")) goto 100
             call fdel(r1,lay,D_TYPE,SGROUP)
             call filter(r1,lay,SGROUP)
             p = oepr%pc_power/2.0_double
@@ -1025,7 +1025,7 @@
             call alloc(oepr%pc_array,lay,D_TYPE,SGROUP)
             oepr%pc_array = oepr%pc_factor*r1
           case default
-            if (error(.true.,"ERROR: oep_preconditioner tag was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: oep_preconditioner tag was not recognized")) goto 100
           end select
         end select
 
@@ -1033,7 +1033,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit oep_mod::form_preconditioner_i")) continue
+        if (error(FLERR,"Exit oep_mod::form_preconditioner_i")) continue
 
       end subroutine
 
@@ -1056,7 +1056,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit oep_mod::chebyshev_initialize_i")) continue
+        if (error(FLERR,"Exit oep_mod::chebyshev_initialize_i")) continue
 
       end subroutine
 
@@ -1073,7 +1073,7 @@
         call saxpby(mp1,oepr%velocity,mp2,de_dv)
         call saxpby(p1,oepr%scp,p1,oepr%velocity)
 
-        if (error("Exit oep_mod::chebyshev_step_i")) continue
+        if (error(FLERR,"Exit oep_mod::chebyshev_step_i")) continue
 
       end subroutine
 
@@ -1084,9 +1084,9 @@
 
         call arg("oep_step_size",oepr%step_size,found)
         if (.not.found) oepr%step_size = 4.0_double
-        if (error(oepr%step_size <= 0.0_double,"ERROR: oep_step_size <= 0")) goto 100
+        if (error(FLERR,oepr%step_size <= 0.0_double,"ERROR: oep_step_size <= 0")) goto 100
 
-100     if (error("Exit oep_mod::simple_initialize_i")) continue
+100     if (error(FLERR,"Exit oep_mod::simple_initialize_i")) continue
 
       end subroutine
 
@@ -1101,7 +1101,7 @@
         step = -oepr%step_size
         call saxpby(p1,oepr%scp,step,de_dv)
 
-        if (error("Exit oep_mod::simple_step_i")) continue
+        if (error(FLERR,"Exit oep_mod::simple_step_i")) continue
 
       end subroutine
 

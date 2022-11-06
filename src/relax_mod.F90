@@ -170,14 +170,14 @@
         case ( "shape_quench_z", "SHAPE_QUENCH_Z", "Shape_quench_z")
            rx%o%lattice_relaxation = SHAPE_QUENCH_Z
         case default
-          if (error(.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
         end select
 
         select case (rx%o%lattice_relaxation)
         case (SHAPE_LINEAR, SHAPE_QUENCH, SHAPE_QUENCH_Z)
            call arg("lattice_relax_tol",stress_tol,found)
            if (.not.found) stress_tol = 1.0_double
-           if (error(stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
+           if (error(FLERR,stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
         end select   
 
         call arg("relax_method",tag,found)
@@ -192,17 +192,17 @@
         case ( "quench_minimization", "QUENCH_MINIMIZATION", "Quench_minimization", "qm", "QM" )
           rx%o%method = QUENCH__MINIMIZATION
         case default
-          if (error(.true.,"ERROR: unrecognized relax_method")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized relax_method")) goto 100
         end select
 
         select case (rx%o%method)
         case (STEEPEST__DESCENT,CONJUGATE__GRADIENT,QUENCH__MINIMIZATION)
           call arg("relax_steps",rx%o%max_steps,found)
           if (.not.found) rx%o%max_steps = 100
-          if (error(rx%o%max_steps < 0,"ERROR: relax_steps < 0")) goto 100
+          if (error(FLERR,rx%o%max_steps < 0,"ERROR: relax_steps < 0")) goto 100
           call arg("relax_tol",rx%o%force_tol,found)
           if (.not.found) rx%o%force_tol = 1.0e-3_double
-          if (error(rx%o%force_tol < 0.0_double,"ERROR: relax_tol < 0")) goto 100
+          if (error(FLERR,rx%o%force_tol < 0.0_double,"ERROR: relax_tol < 0")) goto 100
           rx%o%step = 0
           rx%o%force_nrm = 1.0e10_double
         end select
@@ -211,14 +211,14 @@
         case (STEEPEST__DESCENT)
           call arg("relax_prefactor",rx%o%sd_con,found)
           if (.not.found) rx%o%sd_con = 1.0_double
-          if (error(rx%o%sd_con <= 0.0_double,"ERROR: relax_prefactor <= 0")) goto 100
+          if (error(FLERR,rx%o%sd_con <= 0.0_double,"ERROR: relax_prefactor <= 0")) goto 100
         case (QUENCH__MINIMIZATION)
           call arg("relax_time_step",rx%o%time_step,found)
           if (.not.found) rx%o%time_step = 100.0_double
-          if (error(rx%o%time_step <= 0.0_double,"ERROR: relax_time_step <= 0")) goto 100
+          if (error(FLERR,rx%o%time_step <= 0.0_double,"ERROR: relax_time_step <= 0")) goto 100
         end select
 
-100     if (error("Exit relax_mod::constructor_rx_1")) continue
+100     if (error(FLERR,"Exit relax_mod::constructor_rx_1")) continue
 
       end function
       
@@ -249,14 +249,14 @@
         case ( "shape_quench_z", "SHAPE_QUENCH_Z", "Shape_quench_z")
            rx%o%lattice_relaxation = SHAPE_QUENCH_Z
         case default
-          if (error(.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
         end select
 
         select case (rx%o%lattice_relaxation)
         case (SHAPE_LINEAR, SHAPE_QUENCH, SHAPE_QUENCH_Z)
            call arg("lattice_relax_tol",stress_tol,found)
            if (.not.found) stress_tol = 1.0_double
-           if (error(stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
+           if (error(FLERR,stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
         end select
 
         select case (method(1:len_trim(method)))
@@ -269,17 +269,17 @@
         case ( "quench_minimization", "QUENCH_MINIMIZATION", "Quench_minimization", "qm", "QM" )
           rx%o%method = QUENCH__MINIMIZATION
         case default
-          if (error(.true.,"ERROR: unrecognized method")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized method")) goto 100
         end select
 
         select case (rx%o%method)
         case (STEEPEST__DESCENT,CONJUGATE__GRADIENT,QUENCH__MINIMIZATION)
           rx%o%max_steps = 100
           if (present(max_steps)) rx%o%max_steps = max_steps
-          if (error(rx%o%max_steps < 1,"ERROR: max_steps < 1")) goto 100
+          if (error(FLERR,rx%o%max_steps < 1,"ERROR: max_steps < 1")) goto 100
           rx%o%force_tol = 1.0e-3_double
           if (present(force_tol)) rx%o%force_tol = force_tol
-          if (error(rx%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
+          if (error(FLERR,rx%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
           rx%o%step = 1
           rx%o%force_nrm = 1.0e10_double
         end select
@@ -288,14 +288,14 @@
         case (STEEPEST__DESCENT)
           rx%o%sd_con = 1.0_double
           if (present(sd_con)) rx%o%sd_con = sd_con
-          if (error(rx%o%sd_con <= 0.0_double,"ERROR: sd_con <= 0")) goto 100
+          if (error(FLERR,rx%o%sd_con <= 0.0_double,"ERROR: sd_con <= 0")) goto 100
         case (QUENCH__MINIMIZATION)
           rx%o%time_step = 1.0_double
           if (present(time_step)) rx%o%time_step = time_step
-          if (error(rx%o%time_step <= 0.0_double,"ERROR: time_step <= 0")) goto 100
+          if (error(FLERR,rx%o%time_step <= 0.0_double,"ERROR: time_step <= 0")) goto 100
         end select
 
-100     if (error("Exit relax_mod::constructor_rx_2")) continue
+100     if (error(FLERR,"Exit relax_mod::constructor_rx_2")) continue
 
       end function
       
@@ -331,7 +331,7 @@
         case ( "shape_quench_z", "SHAPE_QUENCH_Z", "Shape_quench_z")
            rx%o%lattice_relaxation = SHAPE_QUENCH_Z
           case default
-            if (error(.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
+            if (error(FLERR,.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
           end select
         end if
         lattice_relaxation_change = ( rx%o%lattice_relaxation /= old_lattice_relaxation )
@@ -340,7 +340,7 @@
         case (SHAPE_LINEAR, SHAPE_QUENCH, SHAPE_QUENCH_Z)
            call arg("lattice_relax_tol",stress_tol,found)
            if (.not.found) stress_tol = 1.0_double
-           if (error(stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
+           if (error(FLERR,stress_tol < 0.0_double, "ERROR: lattice_relax_tol < 0")) goto 100
         end select
 
         old_method = rx%o%method
@@ -355,7 +355,7 @@
           case ( "quench_minimization", "QUENCH_MINIMIZATION", "Quench_minimization", "qm", "QM" )
             rx%o%method = QUENCH__MINIMIZATION
           case default
-            if (error(.true.,"ERROR: unrecognized method")) goto 100
+            if (error(FLERR,.true.,"ERROR: unrecognized method")) goto 100
           end select
         end if
         method_change = ( rx%o%method /= old_method )
@@ -364,10 +364,10 @@
         case (STEEPEST__DESCENT,CONJUGATE__GRADIENT,QUENCH__MINIMIZATION)
           if (method_change) rx%o%max_steps = 100
           if (present(max_steps)) rx%o%max_steps = max_steps
-          if (error(rx%o%max_steps < 1,"ERROR: max_steps < 1")) goto 100
+          if (error(FLERR,rx%o%max_steps < 1,"ERROR: max_steps < 1")) goto 100
           if (method_change) rx%o%force_tol = 1.0e-3_double
           if (present(force_tol)) rx%o%force_tol = force_tol
-          if (error(rx%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
+          if (error(FLERR,rx%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
           rx%o%step = 1
           rx%o%force_nrm = 1.0e10_double
         end select
@@ -376,16 +376,16 @@
         case (STEEPEST__DESCENT)
           if (method_change) rx%o%sd_con = 1.0_double
           if (present(sd_con)) rx%o%sd_con = sd_con
-          if (error(rx%o%sd_con <= 0.0_double,"ERROR: sd_con <= 0")) goto 100
+          if (error(FLERR,rx%o%sd_con <= 0.0_double,"ERROR: sd_con <= 0")) goto 100
         case (QUENCH__MINIMIZATION)
           if (method_change) rx%o%time_step = 1.0_double
           if (present(time_step)) rx%o%time_step = time_step
-          if (error(rx%o%time_step <= 0.0_double,"ERROR: time_step <= 0")) goto 100
+          if (error(FLERR,rx%o%time_step <= 0.0_double,"ERROR: time_step <= 0")) goto 100
         end select
 
 100     call glean(thy(rx))
 
-        if (error("Exit relax_mod::update_relax")) continue
+        if (error(FLERR,"Exit relax_mod::update_relax")) continue
 
       end subroutine
 
@@ -409,7 +409,7 @@
 100     call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_structure")) continue
+        if (error(FLERR,"Exit relax_mod::relax_structure")) continue
 
       end function
 
@@ -671,7 +671,7 @@
 100     call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_structure_rx")) continue
+        if (error(FLERR,"Exit relax_mod::relax_structure_rx")) continue
 
       end function
 
@@ -704,7 +704,7 @@
 100     call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_brancher")) continue
+        if (error(FLERR,"Exit relax_mod::relax_brancher")) continue
 
       end function
 
@@ -735,7 +735,7 @@
 100     call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_brancher_rx")) continue
+        if (error(FLERR,"Exit relax_mod::relax_brancher_rx")) continue
 
       end function
 
@@ -784,7 +784,7 @@
         call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_sd")) continue
+        if (error(FLERR,"Exit relax_mod::relax_sd")) continue
 
       end function
 
@@ -852,7 +852,7 @@
         call glean(thy(cfg))
         call glean(thy(rx))
         
-        if (error("Exit relax_mod::relax_cg")) continue
+        if (error(FLERR,"Exit relax_mod::relax_cg")) continue
 
       end function
 
@@ -893,8 +893,8 @@
           tags(ia) = x_type(cfg,ia)
           tag = "atom_mass_"//tags(ia)
           call arg(trim(tag),mass,found)
-          if (error(.not.found,"ERROR: atom_mass was not found")) goto 100
-          if (error(mass <= 0.0_double,"ERROR: atom_mass <= 0")) goto 100
+          if (error(FLERR,.not.found,"ERROR: atom_mass was not found")) goto 100
+          if (error(FLERR,mass <= 0.0_double,"ERROR: atom_mass <= 0")) goto 100
           masses(ia) = AMU_2_ELECTRON_MASS*mass
         end do
 
@@ -976,7 +976,7 @@
         call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::relax_qm")) continue
+        if (error(FLERR,"Exit relax_mod::relax_qm")) continue
 
       end function
 
@@ -1146,9 +1146,9 @@
         na = x_n_atoms(cfg)
 
         allocate(pos_cart(3,na),pos_cart_start(3,na),direction(3,na),STAT=status)
-        if (error(status /= 0,"limnin_i: allocate error")) goto 100
+        if (error(FLERR,status /= 0,"limnin_i: allocate error")) goto 100
 
-        if (error(size(displace,1) /= 3 .or. size(displace,2) /= na,&
+        if (error(FLERR,size(displace,1) /= 3 .or. size(displace,2) /= na,&
              &"linmin_i: displace array wrong dimensions")) goto 100
 
         if (i_access(output)) write(x_unit(output),'(/,"Beginning line minimization")')
@@ -1233,7 +1233,7 @@
         call glean(thy(cfg))
         call glean(thy(rx))
 
-        if (error("Exit relax_mod::linmin_i")) continue
+        if (error(FLERR,"Exit relax_mod::linmin_i")) continue
 
       end subroutine
 
@@ -1273,7 +1273,7 @@
         end if
         go = ( go .and. (rx%o%step < rx%o%max_steps) )
 
-        if (error('Exit relax_mod:continue_relax_i')) goto 100
+        if (error(FLERR,'Exit relax_mod:continue_relax_i')) goto 100
 
 100     call glean(thy(cfg))
         call glean(thy(rx))

@@ -314,7 +314,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_OPERATORS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_OPERATORS block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_OPERATORS block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -344,14 +344,14 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_TYPES")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_TYPES tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_TYPES tag was not found")) goto 200
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 1
             call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
             r_nt = s4
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,r_nt)
-          if (error(r_nt /= nt,"ERROR: different numbers of types")) goto 200
+          if (error(FLERR,r_nt /= nt,"ERROR: different numbers of types")) goto 200
         end if
 
         ! read the ncp files
@@ -470,7 +470,7 @@
         call glean(thy(lay))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_operators_ncp_mod::constructor_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::constructor_ao")) continue
       end function
 
       subroutine update_ao(ao,cr,lay)
@@ -523,7 +523,7 @@
         call glean(thy(cr))
         call glean(thy(lay))
 
-        if (error("Exit atomic_operators_ncp_mod::update_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::update_ao")) continue
 
       end subroutine
 
@@ -754,14 +754,14 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100 
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100 
         if (associated( ao%o%tdata(it)%pl )) then
           n = size(ao%o%tdata(it)%pl)
         else
           n = 0
         end if
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_n_type_projectors")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_n_type_projectors")) continue
       end function
 
       function ao_n_atom_projectors(ao,ia) result(n)
@@ -774,14 +774,14 @@
 
 !cod$
         call my(ao)
-        if (error((ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100 
+        if (error(FLERR,(ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100 
         if (associated( ao%o%tdata(ao%o%adata(ia)%ti)%pl )) then
           n = size(ao%o%tdata(ao%o%adata(ia)%ti)%pl)
         else
           n = 0
         end if
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_n_atom_projectors")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_n_atom_projectors")) continue
       end function
 
       function ao_projector_l(ao,ip) result(l)
@@ -795,10 +795,10 @@
 
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         l = ao%o%pdata(ip)%l
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_l")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_l")) continue
       end function
 
       function ao_type_projector_l(ao,it,ip) result(l)
@@ -812,11 +812,11 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
-        if (error((ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
         l = ao%o%tdata(it)%pl(ip)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_type_projector_l")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_type_projector_l")) continue
       end function
 
       function ao_projector_m(ao,ip) result(m)
@@ -830,10 +830,10 @@
 
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: projector index is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: projector index is out of range")) goto 100
         m = ao%o%pdata(ip)%m
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_m")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_m")) continue
       end function
 
       function ao_type_projector_m(ao,it,ip) result(m)
@@ -847,11 +847,11 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
-        if (error((ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
         m = ao%o%tdata(it)%pm(ip)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_type_projector_m")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_type_projector_m")) continue
       end function
 
       function ao_projector_kbf(ao,ip) result(kbf)
@@ -865,10 +865,10 @@
 
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         kbf = ao%o%pdata(ip)%kbf
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_kbf")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_kbf")) continue
       end function
 
       function ao_type_projector_kbf(ao,it,ip) result(kbf)
@@ -882,11 +882,11 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
-        if (error((ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
         kbf = ao%o%tdata(it)%pkbf(ip)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_type_projector_kbf")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_type_projector_kbf")) continue
       end function
 
       function ao_projector_type(ao,ip) result(it)
@@ -899,10 +899,10 @@
 !       errors: ip out of range.
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         it = ao%o%pdata(ip)%ti
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_type")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_type")) continue
       end function
 
       function ao_projector_atom(ao,ip) result(ia)
@@ -916,10 +916,10 @@
 
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         ia = ao%o%pdata(ip)%ai
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_atom")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_atom")) continue
       end function
 
 
@@ -934,10 +934,10 @@
 
 !cod$
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         tpi = ao%o%pdata(ip)%tpi
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_index_in_type")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_index_in_type")) continue
       end function
 
       function ao_atom_type(ao,ia) result(ti)
@@ -950,10 +950,10 @@
 
 !cod$
         call my(ao)
-        if (error((ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
         ti = ao%o%adata(ia)%ti
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_atom_type")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_atom_type")) continue
       end function
 
       function ao_atom_base(ao,ia) result(bi)
@@ -967,10 +967,10 @@
 
 !cod$
         call my(ao)
-        if (error((ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
         bi = ao%o%adata(ia)%bi
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_atom_base")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_atom_base")) continue
       end function
 
       function ao_atom_valence(ao,ia) result(v)
@@ -983,10 +983,10 @@
 
 !cod$
         call my(ao)
-        if (error((ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > size(ao%o%adata)),"ERROR: ia is out of range")) goto 100
         v = ao%o%adata(ia)%valence
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_atom_valence")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_atom_valence")) continue
       end function
 
       subroutine ao_apply_projector_kbf(ao,pdots)
@@ -1091,13 +1091,13 @@
 !cod$
         integer :: it, l, c
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         it = ao%o%pdata(ip)%ti
         l = ao%o%tdata(it)%pl(ao%o%pdata(ip)%tpi)
         c = ao%o%tdata(it)%pc(ao%o%pdata(ip)%tpi)
         pfv = projector_f_values(ao%o%tdata(it)%ncpd,q,l,c) ; if (error()) goto 100
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_f_values")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_f_values")) continue
       end function
 
       function ao_type_projector_f_values(ao,q,it,ip) result(pfv)
@@ -1113,13 +1113,13 @@
 !cod$
         integer :: l, c
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
-        if (error((ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
         l = ao%o%tdata(it)%pl(ip)
         c = ao%o%tdata(it)%pc(ip)
         pfv = projector_f_values(ao%o%tdata(it)%ncpd,q,l,c) ; if (error()) goto 100
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_type_projector_f_values")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_type_projector_f_values")) continue
       end function
 
       function ao_projector_stress_f_values(ao,q,it,ip) result(psfv)
@@ -1135,13 +1135,13 @@
 !cod$
         integer :: l, c
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
-        if (error((ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%tdata(it)%pl)),"ERROR: ip is out of range")) goto 100
         l = ao%o%tdata(it)%pl(ip)
         c = ao%o%tdata(it)%pc(ip)
         psfv = projector_stress_f_values(ao%o%tdata(it)%ncpd,q,l,c) ; if (error()) goto 100
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_stress_f_values")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_stress_f_values")) continue
       end function
 
       function ao_projector_r_value(ao,ip,r,gi,go) result(prv)
@@ -1158,12 +1158,12 @@
 !cod$
         integer :: l, type
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         type = ao%o%pdata(ip)%ti
         l = ao%o%tdata(type)%pl(ao%o%pdata(ip)%tpi)
         prv = projector_r_value(ao%o%tdata(type)%ncpd,r,l,gi,go) ; if (error()) goto 100
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_r_value")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_r_value")) continue
       end function
 
       function ao_projector_r_gradients(ao,ip,r) result(prg)
@@ -1179,12 +1179,12 @@
 !cod$
         integer :: l, type
         call my(ao)
-        if (error((ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(ao%o%pdata)),"ERROR: ip is out of range")) goto 100
         type = ao%o%pdata(ip)%ti
         l = ao%o%tdata(type)%pl(ao%o%pdata(ip)%tpi)
         prg = projector_r_gradients(ao%o%tdata(type)%ncpd,r,l)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_r_gradients")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_r_gradients")) continue
       end function
 
       function ao_projector_radius(ao,ipg) result(radius)
@@ -1198,10 +1198,10 @@
 
 !cod$
         call my(ao)
-        if (error((ipg < 1) .or. (ipg > size(ao%o%pdata)),"ERROR: ipg is out of range")) goto 100
+        if (error(FLERR,(ipg < 1) .or. (ipg > size(ao%o%pdata)),"ERROR: ipg is out of range")) goto 100
         radius = x_radius(ao%o%tdata(ao%o%pdata(ipg)%ti)%ncpd)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_projector_radius")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_projector_radius")) continue
       end function
 
       function ao_type_projector_radius(ao,it) result(radius)
@@ -1214,10 +1214,10 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
         radius = x_radius(ao%o%tdata(it)%ncpd)
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::ao_type_projector_radius")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::ao_type_projector_radius")) continue
       end function
 
       function ao_ewald_energy(ao) result(e)
@@ -1245,10 +1245,10 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
         p => ao%o%tdata(it)%tr2c
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_paw_mod::type_tr2c")) continue
+        if (error(FLERR,"Exit atomic_operators_paw_mod::type_tr2c")) continue
 
       end subroutine
 
@@ -1263,10 +1263,10 @@
 
 !cod$
         call my(ao)
-        if (error((it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
+        if (error(FLERR,(it < 1) .or. (it > size(ao%o%tdata)),"ERROR: it is out of range")) goto 100
         p => ao%o%tdata(it)%tc2r
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_paw_mod::type_tc2r")) continue
+        if (error(FLERR,"Exit atomic_operators_paw_mod::type_tc2r")) continue
 
       end subroutine
 
@@ -1328,7 +1328,7 @@
         call glean(thy(ao))
         call glean(thy(lay))
 
-        if (error("Exit atomic_operators_ncp_mod::atomic_grid_potential_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::atomic_grid_potential_ao")) continue
 
       end function
 
@@ -1395,7 +1395,7 @@
         call glean(thy(ao))
         call glean(thy(lay))
 
-        if (error("Exit atomic_operators_ncp_mod::atomic_xc_density_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::atomic_xc_density_ao")) continue
 
       end function
 
@@ -1431,7 +1431,7 @@
           end if
         end do
 100     call glean(thy(ao))
-        if (error("Exit atomic_operators_ncp_mod::core_density_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::core_density_ao")) continue
       end function
 
       subroutine valence_density_ff(ao,it,vdff)
@@ -1552,7 +1552,7 @@
         call glean(thy(ao))
         call glean(thy(nrestf))
 
-        if (error("Exit atomic_operators_ncp_mod::write_restart_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::write_restart_ao")) continue
 
       end subroutine
 
@@ -1693,7 +1693,7 @@
           aor%tdata(it)%tc2r = conjg(aor%tdata(it)%r2c)
         end do
 
-        if (error("Exit atomic_operators_paw_mod::form_r2c_and_c2r_i")) continue
+        if (error(FLERR,"Exit atomic_operators_paw_mod::form_r2c_and_c2r_i")) continue
 
       end subroutine
 
@@ -1742,7 +1742,7 @@
          case ( "shape_quench_z", "SHAPE_QUENCH_Z", "Shape_quench_z")
             lattice_relaxation = .true.
          case default
-           if (error(.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
+           if (error(FLERR,.true.,"ERROR: unrecognized lattice_relaxation")) goto 100
          end select
 
 
@@ -1819,7 +1819,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit atomic_operators_ncp_mod::form_factors_i")) continue
+        if (error(FLERR,"Exit atomic_operators_ncp_mod::form_factors_i")) continue
 
       end subroutine
 

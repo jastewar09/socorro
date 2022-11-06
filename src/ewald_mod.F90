@@ -133,7 +133,7 @@
             if (eii .in. nbhd(eii_old,tol_eii)) exit
           end if
           eii_old = eii
-          if (error(it == maxit,"ERROR: Ewald energy did not converge")) goto 100
+          if (error(FLERR,it == maxit,"ERROR: Ewald energy did not converge")) goto 100
 
         end do
 
@@ -144,7 +144,7 @@
 
         call glean(thy(cr))
 
-        if (error("Exit ewald_mod::ewald_energy")) continue
+        if (error(FLERR,"Exit ewald_mod::ewald_energy")) continue
 
       end subroutine
 
@@ -242,7 +242,7 @@
             if (dif_max .in. nbhd(0.0_double,tol_fii)) exit
           end if
           fii_old = fii
-          if (error(it == maxit,"ERROR: Ewald forces did not converge")) goto 100
+          if (error(FLERR,it == maxit,"ERROR: Ewald forces did not converge")) goto 100
 
         end do
 
@@ -255,7 +255,7 @@
 
         call glean(thy(cr))
 
-        if (error("Exit ewald_mod::ewald_forces")) continue
+        if (error(FLERR,"Exit ewald_mod::ewald_forces")) continue
 
       end subroutine
 
@@ -355,7 +355,7 @@
             if (pii .in. nbhd(pii_old,tol_pii)) exit
           end if
           pii_old = pii
-          if (error(it == maxit,"ERROR: Ewald pressure did not converge")) goto 100
+          if (error(FLERR,it == maxit,"ERROR: Ewald pressure did not converge")) goto 100
 
         end do
 
@@ -366,7 +366,7 @@
 
         call glean(thy(cr))
 
-        if (error("Exit ewald_mod::ewald_pressure")) continue
+        if (error(FLERR,"Exit ewald_mod::ewald_pressure")) continue
 
       end subroutine
 
@@ -485,7 +485,7 @@
             if (dif_max .in. nbhd(0.0_double,tol_sii)) exit
           end if
           sii_old = sii
-          if (error(it == maxit,"ERROR: Ewald stress tensor did not converge")) goto 100
+          if (error(FLERR,it == maxit,"ERROR: Ewald stress tensor did not converge")) goto 100
 
         end do
 
@@ -498,7 +498,7 @@
 
         call glean(thy(cr))
 
-        if (error("Exit ewald_mod::ewald_stress_tensor")) continue
+        if (error(FLERR,"Exit ewald_mod::ewald_stress_tensor")) continue
 
       end subroutine
 

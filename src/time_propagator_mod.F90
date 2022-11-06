@@ -208,7 +208,7 @@
 
         tp%o%is_tmpv_init = .false.  ! Always initialize to false - even if restarting
 
-100     if (error("Exit time_propagator_mod::constructor_tp")) continue
+100     if (error(FLERR,"Exit time_propagator_mod::constructor_tp")) continue
 
       end function
 
@@ -229,24 +229,24 @@
 
         if (i_access(restf)) tios = findnexttag(restf,"TIME_PROPAGATOR")
         if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: TIME_PROPAGATOR block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: TIME_PROPAGATOR block was not found")) goto 200
 
         if (i_access(restf)) call openblock(restf)
 
         if (i_access(restf)) tios = findnexttag(restf,"PARAMETERS")
         if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
-        if(error(tios == tag_not_found,"ERROR: PARAMETERS tag not found")) goto 100
+        if(error(FLERR,tios == tag_not_found,"ERROR: PARAMETERS tag not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_long ; ndata = 1
           call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),ios)
           num_mvs = s4
         end if
         if (i_comm(restf)) call broadcast(MOD_SCOPE,num_mvs)
-        if (error(num_mvs /= tpr%num_mvs,"ERROR: num_mvs in restart file not consistent with params")) goto 100
+        if (error(FLERR,num_mvs /= tpr%num_mvs,"ERROR: num_mvs in restart file not consistent with params")) goto 100
 
         if (i_access(restf)) tios = findnexttag(restf,"MVS_HISTORY")
         if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
-        if(error(tios == tag_not_found,"ERROR:MVS_HISTORY tag not found")) goto 100
+        if(error(FLERR,tios == tag_not_found,"ERROR:MVS_HISTORY tag not found")) goto 100
 
         allocate( tpr%mvs(num_mvs) )
         tpr%is_mvs_allocated = .true.
@@ -261,7 +261,7 @@
 200     call glean(thy(mb))
         call glean(thy(restf))
 
-        if (error("Exit tddft_mod::read_restart_i")) continue
+        if (error(FLERR,"Exit tddft_mod::read_restart_i")) continue
 
       end subroutine
 
@@ -302,17 +302,17 @@
            tpr%method = SIL
            tpr%num_mvs = 2
         case default
-           if (error(.true.,"constructor_tp: unrecognized tddft_method")) goto 100
+           if (error(FLERR,.true.,"constructor_tp: unrecognized tddft_method")) goto 100
         end select
 
         allocate(tpr%mvs(tpr%num_mvs),STAT=status)
-        if (error(status /= 0,"constructor_tp: could not allocate tpr%mvs()")) goto 100
+        if (error(FLERR,status /= 0,"constructor_tp: could not allocate tpr%mvs()")) goto 100
         
         ! Size of each time step - N.B. the step size is read in assuming units of fs and
         !    then converted to atomic rydberg time units (4.84E-17s)
         call arg("tddft_step_size",tpr%dt,fnd)
         if (.not.fnd) tpr%dt = default_dt*FS_2_ARU
-        if (error(tpr%dt<0,"ERROR! step_size < 0")) goto 100
+        if (error(FLERR,tpr%dt<0,"ERROR! step_size < 0")) goto 100
         tpr%dt = tpr%dt*FS_2_ARU
 
 !        !** Find the total number of time steps 
@@ -321,7 +321,7 @@
         !** Get the tolerance for the error
         call arg("tddft_tol",tpr%tol,fnd)
         if (.not.fnd) tpr%tol = default_tol
-        if (error(tpr%tol<0,"ERROR: tol < 0")) goto 100
+        if (error(FLERR,tpr%tol<0,"ERROR: tol < 0")) goto 100
 
 
         !** Read in whether the current density should be calculated
@@ -343,7 +343,7 @@
            tpr%need_current_density = .true.
         end select
         
-100     if (error("Exit tddft_mod::read_parameters_i")) continue
+100     if (error(FLERR,"Exit tddft_mod::read_parameters_i")) continue
         
       end subroutine
 
@@ -452,7 +452,7 @@
 
         !deallocate(s)
 
-        if (error("Exit time_propagator_mod::propagate_tp")) continue
+        if (error(FLERR,"Exit time_propagator_mod::propagate_tp")) continue
 
         if (debug) call warn( "propagate ending" )
 
@@ -758,7 +758,7 @@
 
         deallocate(evals)
 
-        if (error("Exit time_propagator_mod::ch_i")) continue
+        if (error(FLERR,"Exit time_propagator_mod::ch_i")) continue
 
       end subroutine
 
@@ -827,7 +827,7 @@
         call glean(thy(hv))
         call glean(thy(h))
 
-        if (error("Exit time_propagator_mod::h_norm_i")) continue
+        if (error(FLERR,"Exit time_propagator_mod::h_norm_i")) continue
 
       end subroutine
 
@@ -1301,7 +1301,7 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
         call glean(thy(v))
         call glean(thy(h))
 
-        if (error("Exit time_propagator_mod::sil_i")) continue
+        if (error(FLERR,"Exit time_propagator_mod::sil_i")) continue
 
       end subroutine
 
@@ -1320,12 +1320,12 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
 
         !** Get the number of basis vectors and check for errors
         cur_num_vecs = size(tpr%mvs)
-        if (error(cur_num_vecs /= size(alphas,1),'size alphas /= size mvs')) goto 100
-        if (error(cur_num_vecs /= size(betas,1),'size betas /= size mvs')) goto 100
+        if (error(FLERR,cur_num_vecs /= size(alphas,1),'size alphas /= size mvs')) goto 100
+        if (error(FLERR,cur_num_vecs /= size(betas,1),'size betas /= size mvs')) goto 100
         
         !** Get the number of bands and check for errors
         nb = size(alphas,2)
-        if (error(nb /= size(betas,2),'size(alphas,2) /= size(betas,2)')) goto 100
+        if (error(FLERR,nb /= size(betas,2),'size(alphas,2) /= size(betas,2)')) goto 100
 
         !** Allocate temporary array to move alphas and betas info
         allocate( tmp_mat(new_num_vecs,nb) )
@@ -1389,7 +1389,7 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
            call glean(thy(tmp_mvs(iv)))
         end do
         deallocate(tmp_mvs)
-        if (error('tprop::reallocate_memory_i - Exiting')) continue
+        if (error(FLERR,'tprop::reallocate_memory_i - Exiting')) continue
 
       end subroutine
 
@@ -1609,7 +1609,7 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
         call glean(thy(tp))
         call glean(thy(nrestf))
 
-        if (error("Exit time_propagator_mod::write_restart_tp")) continue
+        if (error(FLERR,"Exit time_propagator_mod::write_restart_tp")) continue
 
       end subroutine
 
@@ -1670,10 +1670,10 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
         Call Start_Timer("tprop: diagonalize_i")
 
         n = size(diag)
-        if (error(size(subdiag) /= n, "ERROR: dimensions of diag and subdiag don't agree")) goto 200
-        if (error(size(evals) /= n, "ERROR: dimensions of diag and evals don't agree")) goto 200
-        if (error(size(evecs,1) /= n, "ERROR: dimensions of diag and evecs columns don't agree")) goto 200
-        if (error(size(evecs,1) /= size(evecs,2), "ERROR: evecs matrix is not square")) goto 200
+        if (error(FLERR,size(subdiag) /= n, "ERROR: dimensions of diag and subdiag don't agree")) goto 200
+        if (error(FLERR,size(evals) /= n, "ERROR: dimensions of diag and evals don't agree")) goto 200
+        if (error(FLERR,size(evecs,1) /= n, "ERROR: dimensions of diag and evecs columns don't agree")) goto 200
+        if (error(FLERR,size(evecs,1) /= size(evecs,2), "ERROR: evecs matrix is not square")) goto 200
 
         if (n < 1) then
            ldz = 1
@@ -1690,8 +1690,8 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
         jobz = 'v'
         call dstev(jobz,n,diag,subdiag,evecs,ldz,work,ierr)
 !        write(iobuf,*) "ERROR: dstev ierr = ",ierr
-!        if (error(ierr /= 0,iobuf)) goto 100
-        if (error(ierr /= 0,"ERROR: dstev failed")) goto 100
+!        if (error(FLERR,ierr /= 0,iobuf)) goto 100
+        if (error(FLERR,ierr /= 0,"ERROR: dstev failed")) goto 100
 
         evals = diag
         
@@ -1699,7 +1699,7 @@ call allreduce(MOD_SCOPE,mpi_sum,check_tmp_local,check_tmp)
 
         Call Stop_Timer("tprop: diagonalize_i")
 
-200     if (error("Exit time_propagator_mod::diagonalize_i")) continue
+200     if (error(FLERR,"Exit time_propagator_mod::diagonalize_i")) continue
 
 
       end subroutine

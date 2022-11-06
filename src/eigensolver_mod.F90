@@ -151,7 +151,7 @@
         case ("on")
           es%o%report = .true.
         case default
-          if (error(.true.,"WARNING: solver_report not recognized")) continue
+          if (error(FLERR,.true.,"WARNING: solver_report not recognized")) continue
         end select
 
         ! determine the rf_mode
@@ -189,7 +189,7 @@
         case ("blocked-davidson","bd")
           es%o%solver_method = BD
         case default
-          if (error(.true.,"ERROR: unrecognized solver_method")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized solver_method")) goto 100
         end select
 
         ! get the solver directions profile type
@@ -201,7 +201,7 @@
         case ("stepped")
           es%o%dir_profile = STEPPED
         case default
-          if (error(.true.,"ERROR: solver_dir_profile not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: solver_dir_profile not recognized")) goto 100
         end select
 
         ! set solver directions profile values
@@ -231,23 +231,23 @@
             end select
           end select
         end if
-        if (error(d1 < 1,"ERROR: solver_directions < 1")) goto 100
+        if (error(FLERR,d1 < 1,"ERROR: solver_directions < 1")) goto 100
         select case (es%o%dir_profile)
         case (FIXED)
           es%o%dir = d1
         case (STEPPED)
           call arg("solver_dir_levels",nl,found)
-            if (error(.not.found,"ERROR: solver_dir_levels not found")) goto 100
-            if (error(nl < 2,"ERROR: solver_dir_levels < 2")) goto 100
-            if (error(nl > 3,"ERROR: solver_dir_levels > 3")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_dir_levels not found")) goto 100
+            if (error(FLERR,nl < 2,"ERROR: solver_dir_levels < 2")) goto 100
+            if (error(FLERR,nl > 3,"ERROR: solver_dir_levels > 3")) goto 100
           call arg("solver_dir_step_1-2",s12,found)
-            if (error(.not.found,"ERROR: solver_dir_step_1-2 not found")) goto 100
-            if (error(s12 < 2,"ERROR: solver_dir_step_1-2 < 2")) goto 100
-            if (error(s12 > (es%o%max_steps - 1),"ERROR: solver_dir_step_1-2 too large")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_dir_step_1-2 not found")) goto 100
+            if (error(FLERR,s12 < 2,"ERROR: solver_dir_step_1-2 < 2")) goto 100
+            if (error(FLERR,s12 > (es%o%max_steps - 1),"ERROR: solver_dir_step_1-2 too large")) goto 100
           call arg("solver_dir_2",d2,found)
-            if (error(.not.found,"ERROR: solver_dir_2 not found")) goto 100
-            if (error(d2 < 1,"ERROR: solver_dir_2 < 1")) goto 100
-            if (error(d2 == d1,"ERROR: solver_dir_2 = solver_directions")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_dir_2 not found")) goto 100
+            if (error(FLERR,d2 < 1,"ERROR: solver_dir_2 < 1")) goto 100
+            if (error(FLERR,d2 == d1,"ERROR: solver_dir_2 = solver_directions")) goto 100
           do is = 1,(s12-1)
             es%o%dir(is) = d1
           end do
@@ -257,13 +257,13 @@
             end do
           else
             call arg("solver_dir_step_2-3",s23,found)
-              if (error(.not.found,"ERROR: solver_dir_step_2-3 not found")) goto 100
-              if (error(s23 <= s12,"ERROR: solver_dir_step_2-3 <= solver_dir_step_1-2")) goto 100
-              if (error(s23 >= (es%o%max_steps - 1),"ERROR: solver_dir_step_2-3 too large")) goto 100
+              if (error(FLERR,.not.found,"ERROR: solver_dir_step_2-3 not found")) goto 100
+              if (error(FLERR,s23 <= s12,"ERROR: solver_dir_step_2-3 <= solver_dir_step_1-2")) goto 100
+              if (error(FLERR,s23 >= (es%o%max_steps - 1),"ERROR: solver_dir_step_2-3 too large")) goto 100
             call arg("solver_dir_3",d3,found)
-              if (error(.not.found,"ERROR: solver_dir_3 not found")) goto 100
-              if (error(d3 < 1,"ERROR: solver_dir_3 < 1")) goto 100
-              if (error(d3 == d2,"ERROR: solver_dir_3 = solver_dir_2")) goto 100
+              if (error(FLERR,.not.found,"ERROR: solver_dir_3 not found")) goto 100
+              if (error(FLERR,d3 < 1,"ERROR: solver_dir_3 < 1")) goto 100
+              if (error(FLERR,d3 == d2,"ERROR: solver_dir_3 = solver_dir_2")) goto 100
             do is = s12,(s23-1)
               es%o%dir(is) = d2
             end do
@@ -287,7 +287,7 @@
               es%o%rfm_dir = 15
             end select
           end if
-          if (error(es%o%rfm_dir <= 1,"ERROR: solver_rfm_directions <= 1")) goto 100
+          if (error(FLERR,es%o%rfm_dir <= 1,"ERROR: solver_rfm_directions <= 1")) goto 100
         end select
 
         ! get the solver tolerance profile type
@@ -299,7 +299,7 @@
         case ("stepped")
           es%o%tol_profile = STEPPED
         case default
-          if (error(.true.,"ERROR: solver_tol_profile not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: solver_tol_profile not recognized")) goto 100
         end select
 
         ! set solver tolerance profile values
@@ -329,22 +329,22 @@
             end select
           end select
         end if
-        if (error(t1 < 0.0_double,"ERROR: solver_tolerance < 0")) goto 100
+        if (error(FLERR,t1 < 0.0_double,"ERROR: solver_tolerance < 0")) goto 100
         select case (es%o%tol_profile)
         case (FIXED)
           es%o%tol = t1
         case (STEPPED)
           call arg("solver_tol_levels",nl,found)
-            if (error(.not.found,"ERROR: solver_tol_levels not found")) goto 100
-            if (error(nl > 3,"ERROR: solver_tol_levels > 3")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_tol_levels not found")) goto 100
+            if (error(FLERR,nl > 3,"ERROR: solver_tol_levels > 3")) goto 100
           call arg("solver_tol_step_1-2",s12,found)
-            if (error(.not.found,"ERROR: solver_tol_step_1-2 not found")) goto 100
-            if (error(s12 < 2,"ERROR: solver_tol_step_1-2 < 2")) goto 100
-            if (error(s12 > (es%o%max_steps - 1),"ERROR: solver_tol_step_1-2 out of bounds")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_tol_step_1-2 not found")) goto 100
+            if (error(FLERR,s12 < 2,"ERROR: solver_tol_step_1-2 < 2")) goto 100
+            if (error(FLERR,s12 > (es%o%max_steps - 1),"ERROR: solver_tol_step_1-2 out of bounds")) goto 100
           call arg("solver_tol_2",t2,found)
-            if (error(.not.found,"ERROR: solver_tol_2 not found")) goto 100
-            if (error(t2 < 0.0_double,"ERROR: solver_tol_2 < 0")) goto 100
-            if (error(t2 == t1,"ERROR: solver_tol_2 = solver_tolerance")) goto 100
+            if (error(FLERR,.not.found,"ERROR: solver_tol_2 not found")) goto 100
+            if (error(FLERR,t2 < 0.0_double,"ERROR: solver_tol_2 < 0")) goto 100
+            if (error(FLERR,t2 == t1,"ERROR: solver_tol_2 = solver_tolerance")) goto 100
           do is = 1,(s12-1)
             es%o%tol(is) = t1
           end do
@@ -354,13 +354,13 @@
             end do
           else
             call arg("solver_tol_step_2-3",s23,found)
-              if (error(.not.found,"ERROR: solver_tol_step_2-3 not found")) goto 100
-              if (error(s23 <= s12,"ERROR: solver_tol_step_2-3 <= solver_tol_step_1-2")) goto 100
-              if (error(s23 >= (es%o%max_steps - 1),"ERROR: solver_tol_step_2-3 out of bounds")) goto 100
+              if (error(FLERR,.not.found,"ERROR: solver_tol_step_2-3 not found")) goto 100
+              if (error(FLERR,s23 <= s12,"ERROR: solver_tol_step_2-3 <= solver_tol_step_1-2")) goto 100
+              if (error(FLERR,s23 >= (es%o%max_steps - 1),"ERROR: solver_tol_step_2-3 out of bounds")) goto 100
             call arg("solver_tol_3",t3,found)
-              if (error(.not.found,"ERROR: solver_tol_3 not found")) goto 100
-              if (error(t3 < 0.0_double,"ERROR: solver_tol_3 < 0")) goto 100
-              if (error(t3 == t2,"ERROR: solver_tol_3 = solver_tol_2")) goto 100
+              if (error(FLERR,.not.found,"ERROR: solver_tol_3 not found")) goto 100
+              if (error(FLERR,t3 < 0.0_double,"ERROR: solver_tol_3 < 0")) goto 100
+              if (error(FLERR,t3 == t2,"ERROR: solver_tol_3 = solver_tol_2")) goto 100
             do is = s12,(s23-1)
               es%o%tol(is) = t2
             end do
@@ -384,7 +384,7 @@
               es%o%rfm_tol = 1.0e-5_double
             end select
           end if
-          if (error(es%o%rfm_tol < 0.0_double,"ERROR: solver_tolerance < 0")) goto 100
+          if (error(FLERR,es%o%rfm_tol < 0.0_double,"ERROR: solver_tolerance < 0")) goto 100
         end select
 
         ! get the diagonalization method
@@ -396,7 +396,7 @@
         case ("scalapack")
           es%o%diagonalization_method = SCALAPACK
         case default
-          if (error(.true.,"ERROR: unrecognized diagonalization_method")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized diagonalization_method")) goto 100
         end select
 
         ! get scalapack specific values
@@ -417,7 +417,7 @@
           if (i_access(es%o%f)) open(x_unit(es%o%f),file=x_name(es%o%f),status='unknown',iostat=ios)
         end if
 
-100     if (error("Exit eigensolver_mod::constructor_es")) continue
+100     if (error(FLERR,"Exit eigensolver_mod::constructor_es")) continue
 
       end function
 
@@ -437,7 +437,7 @@
 
         call glean(thy(es))
 
-        if (error("Exit eigensolver_mod::update_es")) continue
+        if (error(FLERR,"Exit eigensolver_mod::update_es")) continue
 
       end subroutine
 
@@ -530,20 +530,20 @@
         call my(v)
 
         es%o%step = es%o%step + 1
-        if (error(es%o%step > size(es%o%dir),"ERROR: step is out of bounds")) goto 100
+        if (error(FLERR,es%o%step > size(es%o%dir),"ERROR: step is out of bounds")) goto 100
 
         select case (es%o%solver_method)
         case (CG)
           if (overlap_is_identity(h)) then
             call solve_cg_i(es,h,v,evals,rnorm) ; if (error()) goto 100
           else
-            if (error(.true.,"ERROR: CG solver is not supported for non-identity overlap")) goto 100
+            if (error(FLERR,.true.,"ERROR: CG solver is not supported for non-identity overlap")) goto 100
           end if
         case (GCG)
           if (overlap_is_identity(h)) then
             call solve_gcg_i(es,h,v,evals,rnorm) ; if (error()) goto 100
           else
-            if (error(.true.,"ERROR: GCG solver is not supported for non-identity overlap")) goto 100
+            if (error(FLERR,.true.,"ERROR: GCG solver is not supported for non-identity overlap")) goto 100
           end if
         case (BD)
           if (overlap_is_identity(h)) then  
@@ -557,7 +557,7 @@
         call glean(thy(h))
         call glean(thy(v))
 
-100     if (error("Exit eigensolver_mod::eigensolve_es")) continue
+100     if (error(FLERR,"Exit eigensolver_mod::eigensolve_es")) continue
 
       end subroutine
 
@@ -836,7 +836,7 @@
         call glean(thy(h))
         call glean(thy(v))
 
-        if (error("Exit eigensolver_mod::solve_cg_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::solve_cg_i")) continue
 
       end subroutine
 
@@ -995,7 +995,7 @@
         call glean(thy(h))
         call glean(thy(v))
 
-        if (error("Exit eigensolver_mod::solve_gcg_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::solve_gcg_i")) continue
 
       end subroutine
 
@@ -1151,7 +1151,7 @@
         call glean(thy(h))
         call glean(thy(v))
 
-        if (error("Exit eigensolver_mod::solve_bd_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::solve_bd_i")) continue
 
       end subroutine
 
@@ -1330,7 +1330,7 @@
         call glean(thy(h))
         call glean(thy(v))
 
-        if (error("Exit eigensolver_mod::solve_bdgen_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::solve_bdgen_i")) continue
 
       end subroutine
 
@@ -1359,7 +1359,7 @@
           jobz = 'v'
           uplo = 'u'
           call zheev(jobz,uplo,n,a,n,w,work,lwork,rwork,info)
-          if (error(info /= 0,"ERROR: zheev returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: zheev returned error number ",info)) goto 100
 
           if (n /= n0) then
             lwork = int(real(work(1),double))
@@ -1376,7 +1376,7 @@
         if (allocated( work )) deallocate( work )
         if (allocated( rwork )) deallocate( rwork )
 
-200     if (error("Exit eigensolver_mod::diagonalize_lapack_i")) continue
+200     if (error(FLERR,"Exit eigensolver_mod::diagonalize_lapack_i")) continue
 
         if (.not.error()) call stop_timer("eigensolver: diagonalize")
 
@@ -1423,16 +1423,16 @@
           d2 = numroc(na,nb,pc,i0,npc)
           allocate( as(d1,d2), zs(d1,d2) )
           call descinit(desc_as,na,na,nb,nb,i0,i0,comm,max(1,d1),info)
-          if (error(info /= 0,"ERROR: first call to descinit returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: first call to descinit returned error number ",info)) goto 100
           call descinit(desc_a,na,na,na,na,i0,i0,comm,na,info)
-          if (error(info /= 0,"ERROR: second call to descinit returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: second call to descinit returned error number ",info)) goto 100
           call pzgemr2d(na,na,a,i1,i1,desc_a,as,i1,i1,desc_as,comm)
 
           ! Allocate work space
           lwork = -1 ; lrwork = -1
           allocate( work(1), rwork(1) )
           call pzheev(jobz,uplo,na,as,i1,i1,desc_as,w,zs,i1,i1,desc_as,work,lwork,rwork,lrwork,info)
-          if (error(info /= 0,"ERROR: first call to pzheev returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: first call to pzheev returned error number ",info)) goto 100
           lwork = int(real(work(1),double))
           lrwork = int(real(rwork(1),double))
           deallocate( work, rwork )
@@ -1440,7 +1440,7 @@
 
           ! Diagonalize matrix
           call pzheev(jobz,uplo,na,as,i1,i1,desc_as,w,zs,i1,i1,desc_as,work,lwork,rwork,lrwork,info)
-          if (error(info /= 0,"ERROR: second call to pzheev returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: second call to pzheev returned error number ",info)) goto 100
           call pzgemr2d(na,na,zs,i1,i1,desc_as,a,i1,i1,desc_a,comm)
 
           call blacs_gridexit(comm)
@@ -1457,7 +1457,7 @@
         if (allocated( work )) deallocate( work )
         if (allocated( rwork )) deallocate( rwork )
 
-        if (error("Exit eigensolver_mod::diagonalize_scalapack_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::diagonalize_scalapack_i")) continue
 
         if (.not.error()) call stop_timer("eigensolver: diagonalize")
 
@@ -1490,7 +1490,7 @@
           jobz = 'v'
           uplo = 'u'
           call zhegv(type,jobz,uplo,n,a,n,b,n,w,work,lwork,rwork,info)
-          if (error(info /= 0,"ERROR: zhegv returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: zhegv returned error number ",info)) goto 100
 
           if (n /= n0) then
             lwork = int(real(work(1),double))
@@ -1507,7 +1507,7 @@
         if (allocated( work )) deallocate( work )
         if (allocated( rwork )) deallocate( rwork )
 
-200     if (error("Exit eigensolver_mod::diagonalize_gen_lapack_i")) continue
+200     if (error(FLERR,"Exit eigensolver_mod::diagonalize_gen_lapack_i")) continue
 
         if (.not.error()) call stop_timer("eigensolver: diagonalize_gen")
 
@@ -1559,9 +1559,9 @@
           d2 = numroc(na,nb,pc,i0,npc)
           allocate( as(d1,d2), bs(d1,d2), zs(d1,d2) )
           call descinit(desc_as,na,na,nb,nb,i0,i0,comm,max(1,d1),info)
-          if (error(info /= 0,"ERROR: first call to descinit returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: first call to descinit returned error number ",info)) goto 100
           call descinit(desc_a,na,na,na,na,i0,i0,comm,na,info)
-          if (error(info /= 0,"ERROR: second call to descinit returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: second call to descinit returned error number ",info)) goto 100
           call pzgemr2d(na,na,a,i1,i1,desc_a,as,i1,i1,desc_as,comm)
           call pzgemr2d(na,na,b,i1,i1,desc_a,bs,i1,i1,desc_as,comm)
 
@@ -1572,7 +1572,7 @@
           allocate( work(1), rwork(1), iwork(1))
           call pzhegvx(type,jobz,range,uplo,na,as,i1,i1,desc_as,bs,i1,i1,desc_as,r0,r0,i0,i0,abstol,nef,nec,w,orfac, &
                        & zs,i1,i1,desc_as,work,lwork,rwork,lrwork,iwork,liwork,fail,clustr,gap,info)
-          if (error(info /= 0,"ERROR: first call to pzhegvx returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: first call to pzhegvx returned error number ",info)) goto 100
 !          call notify("work(1) return value",int(real(work(1),double)))
 !          call notify("rwork(1) return value",int(real(rwork(1),double)))
 !          call notify("iwork(1) return value",iwork(1))
@@ -1590,7 +1590,7 @@
           orfac = -1.0_double
           call pzhegvx(type,jobz,range,uplo,na,as,i1,i1,desc_as,bs,i1,i1,desc_as,r0,r0,i0,i0,abstol,nef,nec,w,orfac, &
                        & zs,i1,i1,desc_as,work,lwork,rwork,lrwork,iwork,liwork,fail,clustr,gap,info)
-          if (error(info /= 0,"ERROR: second call to pzhegvx returned error number ",info)) goto 100
+          if (error(FLERR,info /= 0,"ERROR: second call to pzhegvx returned error number ",info)) goto 100
           call pzgemr2d(na,na,zs,i1,i1,desc_as,a,i1,i1,desc_a,comm)
 
           call blacs_gridexit(comm)
@@ -1612,7 +1612,7 @@
         if (allocated( clustr )) deallocate( clustr )
         if (allocated( gap )) deallocate( gap )
 
-        if (error("Exit eigensolver_mod::diagonalize_gen_scalapack_i")) continue
+        if (error(FLERR,"Exit eigensolver_mod::diagonalize_gen_scalapack_i")) continue
 
         if (.not.error()) call stop_timer("eigensolver: diagonalize_gen")
 

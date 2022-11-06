@@ -247,31 +247,31 @@
           ! Open the WAVEFUNCTIONS block
           if (i_access(restf)) tios = findnexttag(restf,"WAVEFUNCTIONS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: WAVEFUNCTIONS block was not found")) goto 400
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: WAVEFUNCTIONS block was not found")) goto 400
           if (i_access(restf)) call openblock(restf)
 
           ! Open the PARAMETERS block
           if (i_access(restf)) tios = findfirsttag(restf,"PARAMETERS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: PARAMETERS block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: PARAMETERS block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
 
           ! Read the k-point
           if (i_access(restf)) tios = findfirsttag(restf,"K-POINT")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: K-POINT tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: K-POINT tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 3
             call readf(kpt,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,kpt)
-          if (error(.not.(kpt .in. nbhd(worm_mb%kpt,tol_nbhd)),"ERROR: k-points do not match")) goto 100
+          if (error(FLERR,.not.(kpt .in. nbhd(worm_mb%kpt,tol_nbhd)),"ERROR: k-points do not match")) goto 100
 
           ! Read the number of bands
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_BANDS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_BANDS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_BANDS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long
             ndata = 1
@@ -283,19 +283,19 @@
           ! Read the cutoff
           if (i_access(restf)) tios = findfirsttag(restf,"CUTOFF")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
             call readf(r_cutoff,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,r_cutoff)
-          if (error(r_cutoff > x_cutoff(worm_mb%lay),"ERROR: restart wavefunctions cutoff > mesh cutoff")) goto 100
+          if (error(FLERR,r_cutoff > x_cutoff(worm_mb%lay),"ERROR: restart wavefunctions cutoff > mesh cutoff")) goto 100
 
           ! Read the number of g-points
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_G-POINTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_G-POINTS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_G-POINTS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long
             ndata = 1
@@ -322,7 +322,7 @@
           ! Open the COEFFICIENTS block
           if (i_access(restf)) tios = findfirsttag(restf,"COEFFICIENTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: COEFFICIENTS block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: COEFFICIENTS block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
 
           ! Allocate space for the coefficients
@@ -408,7 +408,7 @@
         call glean(thy(mb))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit multivector_mod::constructor_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::constructor_mv")) continue
 
       end function
 
@@ -428,7 +428,7 @@
 
         worm_mb => wormhole(mb)
         if (associated(mv%o%mat)) then
-           if (error( (size(worm_mb%gpt,1) /= size(mv%o%mat,1)) .or. &
+           if (error(FLERR, (size(worm_mb%gpt,1) /= size(mv%o%mat,1)) .or. &
             (x_n_bands(mb) /= size(mv%o%mat,2)), &
             "ERROR: multivector unable to update a dimension change in the basis")) goto 100
         end if
@@ -442,7 +442,7 @@
         call glean(thy(mv))
         call glean(thy(mb))
 
-        if (error("Exit multivector_mod::update_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::update_mv")) continue
 
       end subroutine
 
@@ -477,7 +477,7 @@
           end if
 
         end if
-        if (error("Exit multivector_mod:: my_new_mv")) continue
+        if (error(FLERR,"Exit multivector_mod:: my_new_mv")) continue
       end subroutine
 
       function thy_mv(mv) result(mvo)
@@ -519,7 +519,7 @@
 !cod$
         type(multivector_obj) :: mvt
 
-        if (error(mv%o%usage /= mv2%o%usage,"Error. mv usage /= to mv2 usage")) goto 100 
+        if (error(FLERR,mv%o%usage /= mv2%o%usage,"Error. mv usage /= to mv2 usage")) goto 100 
         
         call my(mv2)
         if (x_ghost(mv%o%mb) == x_ghost(mv2%o%mb)) then
@@ -641,8 +641,8 @@
 
         worm_mb => wormhole(mv%o%mb)
 
-        if (error( ((ib<1).or.(x_n_bands(mv%o%mb)<ib)),"ERROR: number of weights larger than number of bands")) goto 100
-        if (error(x_ghost(x_layout(g)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
+        if (error(FLERR, ((ib<1).or.(x_n_bands(mv%o%mb)<ib)),"ERROR: number of weights larger than number of bands")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
 
         allocate(wts(x_n_bands(mv%o%mb)))
         wts = 0.0_double
@@ -694,7 +694,7 @@
         call glean(thy(mv))
         call glean(thy(g))
 
-        if (error("Exit multivector_mod::put_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::put_mv")) continue
 
       end subroutine
 
@@ -762,7 +762,7 @@
           ng = size(mv%o%mat,1)
           nb = size(mv%o%mat,2)
 
-          if (error((size(rv) /= nb),"ERROR: improper size for rv")) goto 100
+          if (error(FLERR,(size(rv) /= nb),"ERROR: improper size for rv")) goto 100
 
           call kernel_portion_mv_rv_i(ng,nb,rv,mv%o%mat)
         end if
@@ -770,7 +770,7 @@
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::ERROR: portion_mv_real_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::ERROR: portion_mv_real_vector")) continue
 
       end subroutine
 
@@ -791,7 +791,7 @@
            ng = size(mv%o%mat,1)
            nb = size(mv%o%mat,2)
 
-           if (error((size(cv) /= nb),"ERROR: improper size for cv")) goto 100
+           if (error(FLERR,(size(cv) /= nb),"ERROR: improper size for cv")) goto 100
 
            call kernel_portion_mv_cv_i(ng,nb,cv,mv%o%mat)
         end if
@@ -800,7 +800,7 @@
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::ERROR: portion_mv_complex_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::ERROR: portion_mv_complex_vector")) continue
 
       end subroutine
 
@@ -822,7 +822,7 @@
         if (associated(mv1%o%mat)) then
            ng = size(mv1%o%mat,1)
            nb = size(mv1%o%mat,2)
-           if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+           if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
 
            if (associated(mv2%o%mat)) then
               call kernel_combine_2mv_rs_i(ng,nb,r1,mv1%o%mat,r2,mv2%o%mat)
@@ -835,7 +835,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::combine_2mv_real_scalar")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_2mv_real_scalar")) continue
 
       end subroutine
 
@@ -857,7 +857,7 @@
         if (associated(mv1%o%mat)) then
            ng = size(mv1%o%mat,1)
            nb = size(mv1%o%mat,2)
-           if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+           if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
 
            if (associated(mv2%o%mat)) then
               call kernel_combine_2mv_cs_i(ng,nb,c1,mv1%o%mat,c2,mv2%o%mat)
@@ -871,7 +871,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::combine_2mv_complex_scalar")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_2mv_complex_scalar")) continue
 
       end subroutine
 
@@ -894,10 +894,10 @@
            ng = size(mv1%o%mat,1)
            nb = size(mv1%o%mat,2)
 
-           if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), &
+           if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), &
                 "ERROR: multibases are different")) goto 100
-           if (error((size(rv1) /= nb),"ERROR: improper size for rv1")) goto 100
-           if (error((size(rv2) /= nb),"ERROR: improper size for rv2")) goto 100
+           if (error(FLERR,(size(rv1) /= nb),"ERROR: improper size for rv1")) goto 100
+           if (error(FLERR,(size(rv2) /= nb),"ERROR: improper size for rv2")) goto 100
 
            if (associated(mv2%o%mat)) then
               call kernel_combine_2mv_rv_i(ng,nb,rv1,mv1%o%mat,rv2,mv2%o%mat)
@@ -914,7 +914,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::combine_2mv_real_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_2mv_real_vector")) continue
 
       end subroutine
 
@@ -936,9 +936,9 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
-        if (error((size(cv1) /= nb),"ERROR: improper size for cv1")) goto 100
-        if (error((size(cv2) /= nb),"ERROR: improper size for cv2")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+        if (error(FLERR,(size(cv1) /= nb),"ERROR: improper size for cv1")) goto 100
+        if (error(FLERR,(size(cv2) /= nb),"ERROR: improper size for cv2")) goto 100
 
         call kernel_combine_2mv_cv_i(ng,nb,cv1,mv1%o%mat,cv2,mv2%o%mat)
         mv1%o%g = x_ghost()
@@ -946,7 +946,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::combine_2mv_complex_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_2mv_complex_vector")) continue
 
       end subroutine
 
@@ -970,10 +970,10 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different 1")) goto 100
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv3%o%mb), "ERROR: multibases are different 2")) goto 100
-        if (error((size(rv1) /= nb),"ERROR: improper size for rv1")) goto 100
-        if (error((size(rv2) /= nb),"ERROR: improper size for rv2")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different 1")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv3%o%mb), "ERROR: multibases are different 2")) goto 100
+        if (error(FLERR,(size(rv1) /= nb),"ERROR: improper size for rv1")) goto 100
+        if (error(FLERR,(size(rv2) /= nb),"ERROR: improper size for rv2")) goto 100
 
         call kernel_combine_3mv_rv_i(ng,nb,rv1,mv1%o%mat,rv2,mv2%o%mat,mv3%o%mat)
         mv3%o%g = x_ghost()
@@ -982,7 +982,7 @@
         call glean(thy(mv2))
         call glean(thy(mv3))
 
-        if (error("Exit multivector_mod::combine_3mv_real_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_3mv_real_vector")) continue
 
       end subroutine
 
@@ -1006,10 +1006,10 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different 1")) goto 100
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv3%o%mb), "ERROR: multibases are different 2")) goto 100
-        if (error((size(cv1) /= nb),"ERROR: improper size for cv1")) goto 100
-        if (error((size(cv2) /= nb),"ERROR: improper size for cv2")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different 1")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv3%o%mb), "ERROR: multibases are different 2")) goto 100
+        if (error(FLERR,(size(cv1) /= nb),"ERROR: improper size for cv1")) goto 100
+        if (error(FLERR,(size(cv2) /= nb),"ERROR: improper size for cv2")) goto 100
 
         call kernel_combine_3mv_cv_i(ng,nb,cv1,mv1%o%mat,cv2,mv2%o%mat,mv3%o%mat)
         mv3%o%g = x_ghost()
@@ -1018,7 +1018,7 @@
         call glean(thy(mv2))
         call glean(thy(mv3))
 
-        if (error("Exit multivector_mod::combine_3mv_complex_vector")) continue
+        if (error(FLERR,"Exit multivector_mod::combine_3mv_complex_vector")) continue
 
       end subroutine
 
@@ -1043,7 +1043,7 @@
         nw = size(mv%o%mat,1)
         nb = size(mv%o%mat,2)
 
-        if (error((size(cmat,1) /= nb) .or. (size(cmat,2) /= nb),"ERROR: improper size for cmat")) goto 100
+        if (error(FLERR,(size(cmat,1) /= nb) .or. (size(cmat,2) /= nb),"ERROR: improper size for cmat")) goto 100
 
         allocate( newmat(nw,nb) )
         newmat = (0.0_double,0.0_double)
@@ -1061,7 +1061,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::transform_mv_complex")) continue
+        if (error(FLERR,"Exit multivector_mod::transform_mv_complex")) continue
 
       end subroutine
 
@@ -1087,8 +1087,8 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are diferent")) goto 100
-        if (error((size(cmat,1) /= nb) .or. (size(cmat,2) /= nb),"ERROR: improper size for cmat")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are diferent")) goto 100
+        if (error(FLERR,(size(cmat,1) /= nb) .or. (size(cmat,2) /= nb),"ERROR: improper size for cmat")) goto 100
 
         if (mv1%o%g_storage == mv2%o%g_storage) then
           call warn("WARNING: Using matmul to perform mv operation")
@@ -1103,7 +1103,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::transform_2mv_complex")) continue
+        if (error(FLERR,"Exit multivector_mod::transform_2mv_complex")) continue
 
       end subroutine
 
@@ -1127,7 +1127,7 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
 
         allocate( mat_global(nb,nb), mat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
@@ -1153,7 +1153,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::project_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::project_2mv")) continue
 
       end subroutine
 
@@ -1179,7 +1179,7 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
 
         allocate( mat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
@@ -1205,7 +1205,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::project_2mv_mat")) continue
+        if (error(FLERR,"Exit multivector_mod::project_2mv_mat")) continue
 
       end subroutine
 
@@ -1239,7 +1239,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::orthonormalize_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::orthonormalize_mv")) continue
 
       end subroutine
 
@@ -1262,9 +1262,9 @@
         ng = size(v%o%mat,1)
         nb = size(v%o%mat,2)
 
-        if (error(x_ghost(v%o%mb) /= x_ghost(hv%o%mb), "ERROR: multibases are diferent 1")) goto 100
-        if (error(x_ghost(v%o%mb) /= x_ghost(r%o%mb), "ERROR: multibases are diferent 2")) goto 100
-        if (error( (size(e) /= nb),"ERROR: improper size for e")) goto 100
+        if (error(FLERR,x_ghost(v%o%mb) /= x_ghost(hv%o%mb), "ERROR: multibases are diferent 1")) goto 100
+        if (error(FLERR,x_ghost(v%o%mb) /= x_ghost(r%o%mb), "ERROR: multibases are diferent 2")) goto 100
+        if (error(FLERR, (size(e) /= nb),"ERROR: improper size for e")) goto 100
 
         call kernel_residual_mv_i(ng,nb,v%o%mat,hv%o%mat,e,r%o%mat)
         r%o%g = x_ghost()
@@ -1273,7 +1273,7 @@
         call glean(thy(hv))
         call glean(thy(r))
 
-        if (error("Exit multivector_mod::residual_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::residual_mv")) continue
 
       end subroutine
 
@@ -1304,12 +1304,12 @@
         case ("l")
           call decompose_large_i(mv,sd,mode,rsa,b1)
         case default
-          if (error(.true.,"ERROR: dcomp_memory tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: dcomp_memory tag was not recognized")) goto 100
         end select
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::decompose_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::decompose_mv")) continue
 
       end subroutine
 
@@ -1329,13 +1329,13 @@
         ng = size(mv%o%mat,1)
         nb = size(mv%o%mat,2)
 
-        if (error( (size(rv) /= nb),"ERROR: target vector is not of size n_bands")) goto 100
+        if (error(FLERR, (size(rv) /= nb),"ERROR: target vector is not of size n_bands")) goto 100
 
         call kernel_multiply_mv_r_i(ng,nb,mv%o%mat,rv)
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::multiply_mv_real")) continue
+        if (error(FLERR,"Exit multivector_mod::multiply_mv_real")) continue
 
       end subroutine
 
@@ -1357,15 +1357,15 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are diferent")) goto 100
-        if (error( (size(rv) /= nb),"ERROR: improper size for rv")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are diferent")) goto 100
+        if (error(FLERR, (size(rv) /= nb),"ERROR: improper size for rv")) goto 100
 
         call kernel_multiply_2mv_r_i(ng,nb,mv1%o%mat,mv2%o%mat,rv)
 
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::multiply_2mv_real")) continue
+        if (error(FLERR,"Exit multivector_mod::multiply_2mv_real")) continue
 
       end subroutine
 
@@ -1387,15 +1387,15 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
-        if (error( (size(cv) /= nb),"ERROR: improper size for cv")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+        if (error(FLERR, (size(cv) /= nb),"ERROR: improper size for cv")) goto 100
 
         call kernel_multiply_2mv_c_i(ng,nb,mv1%o%mat,mv2%o%mat,cv)
 
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::multiply_2mv_complex")) continue
+        if (error(FLERR,"Exit multivector_mod::multiply_2mv_complex")) continue
 
       end subroutine
 
@@ -1418,7 +1418,7 @@
         ng = size(mv%o%mat,1)
         nb = size(mv%o%mat,2)
 
-        if (error( (size(cmat,1) /= nb) .or. (size(cmat,2) /= nb), "ERROR: improper size for cmat")) goto 100
+        if (error(FLERR, (size(cmat,1) /= nb) .or. (size(cmat,2) /= nb), "ERROR: improper size for cmat")) goto 100
 
         cmat = (0.0_double,0.0_double)
         call zherk(uplo,trans,nb,ng,c1,mv%o%mat,ng,c0,cmat,nb)
@@ -1449,7 +1449,7 @@
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::overlap_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::overlap_mv")) continue
 
       end subroutine
 
@@ -1474,8 +1474,8 @@
         ng = size(mv1%o%mat,1)
         nb = size(mv1%o%mat,2)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
-        if (error( (size(cmat,1) /= nb) .or. (size(cmat,2) /= nb), "ERROR: improper size for cmat")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb), "ERROR: multibases are different")) goto 100
+        if (error(FLERR, (size(cmat,1) /= nb) .or. (size(cmat,2) /= nb), "ERROR: improper size for cmat")) goto 100
 
         allocate( cmat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
@@ -1494,7 +1494,7 @@
 100     call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::overlap_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::overlap_2mv")) continue
 
       end subroutine
 
@@ -1519,8 +1519,8 @@
         call my(mv2)
         call my(f)
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb),"ERROR: multibases are not the same")) goto 100
-        if (error(x_ghost(x_layout(f)) /= x_ghost(x_layout(mv1%o%mb)),"ERROR: mismatched layouts")) goto 100
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb),"ERROR: multibases are not the same")) goto 100
+        if (error(FLERR,x_ghost(x_layout(f)) /= x_ghost(x_layout(mv1%o%mb)),"ERROR: mismatched layouts")) goto 100
 
         worm_mb => wormhole(mv1%o%mb)
 
@@ -1543,7 +1543,7 @@
         call glean(thy(mv2))
         call glean(thy(f))
 
-        if (error("Exit multivector_mod::filter_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::filter_mv")) continue
 
       end subroutine
 
@@ -1573,8 +1573,8 @@
 
         nullify( field )
 
-        if (error(x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb),"ERROR: mutibases are different")) goto 200
-        if (error(x_ghost(x_layout(f)) /= x_ghost(x_layout(mv1%o%mb)),"ERROR: mismatched layouts")) goto 200
+        if (error(FLERR,x_ghost(mv1%o%mb) /= x_ghost(mv2%o%mb),"ERROR: mutibases are different")) goto 200
+        if (error(FLERR,x_ghost(x_layout(f)) /= x_ghost(x_layout(mv1%o%mb)),"ERROR: mismatched layouts")) goto 200
 
         worm_mb => wormhole(mv1%o%mb)
 
@@ -1618,7 +1618,7 @@
         call glean(thy(mv2))
         call glean(thy(f))
 
-        if (error("Exit multivector_mod::apply_field")) continue
+        if (error(FLERR,"Exit multivector_mod::apply_field")) continue
 
       end subroutine
 
@@ -1648,8 +1648,8 @@
 
         worm_mb => wormhole(mv%o%mb)
 
-        if (error(size(wts) > x_n_bands(mv%o%mb),"ERROR: number of weights larger than number of bands")) goto 100
-        if (error(x_ghost(x_layout(den)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
+        if (error(FLERR,size(wts) > x_n_bands(mv%o%mb),"ERROR: number of weights larger than number of bands")) goto 100
+        if (error(FLERR,x_ghost(x_layout(den)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
 
         nd = x_dims(worm_mb%lay)
         ng = size(mv%o%mat,1)
@@ -1692,7 +1692,7 @@
         call glean(thy(mv))
         call glean(thy(den))
 
-        if (error("Exit multivector_mod::add_grid_density_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::add_grid_density_mv")) continue
 
       end subroutine
 
@@ -1723,8 +1723,8 @@
 
         worm_mb => wormhole(mvec1%o%mb)
 
-        if (error(x_ghost(mvec1%o%mb) /= x_ghost(mvec2%o%mb),"ERROR: mutibases are different")) goto 100
-        if (error(x_ghost(x_layout(den)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
+        if (error(FLERR,x_ghost(mvec1%o%mb) /= x_ghost(mvec2%o%mb),"ERROR: mutibases are different")) goto 100
+        if (error(FLERR,x_ghost(x_layout(den)) /= x_ghost(worm_mb%lay),"ERROR: mismatched layouts")) goto 100
 
         nd = x_dims(worm_mb%lay)
         ng = size(mvec1%o%mat,1)
@@ -1775,7 +1775,7 @@
         call glean(thy(mvec2))
         call glean(thy(den))
 
-        if (error("Exit multivector_mod::add_grid_density_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::add_grid_density_2mv")) continue
 
       end subroutine
 
@@ -1805,7 +1805,7 @@
 
 100     call glean(thy(mv))
 
-        if (error("Exit multivector_mod::distribute_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::distribute_mv")) continue
 
       end subroutine
 
@@ -1823,7 +1823,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::release_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::release_mv")) continue
 
       end subroutine
 
@@ -1936,7 +1936,7 @@
         call glean(thy(xct))
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::exx_energy_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_energy_mv")) continue
 
       end subroutine
 
@@ -2053,7 +2053,7 @@
         call glean(thy(mv1))
         call glean(thy(mv2))
 
-        if (error("Exit multivector_mod::exx_energy_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_energy_2mv")) continue
 
       end subroutine
 
@@ -2179,7 +2179,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-        if (error("Exit multivector_mod::exx_derivative_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_derivative_mv")) continue
 
       end subroutine
 
@@ -2302,7 +2302,7 @@
         call glean(thy(mv2))
         call glean(thy(mvo))
 
-        if (error("Exit multivector_mod::exx_derivative_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_derivative_2mv")) continue
 
       end subroutine
 
@@ -2354,7 +2354,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-        if (error("Exit multivector_mod::exx_energy_and_derivative_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_energy_and_derivative_mv")) continue
 
       end subroutine
 
@@ -2398,7 +2398,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-        if (error("Exit multivector_mod::exx_energy_and_derivative_2mv")) continue
+        if (error(FLERR,"Exit multivector_mod::exx_energy_and_derivative_2mv")) continue
 
       end subroutine
 
@@ -2541,7 +2541,7 @@
         call glean(thy(mv))
         call glean(thy(nrestf))
 
-        if (error("Exit multivector_mod::write_restart_mv")) continue
+        if (error(FLERR,"Exit multivector_mod::write_restart_mv")) continue
 
       end subroutine
 
@@ -2665,7 +2665,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-200     if (error("Exit multivector_mod::exchange_operator_spair_mv_i")) continue
+200     if (error(FLERR,"Exit multivector_mod::exchange_operator_spair_mv_i")) continue
 
       end subroutine
 
@@ -2790,7 +2790,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-        if (error("Exit multivector_mod::exchange_operator_lpair_2mv_i")) continue
+        if (error(FLERR,"Exit multivector_mod::exchange_operator_lpair_2mv_i")) continue
 
       end subroutine
 
@@ -3108,7 +3108,7 @@
         call glean(thy(mvo))
         call glean(thy(xct))
 
-        if (error("Exit multivector_mod::exchange_operator_p2p_mv_i")) continue
+        if (error(FLERR,"Exit multivector_mod::exchange_operator_p2p_mv_i")) continue
 
       end subroutine
 
@@ -3365,7 +3365,7 @@
         call glean(thy(xct))
         call glean(thy(mvo))
 
-        if (error("Exit multivector_mod::exchange_operator_p2p_2_mv_i")) continue
+        if (error(FLERR,"Exit multivector_mod::exchange_operator_p2p_2_mv_i")) continue
 
       end subroutine
 
@@ -3674,7 +3674,7 @@
         call glean(thy(xct))
         call glean(thy(mvo))
 
-        if (error("Exit multivector_mod::exchange_operator_p2p_2_2mv_i")) continue
+        if (error(FLERR,"Exit multivector_mod::exchange_operator_p2p_2_2mv_i")) continue
 
       end subroutine
 
@@ -3744,7 +3744,7 @@
               ck_norm = 1.0_double/four_omega2
            end if
         case default 
-           if (error(.true.,"Unrecognized coulomb kernel type")) goto 100
+           if (error(FLERR,.true.,"Unrecognized coulomb kernel type")) goto 100
         end select
 
         deallocate( g2, gdk2, gx, gy, gz )
@@ -3759,7 +3759,7 @@
         call glean(thy(xct))
         call glean(thy(lay))
 
-100     if (error("Exit multivector_mod::construct_coulomb_kernel_i")) continue 
+100     if (error(FLERR,"Exit multivector_mod::construct_coulomb_kernel_i")) continue 
 
       end subroutine
 
@@ -3779,7 +3779,7 @@
 
         nullify( worm_mb )
 
-        if (error("Exit multivector_mod::zeros_init_i")) continue
+        if (error(FLERR,"Exit multivector_mod::zeros_init_i")) continue
 
       end subroutine
 
@@ -3836,7 +3836,7 @@
 
         nullify( worm_mb )
 
-        if (error("Exit multivector_mod::random_init_i")) continue
+        if (error(FLERR,"Exit multivector_mod::random_init_i")) continue
 
       end subroutine
 
@@ -3865,7 +3865,7 @@
 
         nullify( worm_mb )
 
-        if (error("Exit multivector_mod::diagnostic_init_i")) continue
+        if (error(FLERR,"Exit multivector_mod::diagnostic_init_i")) continue
 
       end subroutine
 
@@ -4158,7 +4158,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::decompose_small_i")) continue
+        if (error(FLERR,"Exit multivector_mod::decompose_small_i")) continue
 
       end subroutine
 
@@ -4279,7 +4279,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::decompose_medium_i")) continue
+        if (error(FLERR,"Exit multivector_mod::decompose_medium_i")) continue
 
       end subroutine
 
@@ -4404,7 +4404,7 @@
 
         call glean(thy(mv))
 
-        if (error("Exit multivector_mod::decompose_large_i")) continue
+        if (error(FLERR,"Exit multivector_mod::decompose_large_i")) continue
 
       end subroutine
 

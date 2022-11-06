@@ -170,18 +170,18 @@
           ! Open the ATOMIC_POTENTIAL block
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_POTENTIAL")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_POTENTIAL block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_POTENTIAL block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
 
           ! Find the PAW tag
           if (i_access(restf)) tios = findfirsttag(restf,"PAW")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: PAW tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: PAW tag was not found")) goto 100
 
           ! Read the number of atoms
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_ATOMS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long
             ndata = 1
@@ -189,12 +189,12 @@
             na = s4
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,na)
-          if (error(na /= x_n_atoms(ap%o%ao),"ERROR: different numbers of atoms")) goto 100
+          if (error(FLERR,na /= x_n_atoms(ap%o%ao),"ERROR: different numbers of atoms")) goto 100
 
           ! Read the number of projectors
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_PROJECTORS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_PROJECTORS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_PROJECTORS tag was not found")) goto 100
           allocate( nps(na), v4(na) )
           if (i_access(restf)) then
             dsize = sizeof_long
@@ -210,12 +210,12 @@
               exit
             end if
           end do
-          if (error(.not.np_ok,"ERROR: different numbers of projectors")) goto 100
+          if (error(FLERR,.not.np_ok,"ERROR: different numbers of projectors")) goto 100
 
           ! Set the file pointer at the beginning of the dij matrix elements
           if (i_access(restf)) tios = findfirsttag(restf,"DIJ_MATRIX_ELEMENTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: DIJ_MATRIX_ELEMENTS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DIJ_MATRIX_ELEMENTS tag was not found")) goto 100
 
           ! Allocate space for the data
           n = 0
@@ -288,7 +288,7 @@
         if (present(hap)) call glean(thy(hap))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_potential_paw_mod::constructor_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::constructor_ap")) continue
 
       end function 
 
@@ -313,7 +313,7 @@
         call glean(thy(ad))
         call glean(thy(hap))
         
-        if (error("Exit atomic_potential_paw_mod::update_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::update_ap")) continue
 
       end subroutine
 
@@ -456,7 +456,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::atomic_hamiltonian_1d_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::atomic_hamiltonian_1d_ap")) continue
 
       end subroutine
 
@@ -491,7 +491,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::atomic_hamiltonian_2d_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::atomic_hamiltonian_2d_ap")) continue
 
       end subroutine
 
@@ -527,7 +527,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::atomic_overlap_1d_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::atomic_overlap_1d_ap")) continue
 
       end subroutine
 
@@ -565,7 +565,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::atomic_overlap_2d_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::atomic_overlap_2d_ap")) continue
 
       end subroutine
 
@@ -600,7 +600,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::extract_potential_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::extract_potential_ap")) continue
 
       end subroutine
 
@@ -631,7 +631,7 @@
 
         call glean(thy(ap))
 
-        if (error("Exit atomic_potential_paw_mod::insert_potential_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::insert_potential_ap")) continue
 
       end subroutine
 
@@ -733,7 +733,7 @@
         call glean(thy(ap))
         call glean(thy(nrestf))
 
-        if (error("Exit atomic_potential_paw_mod::write_restart_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::write_restart_ap")) continue
       
       end subroutine
 
@@ -801,7 +801,7 @@
         call glean(thy(ad))
         call glean(thy(hap))
 
-        if (error("Exit atomic_potential_paw_mod::form_dij_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::form_dij_i")) continue
 
       end subroutine 
 
@@ -847,7 +847,7 @@
 
         nullify( pawd )
 
-        if (error("Exit atomic_potential_paw_mod::diagonal_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::diagonal_terms_i")) continue
 
       end subroutine
 
@@ -890,7 +890,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_potential_paw_mod::hartree_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::hartree_terms_i")) continue
 
       end subroutine
 
@@ -909,7 +909,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_potential_paw_mod::xc_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::xc_terms_i")) continue
 
       end subroutine
 
@@ -1034,7 +1034,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_potential_paw_mod::accum_xc_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::accum_xc_i")) continue
 
       end subroutine 
 
@@ -1225,7 +1225,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_potential_paw_mod::accum_xc_grad_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::accum_xc_grad_i")) continue
 
       end subroutine 
   
@@ -1270,7 +1270,7 @@
 
         call glean(thy(ad))
  
-        if (error("Exit atomic_potential_paw_mod::hat_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::hat_terms_i")) continue
 
       end subroutine
 
@@ -1319,7 +1319,7 @@
         call glean(thy(ad))
         call glean(thy(hap))
 
-        if (error("Exit atomic_potential_paw_mod::multipole_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::multipole_terms_i")) continue
 
       end subroutine 
 
@@ -1383,7 +1383,7 @@
         call glean(thy(ad))
         call glean(thy(hap))
   
-        if (error("Exit atomic_potential_paw_mod::form_de_dqlm_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::form_de_dqlm_i")) continue
 
       end subroutine 
 
@@ -1414,7 +1414,7 @@
 
         nullify( gx, gy, gz, c_hap )
 
-        if (error(x_ghost(lay) /= x_layout_ghost(ao),"ERROR: inconsistent layouts")) goto 100
+        if (error(FLERR,x_ghost(lay) /= x_layout_ghost(ao),"ERROR: inconsistent layouts")) goto 100
 
         call fmesh(gx,gy,gz,lay,D_TYPE,SGROUP)
 
@@ -1495,7 +1495,7 @@
         call glean(thy(ao))
         call glean(thy(hap))
 
-        if (error("Exit atomic_potential_paw_mod::hap_terms_i")) continue
+        if (error(FLERR,"Exit atomic_potential_paw_mod::hap_terms_i")) continue
         
       end subroutine
 
@@ -1594,7 +1594,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit atomic_density_paw_mod::distribute_dij_i")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::distribute_dij_i")) continue
 
       end subroutine
 

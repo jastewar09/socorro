@@ -115,14 +115,14 @@
         case (FD_DENSITY)
           call my(axc_density(xc_type),axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
 
 100     call glean(thy(xc_type))
 
-        if (error("Exit axc_mod::constructor_axc")) continue
+        if (error(FLERR,"Exit axc_mod::constructor_axc")) continue
 
       end function 
 
@@ -136,11 +136,11 @@
         case (FD_DENSITY)
           call update(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::update_axc")) continue
+        if (error(FLERR,"Exit axc_mod::update_axc")) continue
       end subroutine
 
       subroutine my_axc(axc)
@@ -152,11 +152,11 @@
         case (FD_DENSITY)
           call my(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::my_axc")) continue
+        if (error(FLERR,"Exit axc_mod::my_axc")) continue
       end subroutine
 
       subroutine my_new_axc(axci,axc)
@@ -169,11 +169,11 @@
         case (FD_DENSITY)
           call my(axci%axc_density,axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::my_new_axc")) continue
+        if (error(FLERR,"Exit axc_mod::my_new_axc")) continue
       end subroutine
 
       function thy_axc(axc) result(axco)
@@ -187,11 +187,11 @@
           call my(thy(axc%axc_density),axco%axc_density)
           call bequeath(thy(axco%axc_density))
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::thy_axc")) continue
+        if (error(FLERR,"Exit axc_mod::thy_axc")) continue
       end function
 
       subroutine glean_axc(axc)
@@ -203,11 +203,11 @@
         case (FD_DENSITY)
           call glean(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::glean_axc")) continue
+        if (error(FLERR,"Exit axc_mod::glean_axc")) continue
       end subroutine
 
       subroutine bequeath_axc(axc)
@@ -219,11 +219,11 @@
         case (FD_DENSITY)
           call bequeath(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::bequeath_axc")) continue
+        if (error(FLERR,"Exit axc_mod::bequeath_axc")) continue
       end subroutine
  
       subroutine assign_axc(axc,axc2)
@@ -236,11 +236,11 @@
         case (FD_DENSITY)
           axc%axc_density = axc2%axc_density
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::assign_axc")) continue
+        if (error(FLERR,"Exit axc_mod::assign_axc")) continue
       end subroutine
 
       function axc_ref(axc) result(r)
@@ -256,12 +256,12 @@
           r = x_ref(axc%axc_density)
         case (FD_ORBITAL)
           r = 0
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
           r = 0
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::axc_ref")) continue
+        if (error(FLERR,"Exit axc_mod::axc_ref")) continue
       end function
  
       function axc_ghost(axc) result(g)
@@ -276,11 +276,11 @@
         case (FD_DENSITY)
           g = x_ghost(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::axc_ghost")) continue
+        if (error(FLERR,"Exit axc_mod::axc_ghost")) continue
       end function
 
       function axc_xc_type(axc) result(xc_type)
@@ -294,12 +294,12 @@
         case (FD_DENSITY)
           call my(x_xc_type(axc%axc_density),xc_type)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: orbital-dependent functionals are not yet implemented")) goto 100
+          if (error(FLERR,.true.,"ERROR: orbital-dependent functionals are not yet implemented")) goto 100
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) goto 100
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) goto 100
         end select
         call bequeath(thy(xc_type))
-100     if (error("Exit axc_mod::axc_xc_type")) continue
+100     if (error(FLERR,"Exit axc_mod::axc_xc_type")) continue
       end function
 
       function axc_functional_dependence(axc) result(fd)
@@ -323,11 +323,11 @@
         case (FD_DENSITY)
           ug = uses_gradient(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: query is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: query is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::q_uses_gradient")) continue
+        if (error(FLERR,"Exit axc_mod::q_uses_gradient")) continue
       end function
 
       function q_uses_laplacian(axc) result(ul)
@@ -341,11 +341,11 @@
         case (FD_DENSITY)
           ul = uses_laplacian(axc%axc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: query is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: query is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::q_uses_laplacian")) continue
+        if (error(FLERR,"Exit axc_mod::q_uses_laplacian")) continue
       end function
 
       subroutine xcd_energy_density_axc(axc,n,dn,lapl,exc)
@@ -361,11 +361,11 @@
         case (FD_DENSITY)
           call xc_energy_density(axc%axc_density,n,dn,lapl,exc)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::xcd_energy_density_axc")) continue
+        if (error(FLERR,"Exit axc_mod::xcd_energy_density_axc")) continue
       end subroutine
 
       subroutine xcd_derivatives_axc(axc,n,dn,lapl,dfxcdn,dfxcddnodn,dfxcdlapl)
@@ -381,11 +381,11 @@
         case (FD_DENSITY)
           call xc_derivatives(axc%axc_density,n,dn,lapl,dfxcdn,dfxcddnodn,dfxcdlapl)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: hybrid functionals are not yet implemented")) continue
+          if (error(FLERR,.true.,"ERROR: hybrid functionals are not yet implemented")) continue
         end select
-        if (error("Exit axc_mod::xcd_derivatives_axc")) continue
+        if (error(FLERR,"Exit axc_mod::xcd_derivatives_axc")) continue
       end subroutine
 
       end module

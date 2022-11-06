@@ -110,7 +110,7 @@
         nullify(dk%o%dv)
         nullify(dk%o%dw)
 
-        if (error((present(dv) .neqv. present(dw)),"ERROR: dv and dw must become defined together")) goto 100
+        if (error(FLERR,(present(dv) .neqv. present(dw)),"ERROR: dv and dw must become defined together")) goto 100
 
         if (present(dv)) then
            allocate(dk%o%dv)
@@ -122,7 +122,7 @@
 100     if (present(dv)) call glean(thy(dv))
         if (present(dw)) call glean(thy(dw))
 
-        if (error("Exit dyad_kpoint_mod::constructor_dk")) continue
+        if (error(FLERR,"Exit dyad_kpoint_mod::constructor_dk")) continue
 
       end function
 
@@ -148,7 +148,7 @@
                 dk%o%dv = dv
              end if
           else
-             if (error((.not. present(dw)), "ERROR: dv and dw must become defined together")) goto 100
+             if (error(FLERR,(.not. present(dw)), "ERROR: dv and dw must become defined together")) goto 100
              call own_i(dk)
              dk%o%g = x_ghost()
              allocate(dk%o%dv)
@@ -164,7 +164,7 @@
                 dk%o%dw = dw
              end if
           else
-             if (error((.not. present(dv)), "ERROR: dv and dw must become defined together")) goto 100
+             if (error(FLERR,(.not. present(dv)), "ERROR: dv and dw must become defined together")) goto 100
              call own_i(dk)
              dk%o%g = x_ghost()
              allocate(dk%o%dw)
@@ -177,7 +177,7 @@
 
         call glean(thy(dk))
 
-        if (error("Exit dyad_kpoint_mod::update_dk")) continue
+        if (error(FLERR,"Exit dyad_kpoint_mod::update_dk")) continue
 
       end subroutine
 
@@ -302,12 +302,12 @@
 
 !cod$
         call my(dk)
-        if (error(is_empty(dk),"ERROR: dk is empty")) goto 100
+        if (error(FLERR,is_empty(dk),"ERROR: dk is empty")) goto 100
         call my(dk%o%dv,dv)
         call bequeath(thy(dv))
 
 100     call glean(thy(dk))
-        if (error("Exit dyad_kpoint_mod::x_v")) continue
+        if (error(FLERR,"Exit dyad_kpoint_mod::x_v")) continue
 
       end function
 
@@ -320,12 +320,12 @@
 
 !cod$
         call my(dk)
-        if (error(is_empty(dk),"ERROR: dk is empty")) goto 100
+        if (error(FLERR,is_empty(dk),"ERROR: dk is empty")) goto 100
         call my(dk%o%dw,dw)
         call bequeath(thy(dw))
 
 100     call glean(thy(dk))
-        if (error("Exit dyad_kpoint_mod::x_w")) continue
+        if (error(FLERR,"Exit dyad_kpoint_mod::x_w")) continue
 
       end function
 
@@ -360,7 +360,7 @@
         call my(mv)
         allocate( cmat(x_n_bands(mv),x_n_bands(mv)))
 
-        if (error(is_empty(dk),"ERROR: dk is empty")) goto 100
+        if (error(FLERR,is_empty(dk),"ERROR: dk is empty")) goto 100
 
         call my(multivector(x_multibasis(mv),init),rmv) ; if (error()) goto 100
         call overlap(dk%o%dw,mv,cmat)
@@ -372,7 +372,7 @@
 100     deallocate(cmat)
         call glean(thy(mv))
         call glean(thy(dk))
-        if (error("Exit dyad_kpoint_mod::apply")) continue
+        if (error(FLERR,"Exit dyad_kpoint_mod::apply")) continue
 
       end function
 

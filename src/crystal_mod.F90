@@ -164,7 +164,7 @@
         type(file_obj) :: f
         logical :: found
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           cr%ref = 0
           allocate( cr%o )
           cr%o%ref = 0
@@ -183,44 +183,44 @@
         end if
         if (i_access(f)) inquire(file=x_name(f),exist=exist_file)
         if (i_comm(f)) call broadcast(FILE_SCOPE,exist_file)
-        if (error(.not.exist_file,"ERROR: file does not exist")) goto 200
+        if (error(FLERR,.not.exist_file,"ERROR: file does not exist")) goto 200
 
         if (i_access(f)) open(x_unit(f),file=x_name(f),status='old',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 200
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 200
 
         if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) tag_ls
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read name")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read name")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,tag_ls)
         cr%o%name = tag_ls(1:len_trim(tag_ls))
 
         if (i_access(f)) read(x_unit(f),*,iostat=ios) latc
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice constant")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice constant")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,latc)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v1
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v1)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v2
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v2)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v3
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v3)
         mat(:,1) = v1
         mat(:,2) = v2
         mat(:,3) = v3
         linear_dependence = ( determinant(mat) .in. nbhd(0.0_double,tol_equal) )
-        if (error(linear_dependence,"ERROR: lattice vectors are linearly dependent")) goto 100
+        if (error(FLERR,linear_dependence,"ERROR: lattice vectors are linearly dependent")) goto 100
         call my(lattice(v1,v2,v3,latc),cr%o%lattice)
 
         if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) tag_ls
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read designator")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read designator")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,tag_ls)
         select case (tag_ls(1:len_trim(tag_ls)))
         case ( "cartesian", "Cartesian", "CARTESIAN", "cart", "Cart", "CART" )
@@ -228,19 +228,19 @@
         case ( "lattice", "Lattice", "LATTICE", "lat", "Lat", "LAT" )
           cartesian_mode = .false.
         case default
-          if (error(.true.,"ERROR: unrecognized designator")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized designator")) goto 100
         end select
 
         if (i_access(f)) read(x_unit(f),*,iostat=ios) na
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read the number of atoms")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read the number of atoms")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,na)
-        if (error(na <= 0,"ERROR: incorrect number of atoms")) goto 100
+        if (error(FLERR,na <= 0,"ERROR: incorrect number of atoms")) goto 100
         call my(atoms(),cr%o%atoms)
         do ia = 1,na
           if (i_access(f)) read(x_unit(f),*,iostat=ios) tag_ts, pos
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read atom information")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read atom information")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,tag_ts)
           if (i_comm(f)) call broadcast(FILE_SCOPE,pos)
           if (cartesian_mode) pos = r2lat(cr%o%lattice,x_lattice_constant(cr%o%lattice)*pos)
@@ -249,7 +249,7 @@
 
         call arg("neighbor_range",cr%o%neighbor_range,found)
         if (.not.found) cr%o%neighbor_range = neighbor_range_default
-        if (error(cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
+        if (error(FLERR,cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
 
         cr%o%neighbor_list_ghost = x_ghost()
         allocate( cr%o%n_neighbors(na) )
@@ -260,7 +260,7 @@
 100     if (i_access(f)) close(x_unit(f))
 200     call glean(thy(f))
 
-999     if (error("Exit crystal_mod::constructor_cr_1")) continue
+999     if (error(FLERR,"Exit crystal_mod::constructor_cr_1")) continue
 
       end function
       
@@ -288,13 +288,13 @@
         ! open the CRYSTAL block
         if (i_access(restf)) tios = findfirsttag(restf,"CRYSTAL")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: CRYSTAL block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: CRYSTAL block was not found")) goto 200
         if (i_access(restf)) call openblock(restf)
 
         ! determine the name
         if (i_access(restf)) tios = findfirsttag(restf,"NAME")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: NAME tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NAME tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = 1 ; ndata = line_len
           call readf(cr%o%name,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -314,7 +314,7 @@
         ! determine the neighbor range
         call arg("neighbor_range",cr%o%neighbor_range,found)
         if (.not.found) cr%o%neighbor_range = neighbor_range_default
-        if (error(cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 200
+        if (error(FLERR,cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 200
 
         ! allocate arrays for the neighbor information
         cr%o%neighbor_list_ghost = x_ghost()
@@ -326,7 +326,7 @@
 
 200     call glean(thy(restf))
 
-        if (error("Exit crystal_mod::constructor_cr_2")) continue
+        if (error(FLERR,"Exit crystal_mod::constructor_cr_2")) continue
 
       end function
       
@@ -343,7 +343,7 @@
         logical :: found
         integer :: na
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           cr%ref = 0
           allocate( cr%o )
           cr%o%ref = 0
@@ -370,7 +370,7 @@
 
         call arg("neighbor_range",cr%o%neighbor_range,found)
         if (.not.found) cr%o%neighbor_range = neighbor_range_default
-        if (error(cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
+        if (error(FLERR,cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
 
         cr%o%neighbor_list_ghost = x_ghost()
         na = x_n_atoms(cr%o%atoms)
@@ -382,7 +382,7 @@
 100     call glean(thy(at))
         call glean(thy(lat))
 
-999     if (error("Exit crystal_mod::constructor_cr_3")) continue
+999     if (error(FLERR,"Exit crystal_mod::constructor_cr_3")) continue
 
       end function
       
@@ -427,11 +427,11 @@
           cr%o%g = x_ghost()
           if (atoms_change) cr%o%atoms = atoms
           if (lattice_change) then
-            if (error(.true.,"ERROR: lattice changes are not currently allowed")) goto 100
+            if (error(FLERR,.true.,"ERROR: lattice changes are not currently allowed")) goto 100
           end if
           if (range_change) then
              cr%o%neighbor_range = neighbor_range
-             if (error(cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
+             if (error(FLERR,cr%o%neighbor_range <= 0,"ERROR: neighbor_range <= 0")) goto 100
 !            Do not calculate the actual neighbor list until it is needed
              cr%o%neighbor_list_ghost = x_ghost()  ! Make sure neighbor_list_ghost will not match cr%o%g
           end if
@@ -442,7 +442,7 @@
         if (present(atoms)) call glean(thy(atoms))
         if (present(lattice)) call glean(thy(lattice))
 
-        if (error("Exit crystal_mod::update_cr")) continue
+        if (error(FLERR,"Exit crystal_mod::update_cr")) continue
 
       end subroutine
 
@@ -588,11 +588,11 @@
 
 !cod$
         call my(cr)
-        if (error((ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
         if (cr%o%neighbor_list_ghost /= cr%o%g) call find_neighbors_i(cr)
         nn = cr%o%n_neighbors(ia)
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::cr_n_neighbors")) continue
+        if (error(FLERR,"Exit crystal_mod::cr_n_neighbors")) continue
 
       end function
 
@@ -607,7 +607,7 @@
         call my(cr)
         nc = cr%o%neighbor_range
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::cr_neighbor_range")) continue
+        if (error(FLERR,"Exit crystal_mod::cr_neighbor_range")) continue
       end function
 
       function cr_neighbor_index(cr,ia,in) result(ni)
@@ -620,11 +620,11 @@
 
 !cod$
         call my(cr)
-        if (error((ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
-        if (error((in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
+        if (error(FLERR,(in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
         ni = cr%o%neighbor_index(in,ia)
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::cr_neighbor_index")) continue
+        if (error(FLERR,"Exit crystal_mod::cr_neighbor_index")) continue
       end function
 
       function cr_neighbor_distance(cr,ia,in) result(nd)
@@ -637,11 +637,11 @@
 
 !cod$
         call my(cr)
-        if (error((ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
-        if (error((in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
+        if (error(FLERR,(in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
         nd = cr%o%neighbor_distance(in,ia)
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::cr_neighbor_distance")) continue
+        if (error(FLERR,"Exit crystal_mod::cr_neighbor_distance")) continue
       end function
 
       function cr_neighbor_vector(cr,ia,in) result(nv)
@@ -654,11 +654,11 @@
 
 !cod$
         call my(cr)
-        if (error((ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
-        if (error((in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > x_n_atoms(cr%o%atoms)),"ERROR: atom index out of range")) goto 100
+        if (error(FLERR,(in < 1) .or. (in > cr%o%n_neighbors(ia)),"ERROR: neighbor index out of range")) goto 100
         nv = cr%o%neighbor_vector(:,in,ia)
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::cr_neighbor_vector")) continue
+        if (error(FLERR,"Exit crystal_mod::cr_neighbor_vector")) continue
       end function
 
       subroutine save_crys(cr,cp_mode,path)
@@ -700,7 +700,7 @@
           end if
         end if
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
         if (i_access(f)) write(x_unit(f),'(a)') trim(cr%o%name)
         latc = x_lattice_constant(cr%o%lattice)
         if (i_access(f)) write(x_unit(f),'(f15.10)') latc
@@ -733,7 +733,7 @@
 100     call glean(thy(cr))
         call glean(thy(f))
 
-        if (error("Exit crystal_mod::save_crys")) continue
+        if (error(FLERR,"Exit crystal_mod::save_crys")) continue
 
       end subroutine
 
@@ -749,7 +749,7 @@
         call diary(cr%o%lattice)
         call diary(cr%o%atoms,cr%o%lattice) ; if (error()) goto 100
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::diary_cr")) continue
+        if (error(FLERR,"Exit crystal_mod::diary_cr")) continue
       end subroutine
 
       subroutine diary_crystal_step(cr,step)
@@ -775,7 +775,7 @@
         end if
         call diary(cr%o%atoms,cr%o%lattice) ; if (error()) goto 100
 100     call glean(thy(cr))
-        if (error("Exit crystal_mod::diary_crystal_step")) continue
+        if (error(FLERR,"Exit crystal_mod::diary_crystal_step")) continue
       end subroutine
 
       subroutine write_restart_cr(cr,nrestf)
@@ -813,7 +813,7 @@
         call glean(thy(cr))
         call glean(thy(nrestf))
 
-        if (error("Exit crystal_mod::write_restart_cr")) continue
+        if (error(FLERR,"Exit crystal_mod::write_restart_cr")) continue
 
       end subroutine
 

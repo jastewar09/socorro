@@ -180,7 +180,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"K-POINTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: K-POINTS block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: K-POINTS block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -189,7 +189,7 @@
           ! read the mode
           if (i_access(restf)) tios = findfirsttag(restf,"MODE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: MODE tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: MODE tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 1
             call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -222,7 +222,7 @@
           case ("usp")
             call usp_i(ext,kp%o) ; if (error()) goto 200
           case default
-            if (error(.true.,"ERROR: kpoints tag was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: kpoints tag was not recognized")) goto 100
           end select
 
         end if
@@ -235,7 +235,7 @@
 200     call glean(thy(ext))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit kpoints_mod::constructor_kp")) continue
+        if (error(FLERR,"Exit kpoints_mod::constructor_kp")) continue
 
       end function
 
@@ -266,14 +266,14 @@
         case ("gmp")
           call gmp_ck_i(lat,lat_grp,dbl_grp,kp%o) ; if (error()) goto 100
         case default
-          if (error(.true.,"ERROR: kpoints tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: kpoints tag was not recognized")) goto 100
         end select
 
 100     call glean(thy(lat))
         call glean(thy(lat_grp))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::constructor_kpc")) continue
+        if (error(FLERR,"Exit kpoints_mod::constructor_kpc")) continue
 
       end function
 
@@ -310,7 +310,7 @@
 100     call glean(thy(kp))
         if (present(ext)) call glean(thy(ext))
 
-        if (error("Exit kpoints_mod::update_kp")) continue
+        if (error(FLERR,"Exit kpoints_mod::update_kp")) continue
 
       end subroutine
 
@@ -338,7 +338,7 @@
 100     call glean(thy(kp))
         call glean(thy(ext))
 
-        if (error("Exit kpoints_mod::change_kp")) continue
+        if (error(FLERR,"Exit kpoints_mod::change_kp")) continue
 
       end function
 
@@ -460,10 +460,10 @@
 
 !cod$
         call my(kp)
-        if (error((ik < 1) .or. (ik > size(kp%o%set)),"ERROR: index is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(kp%o%set)),"ERROR: index is out of range")) goto 100
         sp = kp%o%set(ik)%sp
 100     call glean(thy(kp))
-        if (error("Exit kpoints_mod::kp_kpoint")) continue
+        if (error(FLERR,"Exit kpoints_mod::kp_kpoint")) continue
       end function
 
       function kp_kpoints(kp) result(sps)
@@ -491,10 +491,10 @@
 
 !cod$
         call my(kp)
-        if (error((ik < 1) .or. (ik > size(kp%o%set)),"ERROR: ik is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(kp%o%set)),"ERROR: ik is out of range")) goto 100
         wt = kp%o%set(ik)%wgt
 100     call glean(thy(kp))
-        if (error("Exit kpoints_mod::kp_kweight")) continue
+        if (error(FLERR,"Exit kpoints_mod::kp_kweight")) continue
       end function
 
       function kp_kweights(kp) result(wts)
@@ -522,10 +522,10 @@
 
 !cod$
         call my(kp)
-        if (error((ik < 1) .or. (ik > size(kp%o%set)),"ERROR: index is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(kp%o%set)),"ERROR: index is out of range")) goto 100
         map = kp%o%set(ik)%map
 100     call glean(thy(kp))
-        if (error("Exit kpoints_mod::kp_kmap")) continue
+        if (error(FLERR,"Exit kpoints_mod::kp_kmap")) continue
       end function
 
       function kp_kmaps(kp) result(maps)
@@ -612,7 +612,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         nk = size(kp%o%set)
         if (i_access(f)) then
@@ -636,7 +636,7 @@
 100     call glean(thy(kp))
         call glean(thy(f))
 
-        if (error("Exit kpoints_mod::save_kp")) continue
+        if (error(FLERR,"Exit kpoints_mod::save_kp")) continue
 
       end subroutine
 
@@ -691,7 +691,7 @@
         call glean(thy(kp))
         call glean(thy(nrestf))
 
-        if (error("Exit kpoints_mod::write_restart_kp")) continue
+        if (error(FLERR,"Exit kpoints_mod::write_restart_kp")) continue
 
       end subroutine
 
@@ -719,7 +719,7 @@
 
           if (i_access(restf)) tios = findfirsttag(restf,"MP_PARAMETERS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: MP_PARAMETERS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: MP_PARAMETERS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 3
             call readf(v4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -730,7 +730,7 @@
         else
 
           call arg("mpparams",kpr%mpp,found)
-          if (error(.not.found,"ERROR: mpparams tag was not found")) goto 100
+          if (error(FLERR,.not.found,"ERROR: mpparams tag was not found")) goto 100
 
         end if
 
@@ -739,7 +739,7 @@
 100     call glean(thy(ext))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit kpoints_mod::gmp_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::gmp_i")) continue
 
       end subroutine
 
@@ -759,7 +759,7 @@
         nullify( kpr%set )
 
         call arg("mpparams",kpr%mpp,found)
-        if (error(.not.found,"ERROR: mpparams tag was not found")) goto 100
+        if (error(FLERR,.not.found,"ERROR: mpparams tag was not found")) goto 100
 
         call monkhorst_pack_ck_i(lat,lat_grp,dbl_grp,kpr) ; if (error()) goto 100
 
@@ -767,7 +767,7 @@
         call glean(thy(lat_grp))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::gmp_ck_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::gmp_ck_i")) continue
 
       end subroutine
 
@@ -947,7 +947,7 @@
         call glean(thy(lat_grp))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::monkhorst_pack_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::monkhorst_pack_i")) continue
 
       end subroutine
 
@@ -1115,7 +1115,7 @@
         call glean(thy(lat_grp))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::monkhorst_pack_ck_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::monkhorst_pack_ck_i")) continue
 
       end subroutine
 
@@ -1133,7 +1133,7 @@
 
 100     call glean(thy(ext))
 
-        if (error("Exit kpoints_mod::gbp_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::gbp_i")) continue
 
       end subroutine
 
@@ -1155,8 +1155,8 @@
 
         if (associated( kpr%set )) deallocate( kpr%set )
 
-        if (error(.not.cubic_cell(lat),"ERROR: GBP mode can be used only with a cubic cell")) goto 100
-        if (error(.not.trivial(x_space_group(ext)),"ERROR: GBP mode can be used only with C1 symmetry")) goto 100
+        if (error(FLERR,.not.cubic_cell(lat),"ERROR: GBP mode can be used only with a cubic cell")) goto 100
+        if (error(FLERR,.not.trivial(x_space_group(ext)),"ERROR: GBP mode can be used only with C1 symmetry")) goto 100
 
         allocate( kpr%set(1) )
         kpr%set(1)%sp = (/0.25_double,0.25_double,0.25_double/)
@@ -1175,7 +1175,7 @@
         call glean(thy(lat))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::baldereschi_point_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::baldereschi_point_i")) continue
 
       end subroutine
 
@@ -1219,7 +1219,7 @@
           ! read the number of k-points
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_K-POINTS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_K-POINTS tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_K-POINTS tag was not found")) goto 200
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 1
             call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -1231,7 +1231,7 @@
           allocate( tsp(3,nk), tdeg(nk) )
           if (i_access(restf)) tios = findfirsttag(restf,"K-POINT_DATA")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: K-POINT_DATA tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: K-POINT_DATA tag was not found")) goto 200
           if (i_access(restf)) then
             do ik = 1,nk
               dsize = sizeof_double ; ndata = 3
@@ -1251,24 +1251,24 @@
           ! find the k-points file
           if (i_access(f)) inquire(file=x_name(f),exist=exist_file)
           if (i_comm(f)) call broadcast(FILE_SCOPE,exist_file)
-          if (error(.not.exist_file,"ERROR: k-points file was not found")) goto 200
+          if (error(FLERR,.not.exist_file,"ERROR: k-points file was not found")) goto 200
 
           ! open the k-points file
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open file")) goto 200
+          if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 200
 
           ! read the number of k-points
           if (i_access(f)) read(x_unit(f),*,iostat=ios) nk
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read the number of k-points")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read the number of k-points")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,nk)
           allocate( kpr%set(nk) )
 
           ! read the k-points representation
           if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) rep
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read the k-points representation")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read the k-points representation")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,rep)
           select case (trim(rep))
           case ("lattice","Lattice","LATTICE","lat","Lat","LAT","l","L")
@@ -1276,7 +1276,7 @@
           case ("cartesian","Cartesian","CARTESIAN","cart","Cart","CART","c","C")
             lattice_rep = .false.
           case default
-            if (error(.true.,"ERROR: k-points representation was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: k-points representation was not recognized")) goto 100
           end select
 
           ! read the k-points data
@@ -1333,7 +1333,7 @@
         call glean(thy(lat))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::usp_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::usp_i")) continue
 
       end subroutine
 
@@ -1380,7 +1380,7 @@
         call glean(thy(lat))
         call glean(thy(dbl_grp))
 
-        if (error("Exit kpoints_mod::update_usp_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::update_usp_i")) continue
 
       end subroutine
 
@@ -1394,7 +1394,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         nk = size(kpr%set)
         if (i_access(f)) then
@@ -1409,7 +1409,7 @@
 
 100     call glean(thy(f))
 
-        if (error("Exit kpoints_mod::save_i")) continue
+        if (error(FLERR,"Exit kpoints_mod::save_i")) continue
 
       end subroutine
 

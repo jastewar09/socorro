@@ -181,7 +181,7 @@
         logical :: found
         character(line_len) :: init
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           wf%ref = 0
           allocate( wf%o )
           wf%o%ref = 0
@@ -224,7 +224,7 @@
             case ("random","diagnostic")
               continue
             case default
-              if (error(.true.,"ERROR: wf_init was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: wf_init was not recognized")) goto 100
             end select
             call my(multivector(mb,init),wf%o%mv)                                          ; if (error()) goto 100
             if (present(dk)) then
@@ -245,7 +245,7 @@
         if (present(dk)) call glean(thy(dk))
         if (present(restf)) call glean(thy(restf))
 
-999     if (error("Exit wavefunctions_es_mod::constructor_wf")) continue
+999     if (error(FLERR,"Exit wavefunctions_es_mod::constructor_wf")) continue
 
       end function
 
@@ -272,7 +272,7 @@
         mb_change = .false.
         if (present(mb)) then
           mb_change = ( x_ghost(x_multibasis(wf%o%mv)) /= x_ghost(mb) )
-          if (error(mb_change,"ERROR: multibasis change is not currently allowed")) goto 100
+          if (error(FLERR,mb_change,"ERROR: multibasis change is not currently allowed")) goto 100
         end if
 
         if (wf%o%usage == AUXILIARY) goto 100
@@ -297,7 +297,7 @@
         if (present(mb)) call glean(thy(mb))
         if (present(dk)) call glean(thy(dk))
 
-        if (error("Exit wavefunctions_es_mod::update_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::update_wf")) continue
 
       end subroutine
 
@@ -500,7 +500,7 @@
           ke = 0.0_double
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::kinetic_energy_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::kinetic_energy_wf")) continue
       end function
 
       subroutine forces_wf(wf,wts,f)
@@ -522,7 +522,7 @@
           f = 0.0_double
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::forces_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::forces_wf")) continue
       end subroutine
 
       subroutine pressure_wf(wf,wts,p)
@@ -542,7 +542,7 @@
           p = 0.0_double
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::pressure_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::pressure_wf")) continue
       end subroutine
 
       subroutine stress_tensor_wf(wf,wts,s)
@@ -564,7 +564,7 @@
           s = 0.0_double
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::stress_tensor_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::stress_tensor_wf")) continue
       end subroutine
 
       subroutine add_density_wf(wf,weights,den)
@@ -584,7 +584,7 @@
         end select
 100     call glean(thy(wf))
         call glean(thy(den))
-        if (error("Exit wavefunctions_es_mod::add_density_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::add_density_wf")) continue
       end subroutine
 
       subroutine decompose_wf(wf,site_data,mode,rsa,b1)
@@ -608,7 +608,7 @@
           rsa = 0.0_double
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::decompose_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::decompose_wf")) continue
 
       end subroutine
 
@@ -624,7 +624,7 @@
         call my(wf)
         call distribute(wf%o%mv,rank)
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::distribute_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::distribute_wf")) continue
 
       end subroutine
 
@@ -642,7 +642,7 @@
           call release(wf%o%mv)
         end select
         call glean(thy(wf))
-        if (error("Exit wavefunctions_es_mod::release_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::release_wf")) continue
 
       end subroutine
 
@@ -679,7 +679,7 @@
 100     call glean(thy(wf))
         call glean(thy(nrestf))
 
-        if (error("Exit wavefunctions_es_mod::write_restart_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_es_mod::write_restart_wf")) continue
 
       end subroutine
 

@@ -280,15 +280,15 @@
 !cod$
         type(grid_obj) :: gt
         call my(g2)
-        if (error(x_ghost(g%o%layout) /= x_ghost(g2%o%layout),"ERROR: incompatible layouts")) goto 100
-        if (error(g%o%scope /= g2%o%scope,"ERROR: incompatible scopes")) goto 100
+        if (error(FLERR,x_ghost(g%o%layout) /= x_ghost(g2%o%layout),"ERROR: incompatible layouts")) goto 100
+        if (error(FLERR,g%o%scope /= g2%o%scope,"ERROR: incompatible scopes")) goto 100
         gt%o => g%o
         g%o%ref = g%o%ref - g%ref
         g%o => g2%o
         g%o%ref = g%o%ref + g%ref
         call glean(gt)
 100     call glean(thy(g2))
-        if (error("Exit grid_mod::assign_grid")) continue
+        if (error(FLERR,"Exit grid_mod::assign_grid")) continue
       end subroutine
 
       function grid_ref(g) result(r)
@@ -368,9 +368,9 @@
         call my(g)
         select case (kind)
         case (RS_KIND)
-          if (error(.not.consistent(data,g%o%layout,S_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
+          if (error(FLERR,.not.consistent(data,g%o%layout,S_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
         case (RD_KIND)
-          if (error(.not.consistent(data,g%o%layout,D_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
+          if (error(FLERR,.not.consistent(data,g%o%layout,D_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
         end select
         call own_i(g)
         call empty_i(g)
@@ -381,7 +381,7 @@
         call transfer_grid_i(g%o%layout,g%o%scope,g%o%type,g%o%rdata,g%o%cdata,tpo,rtmp,ctmp) ; if (error()) goto 100
         g%o%g = x_ghost()
 100     call glean(thy(g))
-        if (error("Exit grid_mod::put_ptr_grid_r")) continue
+        if (error(FLERR,"Exit grid_mod::put_ptr_grid_r")) continue
       end subroutine
 
       subroutine put_ptr_grid_c(data,g,kind)
@@ -400,9 +400,9 @@
         call my(g)
         select case (kind)
         case (CSP_KIND,CSF_KIND)
-          if (error(.not.consistent(data,g%o%layout,S_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
+          if (error(FLERR,.not.consistent(data,g%o%layout,S_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
         case (CDP_KIND,CDF_KIND)
-          if (error(.not.consistent(data,g%o%layout,D_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
+          if (error(FLERR,.not.consistent(data,g%o%layout,D_TYPE,g%o%scope),"ERROR: incorrect data distribution")) goto 100
         end select
         call own_i(g)
         call empty_i(g)
@@ -413,7 +413,7 @@
         call transfer_grid_i(g%o%layout,g%o%scope,g%o%type,g%o%rdata,g%o%cdata,tpo,rtmp,ctmp) ; if (error()) goto 100
         g%o%g = x_ghost()
 100     call glean(thy(g))
-        if (error("Exit grid_mod::put_ptr_grid_c")) continue
+        if (error(FLERR,"Exit grid_mod::put_ptr_grid_c")) continue
       end subroutine
 
       subroutine take_ptr_grid_r(data,g,kind)
@@ -438,7 +438,7 @@
         g%o%g = x_ghost()
         data => rtmp
 100     call glean(thy(g))
-        if (error("Exit grid_mod::take_ptr_grid_r")) continue
+        if (error(FLERR,"Exit grid_mod::take_ptr_grid_r")) continue
       end subroutine
 
       subroutine take_ptr_grid_c(data,g,kind)
@@ -463,7 +463,7 @@
         g%o%g = x_ghost()
         data => ctmp
 100     call glean(thy(g))
-        if (error("Exit grid_mod::take_ptr_grid_c")) continue
+        if (error(FLERR,"Exit grid_mod::take_ptr_grid_c")) continue
       end subroutine
 
       subroutine transform_grid(g,kind)
@@ -491,7 +491,7 @@
           call put(ctmp,g,kind) ; if (error()) goto 100
         end select
 100     call glean(thy(g))
-        if (error("Exit grid_mod::transform_grid: ")) continue
+        if (error(FLERR,"Exit grid_mod::transform_grid: ")) continue
       end subroutine
 
       function norm_grid(g) result(n)
@@ -535,7 +535,7 @@
           n = sqrt(x_global)
         end select
 100     call glean(thy(g))
-        if (error("Exit grid_mod::norm_grid: ")) continue
+        if (error(FLERR,"Exit grid_mod::norm_grid: ")) continue
       end function
 
       subroutine empty_grid(g)
@@ -551,7 +551,7 @@
         if (error()) goto 100
         g%o%g = x_ghost()
 100     call glean(thy(g))
-        if (error("Exit grid_mod::empty_grid: ")) continue
+        if (error(FLERR,"Exit grid_mod::empty_grid: ")) continue
       end subroutine
 
       subroutine filter_grid(g)
@@ -570,7 +570,7 @@
         call put(c1,g,CDF_KIND)
         g%o%g = x_ghost()
 100     call glean(thy(g))
-        if (error("Exit grid_mod::filter_grid: ")) continue
+        if (error(FLERR,"Exit grid_mod::filter_grid: ")) continue
       end subroutine
 
       subroutine get_normalization_grid_c(g,n)
@@ -658,8 +658,8 @@
 
         nullify( c1, c2 )
 
-        if (error(g1%o%type == EMPTY_KIND,"ERROR: g1 is empty")) goto 100
-        if (error(g2%o%type == EMPTY_KIND,"ERROR: g2 is empty")) goto 100
+        if (error(FLERR,g1%o%type == EMPTY_KIND,"ERROR: g1 is empty")) goto 100
+        if (error(FLERR,g2%o%type == EMPTY_KIND,"ERROR: g2 is empty")) goto 100
 
         if ((g1%o%type == CDF_KIND) .and. (g2%o%type == CDF_KIND)) then
           s_local = sum(abs(g2%o%cdata - g1%o%cdata)**2)
@@ -687,7 +687,7 @@
         call glean(thy(g1))
         call glean(thy(g2))
 
-        if (error("Exit grid_mod::distance_grid")) continue
+        if (error(FLERR,"Exit grid_mod::distance_grid")) continue
 
       end function
 
@@ -770,7 +770,7 @@
         call glean(thy(g1))
         call glean(thy(g2))
 
-        if (error("Exit grid_mod::saxpby_grid")) continue
+        if (error(FLERR,"Exit grid_mod::saxpby_grid")) continue
 
       end subroutine
 
@@ -806,7 +806,7 @@
             call xcomm_allreduce(XKGROUP,MPI_SUM,c1,c2) ; if (error()) goto 100
             call put(c2,g,g_type)
           case default
-            if (error(.true.,"ERROR: grid type is not RS_KIND, CSP_KIND, or CSF_KIND")) goto 100
+            if (error(FLERR,.true.,"ERROR: grid type is not RS_KIND, CSP_KIND, or CSF_KIND")) goto 100
           end select
           g%o%scope = SGROUP
         case (SGROUP)
@@ -823,7 +823,7 @@
             call xcomm_allreduce(XSGROUP,MPI_SUM,c1,c2) ; if (error()) goto 100
             call put(c2,g,g_type)
           case default
-            if (error(.true.,"ERROR: grid type is not RS_KIND, CSP_KIND, or CSF_KIND")) goto 100
+            if (error(FLERR,.true.,"ERROR: grid type is not RS_KIND, CSP_KIND, or CSF_KIND")) goto 100
           end select
           g%o%scope = CONFIG
         end select
@@ -835,7 +835,7 @@
 
 100     call glean(thy(g))
 
-        if (error("Exit grid_mod::merge_grid_density_grid")) continue
+        if (error(FLERR,"Exit grid_mod::merge_grid_density_grid")) continue
 
       end subroutine
 
@@ -857,7 +857,7 @@
 
         call my(grid(g%o%layout,g%o%scope),gs)
 
-        if (error(g%o%scope /= SGROUP,"ERROR: grid scope is not SGROUP")) goto 100
+        if (error(FLERR,g%o%scope /= SGROUP,"ERROR: grid scope is not SGROUP")) goto 100
 
         g_type = g%o%type
         select case (g_type)
@@ -896,7 +896,7 @@
 
         call glean(thy(g))
 
-        if (error("Exit grid_mod::xsum_grid")) continue
+        if (error(FLERR,"Exit grid_mod::xsum_grid")) continue
 
       end function
 
@@ -921,7 +921,7 @@
 
         call my(grid(g%o%layout,g%o%scope),gd)
 
-        if (error(g%o%scope /= SGROUP,"ERROR: grid scope is not SGROUP")) goto 100
+        if (error(FLERR,g%o%scope /= SGROUP,"ERROR: grid scope is not SGROUP")) goto 100
 
         select case (nsg)
         case (2)
@@ -972,7 +972,7 @@
 
         call glean(thy(g))
 
-        if (error("Exit grid_mod::xdif_grid")) continue
+        if (error(FLERR,"Exit grid_mod::xdif_grid")) continue
 
       end function
 
@@ -1011,7 +1011,7 @@
 
 100     call glean(thy(g))
 
-        if (error("Exit grid_mod::sgroup_to_kgroup_grid")) continue
+        if (error(FLERR,"Exit grid_mod::sgroup_to_kgroup_grid")) continue
 
       end subroutine
 
@@ -1052,7 +1052,7 @@
 
 100     call glean(thy(g))
 
-        if (error("Exit grid_mod::config_to_kgroup_grid")) continue
+        if (error(FLERR,"Exit grid_mod::config_to_kgroup_grid")) continue
 
       end subroutine
 
@@ -1093,13 +1093,13 @@
         ! Open the block
         if (i_access(restf)) tios = findfirsttag(restf,trim(tag))
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: grid block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: grid block was not found")) goto 200
         if (i_access(restf)) call openblock(restf)
 
         ! Read the cutoff
         if (i_access(restf)) tios = findfirsttag(restf,"CUTOFF")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double
           ndata = 1
@@ -1110,7 +1110,7 @@
         ! Set the file pointer at the beginning of the data
         if (i_access(restf)) tios = findfirsttag(restf,"DATA")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: DATA tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DATA tag was not found")) goto 100
 
         ! Allocate space for the data
         if (r_cutoff == g_cutoff) then
@@ -1211,7 +1211,7 @@
         call glean(thy(g))
         call glean(thy(restf))
 
-        if (error("Exit grid_mod::read_restart_grid")) continue
+        if (error(FLERR,"Exit grid_mod::read_restart_grid")) continue
 
       end subroutine
 
@@ -1241,7 +1241,7 @@
         msg = mpi_mysgroup()
 
         ! Check that there is data on the grid
-        if (error(g%o%type == EMPTY_KIND,"ERROR: grid is empty")) goto 200
+        if (error(FLERR,g%o%type == EMPTY_KIND,"ERROR: grid is empty")) goto 200
 
         ! Start the block
         if (i_access(nrestf)) call startblock(nrestf,trim(tag))
@@ -1295,7 +1295,7 @@
 200     call glean(thy(g))
         call glean(thy(nrestf))
 
-        if (error("Exit grid_mod::write_restart_grid")) continue
+        if (error(FLERR,"Exit grid_mod::write_restart_grid")) continue
 
       end subroutine
 
@@ -1325,10 +1325,10 @@
         call my(g)
 
         ! Check that there is data on the grid
-        if (error(g%o%type == EMPTY_KIND,"ERROR: grid is empty")) goto 200
+        if (error(FLERR,g%o%type == EMPTY_KIND,"ERROR: grid is empty")) goto 200
 
         ! Check that the scope is SGROUP
-        if (error(g%o%scope /= SGROUP, "ERROR: grid scope is not SGROUP")) goto 200
+        if (error(FLERR,g%o%scope /= SGROUP, "ERROR: grid scope is not SGROUP")) goto 200
 
         ! Verify that kind is serial type, if not change it and throw a warning
         select case(kind)
@@ -1349,7 +1349,7 @@
            call warn("Warning: call to grid::write_to_file with kind=CDF_KIND ")
            call warn("            setting    kind=CSF_KIND")
         case default
-           if (error(.true.,'Error: unrecognized kind')) goto 200
+           if (error(FLERR,.true.,'Error: unrecognized kind')) goto 200
         end select
         
 
@@ -1397,13 +1397,13 @@
             endif
           end if                 
         case default
-           if (error(.true.,"Error: unrecognized file_format")) goto 200
+           if (error(FLERR,.true.,"Error: unrecognized file_format")) goto 200
         end select
         
 
 200     call glean(thy(g))
 
-        if (error("Exit grid_mod::write_to_file_grid")) continue
+        if (error(FLERR,"Exit grid_mod::write_to_file_grid")) continue
 
       end subroutine
 
@@ -1482,7 +1482,7 @@
 
         call my(ly)
 
-        if (error(itype == EMPTY_KIND,"ERROR: empty data source")) goto 100
+        if (error(FLERR,itype == EMPTY_KIND,"ERROR: empty data source")) goto 100
         if ( (otype == EMPTY_KIND) .or. (otype == itype) ) then
           otype = itype
           itype = EMPTY_KIND
@@ -1567,7 +1567,7 @@
 
 100     call glean(thy(ly))
 
-        if (error("Exit grid_mod::transfer_grid_i")) continue
+        if (error(FLERR,"Exit grid_mod::transfer_grid_i")) continue
 
       end subroutine
       
@@ -1626,7 +1626,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     rtmp = 0.0_double
@@ -1650,7 +1650,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     ctmp = 0.0_double
@@ -1664,7 +1664,7 @@
            end select
 
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -1683,7 +1683,7 @@
         case(CSF_KIND)
            call fmesh(x,y,z,x_layout(g2),S_TYPE) ; if (error()) GOTO 100
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -1691,7 +1691,7 @@
         ny = size(x,2)
         nz = size(x,3)
 
-        if (error((nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
+        if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
         if (debug) call warn("write_grid_to_matlab_i:: writing coords")
 
@@ -1701,7 +1701,7 @@
         if (i_access(f)) open(unit=x_unit(f), file=x_name(f), &
              form='formatted',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
 
         if (i_access(f)) then
@@ -1713,7 +1713,7 @@
            case(CSF_KIND)
               write(x_unit(f),'(a)') '# Fourier space representation (units are inverse Bohr radii)'
            case default
-              if (error(.true.,"Error: invalid kind")) goto 100
+              if (error(FLERR,.true.,"Error: invalid kind")) goto 100
            end select
 
            !** write out the spin component if spin polarized
@@ -1823,7 +1823,7 @@
 200     call glean(thy(f))
         call glean(thy(g2))
         call glean(thy(g))
-100     if (error("Exit grid_mod:: write_grid_to_matlab_i: ")) continue
+100     if (error(FLERR,"Exit grid_mod:: write_grid_to_matlab_i: ")) continue
 
         if (debug) call warn("write_grid_to_matlab_i:: exiting")
 
@@ -1886,7 +1886,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     rtmp = 0.0_double
@@ -1910,7 +1910,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     ctmp = 0.0_double
@@ -1924,7 +1924,7 @@
            end select
 
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -1937,7 +1937,7 @@
         case(CSF_KIND)
            call fmesh(x,y,z,x_layout(g2),S_TYPE) ; if (error()) GOTO 100
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -1945,7 +1945,7 @@
         ny = size(x,2)
         nz = size(x,3)
 
-        if (error((nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
+        if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
         if (debug) call warn("write_grid_to_vtk_i:: writing coords")
 
@@ -1955,7 +1955,7 @@
         if (i_access(f)) open(unit=x_unit(f), file=x_name(f), &
              form='formatted',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
 
         if (i_access(f)) then
@@ -2002,7 +2002,7 @@
                end if
              end select
            case default
-              if (error(.true.,"Error: invalid kind")) goto 100
+              if (error(FLERR,.true.,"Error: invalid kind")) goto 100
            end select
 
            write(x_unit(f),'(a)') 'ASCII'
@@ -2064,7 +2064,7 @@
 200     call glean(thy(f))
         call glean(thy(g2))
         call glean(thy(g))
-100     if (error("Exit grid_mod:: write_grid_to_vtk_i: ")) continue
+100     if (error(FLERR,"Exit grid_mod:: write_grid_to_vtk_i: ")) continue
 
         if (debug) call warn("write_grid_to_vtk_i:: exiting")
 
@@ -2128,7 +2128,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     rtmp = 0.0_double
@@ -2152,7 +2152,7 @@
            case (2)
               if (present(spin)) then
                  valid_spin = ((spin == 1) .or. (spin ==2))
-                 if (error(.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
+                 if (error(FLERR,.not.valid_spin,"Error: invalid spin (not 1 or 2)")) goto 100
                  ! set other component of spin to zero.
                  if (spin /= msg) then
                     ctmp = 0.0_double
@@ -2166,7 +2166,7 @@
            end select
 
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -2179,7 +2179,7 @@
         case(CSF_KIND)
            call fmesh(x,y,z,x_layout(g2),S_TYPE) ; if (error()) GOTO 100
         case default
-           if (error(.true.,"Error: invalid kind")) goto 100
+           if (error(FLERR,.true.,"Error: invalid kind")) goto 100
         end select
 
 
@@ -2187,7 +2187,7 @@
         ny = size(x,2)
         nz = size(x,3)
 
-        if (error((nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
+        if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
         if (debug) call warn("write_grid_to_amreg_i:: writing coords")
 
@@ -2197,7 +2197,7 @@
         if (i_access(f)) open(unit=x_unit(f), file=x_name(f), &
              form='formatted',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
 
         if (i_access(f)) then
@@ -2282,7 +2282,7 @@
 200     call glean(thy(f))
         call glean(thy(g2))
         call glean(thy(g))
-100     if (error("Exit grid_mod:: write_grid_to_amreg_i: ")) continue
+100     if (error(FLERR,"Exit grid_mod:: write_grid_to_amreg_i: ")) continue
 
         if (debug) call warn("write_grid_to_amreg_i:: exiting")
 

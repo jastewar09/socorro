@@ -273,7 +273,7 @@
 
         call start_timer("electrons_sc: constructor")
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           el%ref = 0
           allocate( el%o )
           el%o%ref = 0
@@ -299,7 +299,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"ELECTRONS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ELECTRONS block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ELECTRONS block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -315,20 +315,20 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"PARAMETERS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: PARAMETERS block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: PARAMETERS block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
         ! Determine the wavefunctions cutoff - amenable to change during a restart
         call arg("wf_cutoff",el%o%cutoff,found)
         if (found) then
-          if (error(el%o%cutoff <= 0.0_double,"ERROR: wf_cutoff <= 0")) goto 100
-          if (error(el%o%cutoff > 0.5_double*x_cutoff(lay),"ERROR: wf_cutoff is too large")) goto 100
+          if (error(FLERR,el%o%cutoff <= 0.0_double,"ERROR: wf_cutoff <= 0")) goto 100
+          if (error(FLERR,el%o%cutoff > 0.5_double*x_cutoff(lay),"ERROR: wf_cutoff is too large")) goto 100
         else
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"CUTOFF")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_double
               ndata = 1
@@ -336,19 +336,19 @@
             end if
             if (i_comm(restf)) call broadcast(FILE_SCOPE,el%o%cutoff)
           else
-            if (error(.true.,"ERROR: wf_cutoff not found")) goto 100
+            if (error(FLERR,.true.,"ERROR: wf_cutoff not found")) goto 100
           end if
         end if
 
         ! Determine the number of bands - amenable to change during a restart
         call arg("nbands",nb,found)
         if (found) then
-          if (error(nb <= 0,"ERROR: nbands <= 0")) goto 100
+          if (error(FLERR,nb <= 0,"ERROR: nbands <= 0")) goto 100
         else
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_BANDS")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_BANDS tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_BANDS tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_long
               ndata = 1
@@ -357,7 +357,7 @@
             end if
             if (i_comm(restf)) call broadcast(FILE_SCOPE,nb)
           else
-            if (error(.not.found,"ERROR: nbands was not found")) goto 100
+            if (error(FLERR,.not.found,"ERROR: nbands was not found")) goto 100
           end if
         end if
 
@@ -365,7 +365,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"CHARGE_STATE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
@@ -381,20 +381,20 @@
             if (.not.found) el%o%charge_state = 0.0_double  ! default value
           case ("integer_ratio")
             call arg("charge_state_ratio",csr,found)
-            if (error(.not.found,"ERROR: charge_state_ratio was not found")) goto 100
-            if (error(csr(2) == 0,"ERROR: denominator = 0")) goto 100
+            if (error(FLERR,.not.found,"ERROR: charge_state_ratio was not found")) goto 100
+            if (error(FLERR,csr(2) == 0,"ERROR: denominator = 0")) goto 100
             el%o%charge_state = real(csr(1),double)/real(csr(2),double)
           case default
-            if (error(.true.,"ERROR: charge_state_mode was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: charge_state_mode was not recognized")) goto 100
           end select
         end if
 
         ! Compute the total number of electrons
         el%o%total_charge = valence_electrons(ext) - el%o%charge_state
-        if (error(el%o%total_charge <= 0.0_double,"ERROR: total charge <= 0")) goto 100
+        if (error(FLERR,el%o%total_charge <= 0.0_double,"ERROR: total charge <= 0")) goto 100
 
         ! Check the number of bands
-        if (error(nb < el%o%total_charge/2.0_double,"ERROR: not enough bands")) goto 100
+        if (error(FLERR,nb < el%o%total_charge/2.0_double,"ERROR: not enough bands")) goto 100
 
         ! Determine the occupation method - amenable to change during a restart
         call arglc("occupation_method",tag,found)
@@ -404,16 +404,16 @@
             el%o%occupation_method = THERMAL
           case ("uniform")
             el%o%occupation_method = UNIFORM
-            if (error(nsg == 2,"ERROR: UNIFORM occupation_method is not compatible with spin")) goto 100
+            if (error(FLERR,nsg == 2,"ERROR: UNIFORM occupation_method is not compatible with spin")) goto 100
           case default
-            if (error(.true.,"ERROR: occupation_method was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: occupation_method was not recognized")) goto 100
           end select
         else
           el%o%occupation_method = THERMAL  ! default value
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"OCCUPATION_METHOD")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: OCCUPATION_METHOD tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: OCCUPATION_METHOD tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_long
               ndata = 1
@@ -430,13 +430,13 @@
           ! Determine kT - amenable to change during a restart
           call arg("kt",el%o%kt,found)
           if (found) then
-            if (error(el%o%kt <= 0.0_double,"ERROR: kT <= 0.0")) goto 100
+            if (error(FLERR,el%o%kt <= 0.0_double,"ERROR: kT <= 0.0")) goto 100
           else
             el%o%kt = 5.0e-3_double  ! default value
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"KT")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR: KT tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: KT tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_double
                 ndata = 1
@@ -455,14 +455,14 @@
             case ("off","false")
               el%o%use_free_energy = .false.
             case default
-              if (error(.true.,"ERROR: free_energy tag was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: free_energy tag was not recognized")) goto 100
             end select
           else
             el%o%use_free_energy = .false.  ! default value
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"FREE_ENERGY_STATUS")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR: FREE_ENERGY_STATUS tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: FREE_ENERGY_STATUS tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_long
                 ndata = 1
@@ -479,9 +479,9 @@
           end if
           select case (x_functional_dependence(x_xc_type(ext)))
           case (FD_ORBITAL)
-            if (error(.not.el%o%use_free_energy,"ERROR: free_energy must be on for an orbital-dependent functional")) goto 100
+            if (error(FLERR,.not.el%o%use_free_energy,"ERROR: free_energy must be on for an orbital-dependent functional")) goto 100
           case (FD_HYBRID)
-            if (error(.not.el%o%use_free_energy,"ERROR: free_energy must be on for a hybrid functional")) goto 100
+            if (error(FLERR,.not.el%o%use_free_energy,"ERROR: free_energy must be on for a hybrid functional")) goto 100
           end select
 
           select case (nsg)
@@ -502,14 +502,14 @@
               case ("variable")
                 el%o%polarization_method = VARIABLE
               case default
-                if (error(.true.,"ERROR: polarization_method was not recognized")) goto 100
+                if (error(FLERR,.true.,"ERROR: polarization_method was not recognized")) goto 100
               end select
             else
               el%o%polarization_method = VARIABLE  ! default value
               if (present(restf)) then
                 if (i_access(restf)) tios = findfirsttag(restf,"POLARIZATION_METHOD")
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                if (error(tios == TAG_NOT_FOUND,"ERROR: POLARIZATION_METHOD tag was not found")) goto 100
+                if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: POLARIZATION_METHOD tag was not found")) goto 100
                 if (i_access(restf)) then
                   dsize = sizeof_long
                   ndata = 1
@@ -529,7 +529,7 @@
                 if (present(restf)) then
                   if (i_access(restf)) tios = findfirsttag(restf,"SPIN_POLARIZATION")
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                  if (error(tios == TAG_NOT_FOUND,"ERROR: SPIN_POLARIZATION tag was not found")) goto 100
+                  if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: SPIN_POLARIZATION tag was not found")) goto 100
                   if (i_access(restf)) then
                     dsize = sizeof_double
                     ndata = 1
@@ -545,7 +545,7 @@
                 if (present(restf)) then
                   if (i_access(restf)) tios = findfirsttag(restf,"SPIN_POLARIZATION")
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                  if (error(tios == TAG_NOT_FOUND,"ERROR: SPIN_POLARIZATION tag was not found")) goto 100
+                  if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: SPIN_POLARIZATION tag was not found")) goto 100
                   if (i_access(restf)) then
                     dsize = sizeof_double
                     ndata = 1
@@ -555,7 +555,7 @@
                 end if
               end if
             end select
-            if (error(el%o%spin_polarization < 0.0_double,"ERROR: spin_polarization < 0")) goto 100
+            if (error(FLERR,el%o%spin_polarization < 0.0_double,"ERROR: spin_polarization < 0")) goto 100
 
           end select
 
@@ -571,13 +571,13 @@
         ! Determine the wavefunctions tolerance - amenable to change during a restart
         call arg("wavefunctions_tolerance",el%o%res_norm_tol,found)
         if (found) then
-          if (error(el%o%res_norm_tol < 0.0_double,"ERROR: wavefunctions_tolerance < 0")) goto 100
+          if (error(FLERR,el%o%res_norm_tol < 0.0_double,"ERROR: wavefunctions_tolerance < 0")) goto 100
         else
           el%o%res_norm_tol = 1.0e-4_double  ! default value
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"WAVEFUNCTIONS_TOLERANCE")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: WAVEFUNCTIONS_TOLERANCE tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: WAVEFUNCTIONS_TOLERANCE tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_double
               ndata = 1
@@ -594,7 +594,7 @@
         if (error()) goto 200
 
         ! Divide the k-points among processes
-        if (error(nk < mpi_nkgroups(),"ERROR: nk is less than kgroups")) then
+        if (error(FLERR,nk < mpi_nkgroups(),"ERROR: nk is less than kgroups")) then
           call notify("Number of k-points = ",nk)
           goto 200
         end if
@@ -614,7 +614,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"WAVEFUNCTIONS_START")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: WAVEFUNCTIONS_START tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: WAVEFUNCTIONS_START tag was not found")) goto 200
         end if
         if (has_dyadic_potential(gp)) call my(dyad_kpoint(),dk)
         do ik = 1,nk
@@ -672,7 +672,7 @@
         call glean(thy(gp))
         if (present(restf)) call glean(thy(restf))
 
-999     if (error("Exit electrons_sc_mod::constructor_el")) continue
+999     if (error(FLERR,"Exit electrons_sc_mod::constructor_el")) continue
 
         if (.not.error()) call stop_timer("electrons_sc: constructor")
 
@@ -736,7 +736,7 @@
         call glean(thy(ext))
         call glean(thy(gp))
 
-        if (error("Exit electrons_sc_mod::update_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::update_el")) continue
 
         if (.not.error()) call stop_timer("electrons_sc: update")
 
@@ -916,11 +916,11 @@
 
 !cod$
         call my(el)
-        if ( error((ik < 1) .or. (ik > size(el%o%wf)),"ERROR: ik is out of range")) goto 100
+        if ( error(FLERR,(ik < 1) .or. (ik > size(el%o%wf)),"ERROR: ik is out of range")) goto 100
         call my(el%o%wf(ik),wf)
         call bequeath(thy(wf))
 100     call glean(thy(el))
-        if (error("Exit electrons_sc_mod::el_wavefunctions")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::el_wavefunctions")) continue
       end function 
 
       function el_density(el) result(dens)
@@ -995,11 +995,11 @@
 
 !cod$
         call my(el)
-        if (error((ik < 1) .or. (ik > size(el%o%eigs,1)),"ERROR: ik is out of range")) goto 100
-        if (error((ib < 1) .or. (ib > size(el%o%eigs,2)),"ERROR: ib is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(el%o%eigs,1)),"ERROR: ik is out of range")) goto 100
+        if (error(FLERR,(ib < 1) .or. (ib > size(el%o%eigs,2)),"ERROR: ib is out of range")) goto 100
         ev = el%o%eigs(ik,ib)
 100     call glean(thy(el))
-        if (error("Exit electrons_sc_mod::el_eigenvalue")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::el_eigenvalue")) continue
       end function
 
       function el_eigenvalues(el) result(evs)
@@ -1024,11 +1024,11 @@
 
 !cod$
         call my(el)
-        if (error((ik < 1) .or. (ik > size(el%o%occs,1)),"ERROR: ik is out of range")) goto 100
-        if (error((ib < 1) .or. (ib > size(el%o%occs,2)),"ERROR: ib is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(el%o%occs,1)),"ERROR: ik is out of range")) goto 100
+        if (error(FLERR,(ib < 1) .or. (ib > size(el%o%occs,2)),"ERROR: ib is out of range")) goto 100
         occ = el%o%occs(ik,ib)
 100     call glean(thy(el))
-        if (error("Exit electrons_sc_mod::el_occupation")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::el_occupation")) continue
       end function
 
       function el_occupations(el) result(occs)
@@ -1131,7 +1131,7 @@
 
         call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::forces_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::forces_el")) continue
 
       end subroutine
 
@@ -1164,7 +1164,7 @@
 
         call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::pressure_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::pressure_el")) continue
 
       end subroutine
 
@@ -1198,7 +1198,7 @@
 
         call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::stress_tensor_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::stress_tensor_el")) continue
 
       end subroutine
 
@@ -1376,7 +1376,7 @@
           call my(file(trim(eigenvalues_path)),f)
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open eigenvalues file")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to open eigenvalues file")) goto 100
           if (i_access(f)) then
             select case (nsg)
             case (1)
@@ -1410,7 +1410,7 @@
           call my(file(trim(gks_eigenvalues_path)),f)
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open gks_eigenvalues file")) goto 200
+          if (error(FLERR,ios /= 0,"ERROR: unable to open gks_eigenvalues file")) goto 200
           if (i_access(f)) then
             select case (nsg)
             case (1)
@@ -1444,7 +1444,7 @@
           call my(file(trim(band_structure_path)),f)
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open band_structure file")) goto 400
+          if (error(FLERR,ios /= 0,"ERROR: unable to open band_structure file")) goto 400
           if (i_access(f)) then
             select case (nsg)
             case (1)
@@ -1473,11 +1473,11 @@
         if (found) then
            brl = band_range(1)
            bru = band_range(2)
-           if (error((brl<1),"Error: write_band_range(1) is not valid (<1)")) goto 300
-           if (error((nb<brl),"Error: write_band_range(1) is not valid (>nb)")) goto 300
-           if (error((bru<1),"Error: write_band_range(2) is not valid (<1)")) goto 300
-           if (error((nb<bru),"Error: write_band_range(2) is not valid (>nb)")) goto 300
-           if (error((bru<brl),"Error: write_band_range is not valid (bru<brl)")) goto 300
+           if (error(FLERR,(brl<1),"Error: write_band_range(1) is not valid (<1)")) goto 300
+           if (error(FLERR,(nb<brl),"Error: write_band_range(1) is not valid (>nb)")) goto 300
+           if (error(FLERR,(bru<1),"Error: write_band_range(2) is not valid (<1)")) goto 300
+           if (error(FLERR,(nb<bru),"Error: write_band_range(2) is not valid (>nb)")) goto 300
+           if (error(FLERR,(bru<brl),"Error: write_band_range is not valid (bru<brl)")) goto 300
         else
            brl = 1
            bru = nb
@@ -1488,11 +1488,11 @@
         if (found) then
            krl = kpoint_range(1)
            kru = kpoint_range(2)
-           if (error((krl<1),"Error: write_band_range(1) is not valid (<1)")) goto 300
-           if (error((nk<krl),"Error: write_band_range(1) is not valid (>nk)")) goto 300
-           if (error((kru<1),"Error: write_band_range(2) is not valid (<1)")) goto 300
-           if (error((nk<kru),"Error: write_band_range(2) is not valid (>nk)")) goto 300
-           if (error((kru<krl),"Error: write_band_range is not valid (kru<krl)")) goto 300
+           if (error(FLERR,(krl<1),"Error: write_band_range(1) is not valid (<1)")) goto 300
+           if (error(FLERR,(nk<krl),"Error: write_band_range(1) is not valid (>nk)")) goto 300
+           if (error(FLERR,(kru<1),"Error: write_band_range(2) is not valid (<1)")) goto 300
+           if (error(FLERR,(nk<kru),"Error: write_band_range(2) is not valid (>nk)")) goto 300
+           if (error(FLERR,(kru<krl),"Error: write_band_range is not valid (kru<krl)")) goto 300
         else
            krl = 1
            kru = nk
@@ -1529,7 +1529,7 @@
           case("reciprocalspace","reciprocal","fourier","f")
              kind = CSF_KIND
           case default
-             if (error(.true.,"Error: unrecognized write_wavefunctions_rep tag")) goto 300
+             if (error(FLERR,.true.,"Error: unrecognized write_wavefunctions_rep tag")) goto 300
           end select
 
           ! Write out wavefunctions
@@ -1597,7 +1597,7 @@
           case("reciprocalspace","reciprocal","fourier","f")
              kind = CSF_KIND
           case default
-             if (error(.true.,"Error: unrecognized write_state_densities_rep tag")) goto 300
+             if (error(FLERR,.true.,"Error: unrecognized write_state_densities_rep tag")) goto 300
           end select
 
           ! Write out state_densities
@@ -1687,7 +1687,7 @@
           case("reciprocalspace","reciprocal","fourier","f")
              kind = CSF_KIND
           case default
-             if (error(.true.,"Error: unrecognized write_density_rep tag")) goto 300
+             if (error(FLERR,.true.,"Error: unrecognized write_density_rep tag")) goto 300
           end select
 
           ! Grab the grid density
@@ -1754,7 +1754,7 @@
 
         call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::diary_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::diary_el")) continue
 
       end subroutine
 
@@ -1848,7 +1848,7 @@
         ! Read the eigenvalue range to decompose.
         call arg("dcomp_range",range,found)
         if (found) then
-          if (error(range < 0.0_double,"ERROR: dcomp_range < 0")) goto 100
+          if (error(FLERR,range < 0.0_double,"ERROR: dcomp_range < 0")) goto 100
           emin = el%o%fermi_level - 0.5_double*range
           emax = el%o%fermi_level + 0.5_double*range
         else
@@ -2063,7 +2063,7 @@
         call glean(thy(el))
         call glean(thy(f))
 
-        if (error("Exit electrons_sc_mod::decompose_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::decompose_el")) continue
 
       end subroutine
 
@@ -2087,7 +2087,7 @@
 
 100     call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::distribute_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::distribute_el")) continue
 
       end subroutine
 
@@ -2110,7 +2110,7 @@
 
         call glean(thy(el))
 
-        if (error("Exit electrons_sc_mod::release_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::release_el")) continue
 
       end subroutine
 
@@ -2229,7 +2229,7 @@
         call glean(thy(el))
         call glean(thy(nrestf))
 
-        if (error("Exit electrons_sc_mod::write_restart_el")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::write_restart_el")) continue
 
       end subroutine
 
@@ -2257,7 +2257,7 @@
 
         call glean(thy(ext))
 
-        if (error("Exit electrons_sc_mod::accumulate_density_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::accumulate_density_i")) continue
 
       end subroutine
 
@@ -2279,7 +2279,7 @@
         if (allocated( eigs_k)) deallocate( eigs_k )
         if (allocated( eigs_kg )) deallocate( eigs_kg )
 
-        if (error("Exit electrons_sc_mod::eigenvalues_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::eigenvalues_i")) continue
 
       end subroutine
 
@@ -2337,7 +2337,7 @@
                 emin = elr%fermi_level
               end if
             end do
-            if (error(.not.(q .in. nbhd(elr%total_charge,qtol)), "ERROR: Fermi level was not found")) then
+            if (error(FLERR,.not.(q .in. nbhd(elr%total_charge,qtol)), "ERROR: Fermi level was not found")) then
               call notify_occupations_i(elr,it,emin,emax,elr%fermi_level,q,spin_degeneracy,kwts)
               goto 100
             end if
@@ -2379,7 +2379,7 @@
                   emin = elr%fermi_level
                 end if
               end do
-              if (error(.not.(q .in. nbhd(total_charge,qtol)), "ERROR: Fermi level was not found")) then
+              if (error(FLERR,.not.(q .in. nbhd(total_charge,qtol)), "ERROR: Fermi level was not found")) then
                 call notify_occupations_i(elr,it,emin,emax,elr%fermi_level,q,spin_degeneracy,kwts)
               end if
 
@@ -2422,7 +2422,7 @@
                     emin = elr%fermi_level
                   end if
                 end do
-                if (error(.not.(q .in. nbhd(total_charge,qtol)), "ERROR: Fermi level was not found")) then
+                if (error(FLERR,.not.(q .in. nbhd(total_charge,qtol)), "ERROR: Fermi level was not found")) then
                   call notify_occupations_i(elr,it,emin,emax,elr%fermi_level,q,spin_degeneracy,kwts)
                 end if
 
@@ -2482,7 +2482,7 @@
                   end if
                   sp = 0.0_double  ! Release the constraint on the spin polarization
                 end do
-                if (error(.not.(q .in. nbhd(elr%total_charge,qtol)), "ERROR: Fermi level was not found")) then
+                if (error(FLERR,.not.(q .in. nbhd(elr%total_charge,qtol)), "ERROR: Fermi level was not found")) then
                   call notify_occupations_i(elr,it,emin1,emax1,fsg1,q,spin_degeneracy,kwts)
                   goto 100
                 end if
@@ -2571,7 +2571,7 @@
         if (allocated( eigs_c )) deallocate( eigs_c )
         if (allocated( eigs_sg )) deallocate( eigs_sg )
 
-        if (error("Exit electrons_sc_mod::occupations_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::occupations_i")) continue
 
       end subroutine
 
@@ -2622,7 +2622,7 @@
 
         elr%res_norm_cvg = (elr%res_norm < elr%res_norm_tol)
 
-100     if (error("Exit electrons_sc_mod::residual_norm_i")) continue
+100     if (error(FLERR,"Exit electrons_sc_mod::residual_norm_i")) continue
 
       end subroutine
 
@@ -2644,7 +2644,7 @@
 
 100     if (allocated( wts )) deallocate( wts )
 
-        if (error("Exit electrons_sc_mod::kinetic_energy_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::kinetic_energy_i")) continue
 
       end subroutine
 
@@ -2665,7 +2665,7 @@
         end do
         call xcomm_allreduce(XSGROUP,MPI_SUM,me_sg,elr%mermin_energy)
 
-        if (error("Exit electrons_sc_mod::mermin_energy_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::mermin_energy_i")) continue
 
       end subroutine
 
@@ -2734,7 +2734,7 @@
 
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit electrons_sc_mod::diary_construction_i")) continue
+        if (error(FLERR,"Exit electrons_sc_mod::diary_construction_i")) continue
 
       end subroutine
 
@@ -2814,7 +2814,7 @@
 
 
         !** calculate offsets
-        if (error(nk<0,"Error:get_wf_filename_i - invalid nk, nk<0")) goto 100
+        if (error(FLERR,nk<0,"Error:get_wf_filename_i - invalid nk, nk<0")) goto 100
         if (nk < 10) then
            kpt_offset = 1
            kpt_fmt = "(I1)"
@@ -2840,10 +2840,10 @@
            kpt_offset = 8
            kpt_fmt = "(I8)"
         else
-           if (error(.true.,"Error:get_wf_filename_i - invalid nk, nk too large")) goto 100
+           if (error(FLERR,.true.,"Error:get_wf_filename_i - invalid nk, nk too large")) goto 100
         end if
 
-        if (error(nb<0,"Error:get_wf_filename_i - invalid nb, nb<0")) goto 100
+        if (error(FLERR,nb<0,"Error:get_wf_filename_i - invalid nb, nb<0")) goto 100
         if (nb < 10) then
            band_offset = 1
            band_fmt = "(I1)"
@@ -2869,7 +2869,7 @@
            band_offset = 8
            band_fmt = "(I8)"
         else
-           if (error(.true.,"Error:get_wf_filename_i - invalid nb, nb too large")) goto 100
+           if (error(FLERR,.true.,"Error:get_wf_filename_i - invalid nb, nb too large")) goto 100
         end if
 
 
@@ -2881,7 +2881,7 @@
         
         !** Write the time step if present
         if (present(it)) then
-          if (error(it<0,"Error:get_wf_filename_i - invalid time step, it<0")) goto 100
+          if (error(FLERR,it<0,"Error:get_wf_filename_i - invalid time step, it<0")) goto 100
           !   Convert it which is an integer to a character string, it_char
           fname(pos:(pos+2)) = "it_"
           pos = pos + 3
@@ -2907,7 +2907,7 @@
           case (2)
             fname(pos:(pos+2)) = "dn_"
           case default
-             if (error(.true.,'Error:get_wf_filename_i - invalid spin index')) goto 100
+             if (error(FLERR,.true.,'Error:get_wf_filename_i - invalid spin index')) goto 100
           end select
  
           pos = pos + 3
@@ -2958,11 +2958,11 @@
         case ( VTK )
            fname(pos:(pos+3)) = ".vtk"
         case default
-           if (error(.true.,"Error! Unrecognized file type")) goto 100
+           if (error(FLERR,.true.,"Error! Unrecognized file type")) goto 100
         end select
 
 
-100     if (error("electrons_mod::get_wf_filename_i - Exiting")) continue
+100     if (error(FLERR,"electrons_mod::get_wf_filename_i - Exiting")) continue
 
       end subroutine 
 
@@ -2993,7 +2993,7 @@
 
 
         !** calculate offsets
-        if (error(nk<0,"Error:get_sd_filename_i - invalid nk, nk<0")) goto 100
+        if (error(FLERR,nk<0,"Error:get_sd_filename_i - invalid nk, nk<0")) goto 100
         if (nk < 10) then
            kpt_offset = 1
            kpt_fmt = "(I1)"
@@ -3019,10 +3019,10 @@
            kpt_offset = 8
            kpt_fmt = "(I8)"
         else
-           if (error(.true.,"Error:get_sd_filename_i - invalid nk, nk too large")) goto 100
+           if (error(FLERR,.true.,"Error:get_sd_filename_i - invalid nk, nk too large")) goto 100
         end if
 
-        if (error(nb<0,"Error:get_sd_filename_i - invalid nb, nb<0")) goto 100
+        if (error(FLERR,nb<0,"Error:get_sd_filename_i - invalid nb, nb<0")) goto 100
         if (nb < 10) then
            band_offset = 1
            band_fmt = "(I1)"
@@ -3048,7 +3048,7 @@
            band_offset = 8
            band_fmt = "(I8)"
         else
-           if (error(.true.,"Error:get_sd_filename_i - invalid nb, nb too large")) goto 100
+           if (error(FLERR,.true.,"Error:get_sd_filename_i - invalid nb, nb too large")) goto 100
         end if
 
 
@@ -3060,7 +3060,7 @@
         
         !** Write the time step if present
         if (present(it)) then
-          if (error(it<0,"Error:get_sd_filename_i - invalid time step, it<0")) goto 100
+          if (error(FLERR,it<0,"Error:get_sd_filename_i - invalid time step, it<0")) goto 100
           !   Convert it which is an integer to a character string, it_char
           fname(pos:(pos+2)) = "it_"
           pos = pos + 3
@@ -3086,7 +3086,7 @@
           case (2)
             fname(pos:(pos+2)) = "dn_"
           case default
-             if (error(.true.,'Error:get_sd_filename_i - invalid spin index')) goto 100
+             if (error(FLERR,.true.,'Error:get_sd_filename_i - invalid spin index')) goto 100
           end select
  
           pos = pos + 3
@@ -3137,18 +3137,12 @@
         case ( VTK )
            fname(pos:(pos+3)) = ".vtk"
         case default
-           if (error(.true.,"Error! Unrecognized file type")) goto 100
+           if (error(FLERR,.true.,"Error! Unrecognized file type")) goto 100
         end select
 
 
-100     if (error("electrons_mod::get_sd_filename_i - Exiting")) continue
+100     if (error(FLERR,"electrons_mod::get_sd_filename_i - Exiting")) continue
 
-      end subroutine 
-
-
-
-
-
-
+      end subroutine
 
       end module

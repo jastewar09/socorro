@@ -175,7 +175,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_DENSITY")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_DENSITY block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_DENSITY block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -183,14 +183,14 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"NCP")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NCP tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NCP tag was not found")) goto 200
         end if
 
         ! read the charge state
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"CHARGE_STATE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 200
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
@@ -216,11 +216,11 @@
             !end if
           case ("integer_ratio")
             call arg("charge_state_ratio",csr,found)
-            if (error(.not.found,"ERROR: charge_state_ratio was not found")) goto 200
-            if (error(csr(2) == 0,"ERROR: denominator = 0")) goto 200
+            if (error(FLERR,.not.found,"ERROR: charge_state_ratio was not found")) goto 200
+            if (error(FLERR,csr(2) == 0,"ERROR: denominator = 0")) goto 200
             ad%o%charge_state = real(csr(1),double)/real(csr(2),double)
           case default
-            if (error(.true.,"ERROR: charge_state_mode was not recognized")) goto 200
+            if (error(FLERR,.true.,"ERROR: charge_state_mode was not recognized")) goto 200
           end select
         end if
 
@@ -242,7 +242,7 @@
 300     call glean(thy(ao))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_density_ncp_mod::constructor_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::constructor_ad")) continue
 
       end function
 
@@ -269,7 +269,7 @@
         call glean(thy(ao))
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_ncp_mod::update_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::update_ad")) continue
 
       end subroutine
 
@@ -456,7 +456,7 @@
 !100     call glean(thy(ad))
 !        call glean(thy(sg))
 
-!        if (error("Exit atomic_density_paw_mod::symmetrize_ad")) continue
+!        if (error(FLERR,"Exit atomic_density_paw_mod::symmetrize_ad")) continue
 
 !      end subroutine
 
@@ -531,7 +531,7 @@
         
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::merge_atomic_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::merge_atomic_density_ad")) continue
 
       end subroutine
 
@@ -595,7 +595,7 @@
 
         call glean(thy(ad))
 
-        if (error("Exit atomic_density_paw_mod::add_atomic_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_paw_mod::add_atomic_density_ad")) continue
 
       end subroutine
 
@@ -613,7 +613,7 @@
         call bequeath(thy(den))
         call glean(thy(ad))
         call glean(thy(lay))
-        if (error("Exit atomic_density_ncp_mod::atomic_hartree_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::atomic_hartree_density_ad")) continue
       end function
 
       function guess_density_ad(ad,lay,ne) result(den)
@@ -688,7 +688,7 @@
         call glean(thy(ad))
         call glean(thy(lay))
 
-        if (error("Exit atomic_density_ncp_mod::guess_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::guess_density_ad")) continue
 
       end function
 
@@ -826,7 +826,7 @@
         call glean(thy(xcp))
         call glean(thy(ccd))
 
-        if (error("Exit atomic_density_ncp_mod::atomic_forces")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::atomic_forces")) continue
 
       end subroutine
 
@@ -937,7 +937,7 @@
         call glean(thy(den))
         call glean(thy(xcp))
 
-        if (error("Exit atomic_density_ncp_mod::atomic_pressure_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::atomic_pressure_ad")) continue
 
       end subroutine
 
@@ -1056,7 +1056,7 @@
         call glean(thy(den))
         call glean(thy(xcp))
 
-        if (error("Exit atomic_density_ncp_mod::atomic_stress_tensor_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::atomic_stress_tensor_ad")) continue
 
       end subroutine
 
@@ -1094,7 +1094,7 @@
         call glean(thy(ad))
         call glean(thy(nrestf))
 
-        if (error("Exit atomic_density_ncp_mod::write_restart_ad")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::write_restart_ad")) continue
 
       end subroutine
 
@@ -1143,7 +1143,7 @@
         end do
         call xcomm_allreduce(XSGROUP,MPI_SUM,energy_sg,adr%energy)
 
-        if (error("Exit atomic_density_ncp_mod::form_energy_i")) continue
+        if (error(FLERR,"Exit atomic_density_ncp_mod::form_energy_i")) continue
 
       end subroutine
 

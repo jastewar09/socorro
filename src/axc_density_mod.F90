@@ -119,7 +119,7 @@
 
 100     call glean(thy(xct))
 
-        if (error("Exit axc_density_mod::constructor_axcd")) continue
+        if (error(FLERR,"Exit axc_density_mod::constructor_axcd")) continue
 
       end function 
 
@@ -135,7 +135,7 @@
         case (DDFS_LIBXC)
           call update(axcd%axcd_libxc)
         end select
-        if (error("Exit axc_density_mod::update_axcd")) continue
+        if (error(FLERR,"Exit axc_density_mod::update_axcd")) continue
       end subroutine
 
       subroutine my_axcd(axcd)
@@ -314,7 +314,7 @@
         case (DDFS_LIBXC)
            call xc_energy_density(axcd%axcd_libxc,n,dn,lapl,exc)
         end select 
-        if (error("Exit axc_density_mod::xc_energy_density_axcd")) continue
+        if (error(FLERR,"Exit axc_density_mod::xc_energy_density_axcd")) continue
       end subroutine
 
       subroutine xc_derivatives_axcd(axcd,n,dn,lapl,dfxcdn,dfxcddnodn,dfxcdlapl)
@@ -332,7 +332,7 @@
         case (DDFS_LIBXC)
           call xc_derivatives(axcd%axcd_libxc,n,dn,lapl,dfxcdn,dfxcddnodn,dfxcdlapl)
         end select 
-        if (error("Exit axc_density_mod::xc_derivatives_axcd")) continue
+        if (error(FLERR,"Exit axc_density_mod::xc_derivatives_axcd")) continue
       end subroutine
 
       end module

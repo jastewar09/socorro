@@ -153,7 +153,7 @@
             exit
           end if
         end do
-        if (error(in_use,"ERROR: no unit was found")) goto 200
+        if (error(FLERR,in_use,"ERROR: no unit was found")) goto 200
 
         ! Determine iostat codes
         in_use = .true.
@@ -164,10 +164,10 @@
             exit
           end if
         end do
-        if (error(in_use,"ERROR: no unit was found")) goto 200
+        if (error(FLERR,in_use,"ERROR: no unit was found")) goto 200
         if (mpi_first(WORLD)) then
           open(unit=iu,file="io_scratch",status="new",iostat=ios)
-          if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
           write(iu,*) "this is a test"
           write(iu,*) "second line"
           rewind(iu)
@@ -191,7 +191,7 @@
         call broadcast(WORLD,IOSTAT_EOL)
         call broadcast(WORLD,IOSTAT_EOF)
 
-200     if (error("Exit io_mod::io_start")) continue
+200     if (error(FLERR,"Exit io_mod::io_start")) continue
 
       end subroutine
 
@@ -221,12 +221,12 @@
 
         if (present(unit)) then
           un = unit
-          if (error((un < first_unit) .or. (un > last_unit),"ERROR: requested unit is out of range")) goto 100
+          if (error(FLERR,(un < first_unit) .or. (un > last_unit),"ERROR: requested unit is out of range")) goto 100
           if ((un /= input_unit) .and. (un /= output_unit))  then
-            if (error(unit_table(un),"ERROR: requested unit is not available")) goto 100
+            if (error(FLERR,unit_table(un),"ERROR: requested unit is not available")) goto 100
             inquire(un,opened=p_op)
             call allreduce(FILE_SCOPE,MPI_LOR,p_op,c_op)
-            if (error(c_op,"ERROR: an open file is associated with the requested unit")) goto 100
+            if (error(FLERR,c_op,"ERROR: an open file is associated with the requested unit")) goto 100
           end if
         else
           un = first_unit
@@ -234,11 +234,11 @@
             if (.not.unit_table(un)) then
               inquire(un,opened=p_op)
               call allreduce(FILE_SCOPE,MPI_LOR,p_op,c_op)
-              if (error(c_op,"ERROR: an open file is associated with an available unit")) goto 100
+              if (error(FLERR,c_op,"ERROR: an open file is associated with an available unit")) goto 100
               exit
             end if
             un = un + 1
-            if (error(un > last_unit,"ERROR: no units are available")) goto 100
+            if (error(FLERR,un > last_unit,"ERROR: no units are available")) goto 100
           end do
         end if
 
@@ -256,7 +256,7 @@
         f%o%name = name
         write(f%o%manglename,'(a,"_",I3.3)') trim(name), mpi_myproc(FILE_SCOPE)
 
-100     if (error("Exit io_mod::constructor_file")) continue
+100     if (error(FLERR,"Exit io_mod::constructor_file")) continue
 
       end function
 
@@ -352,9 +352,9 @@
 !       errors: u out of range.
 
 !cod$
-        if (error((u < first_unit) .or. (u > last_unit),"ERROR: u is out of range")) goto 100
+        if (error(FLERR,(u < first_unit) .or. (u > last_unit),"ERROR: u is out of range")) goto 100
         l = unit_table(u)
-100     if (error("Exit io_mod::unit_in_use")) continue
+100     if (error(FLERR,"Exit io_mod::unit_in_use")) continue
       end function
 
       function f_unit(f) result(u)

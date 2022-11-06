@@ -198,7 +198,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_density_native_mod::constructor_xcd")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::constructor_xcd")) continue
 
       end function 
 
@@ -451,7 +451,7 @@
         call glean(thy(xcd))
         call glean(thy(n_g))
 
-        if (error("Exit xc_density_native_mod::xcd_energy_native")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_energy_native")) continue
 
       end function
 
@@ -518,7 +518,7 @@
         call glean(thy(xcd))
         call glean(thy(n_g))
 
-        if (error("Exit xc_density_native_mod::xcd_potential_native")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_potential_native")) continue
 
       end function
 
@@ -593,7 +593,7 @@
         call glean(thy(xcd))
         call glean(thy(n_g))
 
-        if (error("Exit xc_density_native_mod::xcd_energy_and_potential_native")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_energy_and_potential_native")) continue
 
       end function
 
@@ -619,7 +619,7 @@
         call glean(thy(xcd))
         call glean(thy(n))
 
-        if (error("Exit xc_density_native_mod::xcd_grid_pressure_native")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_grid_pressure_native")) continue
 
       end subroutine
 
@@ -714,7 +714,7 @@
         call glean(thy(xcd))
         call glean(thy(n_g))
 
-        if (error("Exit xc_density_native_mod::xcd_grid_stress_tensor_native")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_grid_stress_tensor_native")) continue
 
       end subroutine
 
@@ -779,7 +779,7 @@
 
         call glean(thy(xcd))
 
-        if (error("Exit xc_density_native_mod::xcd_numerical_i")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcd_numerical_i")) continue
 
       end subroutine
 
@@ -845,7 +845,7 @@
 
         call glean(thy(xcd))
 
-        if (error("Exit xc_density_native_mod::xcq_numerical_i")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::xcq_numerical_i")) continue
 
       end subroutine
 
@@ -918,7 +918,7 @@
         call glean(thy(xcd))
         call glean(thy(lay))
 
-        if (error("Exit xc_density_native_mod::white_bird_i")) continue
+        if (error(FLERR,"Exit xc_density_native_mod::white_bird_i")) continue
 
       end subroutine
 

@@ -61,9 +61,9 @@
 
         if (i_access(diary_file)) open(x_unit(diary_file),file=x_name(diary_file),status='unknown',iostat=ios)
         if (i_comm(diary_file)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: Problems opening the diary file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: Problems opening the diary file")) goto 100
 
-100     if (error("Exit diary_mod::diary_start")) continue
+100     if (error(FLERR,"Exit diary_mod::diary_start")) continue
 
       end subroutine
 

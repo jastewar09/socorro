@@ -804,9 +804,9 @@
         case (KGROUP)
           call MPI_ALLREDUCE(sig,tally,1,MPI_INTEGER,MPI_SUM,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
         v = tally
-100     if (error("Exit mpi_mod::vote")) continue
+100     if (error(FLERR,"Exit mpi_mod::vote")) continue
       end function
 
 !doc$ subroutine broadcast_seh(data)
@@ -871,8 +871,8 @@
         case (KGROUP)
           call MPI_BCAST(data,len(data),MPI_CHARACTER,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_ch")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_ch")) continue
       end subroutine
 
       subroutine broadcast_log0(sc,data)
@@ -888,8 +888,8 @@
         case (KGROUP)
           call MPI_BCAST(data,1,MPI_LOGICAL,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_log0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_log0")) continue
       end subroutine
 
       subroutine broadcast_log1(sc,data)
@@ -905,8 +905,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1),size(data),MPI_LOGICAL,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_log1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_log1")) continue
       end subroutine
 
       subroutine broadcast_log2(sc,data)
@@ -922,8 +922,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1),size(data),MPI_LOGICAL,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_log2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_log2")) continue
       end subroutine
 
       subroutine broadcast_log3(sc,data)
@@ -939,8 +939,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1),size(data),MPI_LOGICAL,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_log3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_log3")) continue
       end subroutine
 
       subroutine broadcast_int0(sc,data)
@@ -956,8 +956,8 @@
         case (KGROUP)
           call MPI_BCAST(data,1,MPI_INTEGER,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_int0")) continue
       end subroutine
 
       subroutine broadcast_int1(sc,data)
@@ -973,8 +973,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1),size(data),MPI_INTEGER,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_int1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_int1")) continue
       end subroutine
 
       subroutine broadcast_int2(sc,data)
@@ -990,8 +990,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1),size(data),MPI_INTEGER,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_int2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_int2")) continue
       end subroutine
 
       subroutine broadcast_int3(sc,data)
@@ -1007,8 +1007,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1),size(data),MPI_INTEGER,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_int3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_int3")) continue
       end subroutine
 
       subroutine broadcast_dpr0(sc,data)
@@ -1024,8 +1024,8 @@
         case (KGROUP)
           call MPI_BCAST(data,1,MPI_DOUBLE_PRECISION,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpr0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpr0")) continue
       end subroutine
 
       subroutine broadcast_dpr1(sc,data)
@@ -1041,8 +1041,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1),size(data),MPI_DOUBLE_PRECISION,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpr1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpr1")) continue
       end subroutine
 
       subroutine broadcast_dpr2(sc,data)
@@ -1058,8 +1058,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1),size(data),MPI_DOUBLE_PRECISION,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpr2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpr2")) continue
       end subroutine
 
       subroutine broadcast_dpr3(sc,data)
@@ -1075,8 +1075,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1),size(data),MPI_DOUBLE_PRECISION,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpr3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpr3")) continue
       end subroutine
 
       subroutine broadcast_dpr4(sc,data)
@@ -1092,8 +1092,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1,1),size(data),MPI_DOUBLE_PRECISION,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpr4")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpr4")) continue
       end subroutine
 
       subroutine broadcast_dpc0(sc,data)
@@ -1109,8 +1109,8 @@
         case (KGROUP)
           call MPI_BCAST(data,1,MPI_DOUBLE_COMPLEX,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpc0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpc0")) continue
       end subroutine
 
       subroutine broadcast_dpc1(sc,data)
@@ -1126,8 +1126,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1),size(data),MPI_DOUBLE_COMPLEX,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpc1")) continue
       end subroutine
 
       subroutine broadcast_dpc2(sc,data)
@@ -1143,8 +1143,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1),size(data),MPI_DOUBLE_COMPLEX,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpc2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpc2")) continue
       end subroutine
 
       subroutine broadcast_dpc3(sc,data)
@@ -1160,8 +1160,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1),size(data),MPI_DOUBLE_COMPLEX,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpc3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpc3")) continue
       end subroutine
 
       subroutine broadcast_dpc4(sc,data)
@@ -1177,8 +1177,8 @@
         case (KGROUP)
           call MPI_BCAST(data(1,1,1,1),size(data),MPI_DOUBLE_COMPLEX,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::broadcast_dpc4")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::broadcast_dpc4")) continue
       end subroutine
 
 !doc$ subroutine reduce(sc,op,data,tot)
@@ -1207,8 +1207,8 @@
         case (KGROUP)
           call MPI_REDUCE(data,tot,1,MPI_LOGICAL,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_log0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_log0")) continue
       end subroutine
 
       subroutine reduce_int0(sc,op,data,tot)
@@ -1224,8 +1224,8 @@
         case (KGROUP)
           call MPI_REDUCE(data,tot,1,MPI_INTEGER,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_int0")) continue
       end subroutine
 
       subroutine reduce_int1(sc,op,data,tot)
@@ -1243,8 +1243,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1),tot(1),n,MPI_INTEGER,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_int1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_int1")) continue
       end subroutine
 
       subroutine reduce_int2(sc,op,data,tot)
@@ -1262,8 +1262,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1),tot(1,1),n,MPI_INTEGER,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_int2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_int2")) continue
       end subroutine
 
       subroutine reduce_int3(sc,op,data,tot)
@@ -1281,8 +1281,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1,1),tot(1,1,1),n,MPI_INTEGER,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_int3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_int3")) continue
       end subroutine
 
       subroutine reduce_dpr0(sc,op,data,tot)
@@ -1298,8 +1298,8 @@
         case (KGROUP)
           call MPI_REDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpr0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpr0")) continue
       end subroutine
 
       subroutine reduce_dpr1(sc,op,data,tot)
@@ -1317,8 +1317,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpr1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpr1")) continue
       end subroutine
 
       subroutine reduce_dpr2(sc,op,data,tot)
@@ -1336,8 +1336,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpr2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpr2")) continue
       end subroutine
 
       subroutine reduce_dpr3(sc,op,data,tot)
@@ -1355,8 +1355,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpr3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpr3")) continue
       end subroutine
 
       subroutine reduce_dpc0(sc,op,data,tot)
@@ -1372,8 +1372,8 @@
         case (KGROUP)
           call MPI_REDUCE(data,tot,1,MPI_DOUBLE_COMPLEX,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpc0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpc0")) continue
       end subroutine
 
       subroutine reduce_dpc1(sc,op,data,tot)
@@ -1391,8 +1391,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1),tot(1),n,MPI_DOUBLE_COMPLEX,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpc1")) continue
       end subroutine
 
       subroutine reduce_dpc2(sc,op,data,tot)
@@ -1410,8 +1410,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_COMPLEX,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpc2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpc2")) continue
       end subroutine
 
       subroutine reduce_dpc3(sc,op,data,tot)
@@ -1429,8 +1429,8 @@
         case (KGROUP)
           call MPI_REDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,0,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::reduce_dpc3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::reduce_dpc3")) continue
       end subroutine
 
 !doc$ subroutine allreduce(sc,op,data,tot,i)
@@ -1465,8 +1465,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data,tot,1,MPI_LOGICAL,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_log0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_log0")) continue
       end subroutine
 
       subroutine allreduce_log1(sc,op,data,tot)
@@ -1484,8 +1484,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1),tot(1),n,MPI_LOGICAL,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_log1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_log1")) continue
       end subroutine
 
       subroutine allreduce_int0(sc,op,data,tot)
@@ -1501,8 +1501,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data,tot,1,MPI_INTEGER,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_int0")) continue
       end subroutine
 
       subroutine allreduce_int1(sc,op,data,tot)
@@ -1520,8 +1520,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1),tot(1),n,MPI_INTEGER,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_int1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_int1")) continue
       end subroutine
 
       subroutine allreduce_int2(sc,op,data,tot)
@@ -1539,8 +1539,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_INTEGER,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_int2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_int2")) continue
       end subroutine
 
       subroutine allreduce_int3(sc,op,data,tot)
@@ -1558,8 +1558,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_INTEGER,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_int3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_int3")) continue
       end subroutine
 
       subroutine allreduce_dpr0(sc,op,data,tot)
@@ -1575,8 +1575,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpr0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpr0")) continue
       end subroutine
 
       subroutine allreduce_dpr1(sc,op,data,tot)
@@ -1594,8 +1594,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpr1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpr1")) continue
       end subroutine
 
       subroutine allreduce_dpr2(sc,op,data,tot)
@@ -1613,8 +1613,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpr2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpr2")) continue
       end subroutine
 
       subroutine allreduce_dpr3(sc,op,data,tot)
@@ -1632,8 +1632,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpr3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpr3")) continue
       end subroutine
 
       subroutine allreduce_dpc0(sc,op,data,tot)
@@ -1649,8 +1649,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc0")) continue
       end subroutine
 
       subroutine allreduce_dpc1(sc,op,data,tot)
@@ -1668,8 +1668,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc1")) continue
       end subroutine
 
       subroutine allreduce_dpc2(sc,op,data,tot)
@@ -1687,8 +1687,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc2")) continue
       end subroutine
 
       subroutine allreduce_dpc3(sc,op,data,tot)
@@ -1706,8 +1706,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc3")) continue
       end subroutine
 
       subroutine allreduce_dpc4(sc,op,data,tot)
@@ -1725,8 +1725,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc4")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc4")) continue
       end subroutine
 
       subroutine allreduce_dpc2_3(sc,op,data,tot,i)
@@ -1746,8 +1746,8 @@
         case (KGROUP)
           call MPI_ALLREDUCE(data(1,1),tot(1,1,i),n,MPI_DOUBLE_COMPLEX,op,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allreduce_dpc2_3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allreduce_dpc2_3")) continue
       end subroutine
 
 !doc$ subroutine allgather(sc,data,tot)
@@ -1774,8 +1774,8 @@
         case (KGROUP)
           call MPI_ALLGATHER(data,1,MPI_INTEGER,tot,1,MPI_INTEGER,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgather_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgather_int0")) continue
       end subroutine
 
 !doc$ subroutine allgatherv(sc,data,tot,count,disp)
@@ -1819,8 +1819,8 @@
             call MPI_ALLGATHERV(data,n,MPI_INTEGER,tot,count,disp,MPI_INTEGER,the_mpi%kgroup_comm,the_mpi%error)
           end select
         end if
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_int1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_int1")) continue
       end subroutine
 
       subroutine allgatherv_int2(sc,data,tot,count,disp)
@@ -1839,8 +1839,8 @@
         case (KGROUP)
           call MPI_ALLGATHERV(data,n,MPI_INTEGER,tot,count,disp,MPI_INTEGER,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_int2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_int2")) continue
       end subroutine
 
       subroutine allgatherv_dpr1(sc,data,tot,count,disp)
@@ -1873,8 +1873,8 @@
             call MPI_ALLGATHERV(data,n,MPI_DOUBLE_PRECISION,tot,count,disp,MPI_DOUBLE_PRECISION,the_mpi%kgroup_comm,the_mpi%error)
           end select
         end if
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_dpr1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_dpr1")) continue
       end subroutine
 
       subroutine allgatherv_dpr2(sc,data,tot,count,disp)
@@ -1893,8 +1893,8 @@
         case (KGROUP)
           call MPI_ALLGATHERV(data,n,MPI_DOUBLE_PRECISION,tot,count,disp,MPI_DOUBLE_PRECISION,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_dpr2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_dpr2")) continue
       end subroutine
 
       subroutine allgatherv_dpr3(sc,data,tot,count,disp)
@@ -1913,8 +1913,8 @@
         case (KGROUP)
           call MPI_ALLGATHERV(data,n,MPI_DOUBLE_PRECISION,tot,count,disp,MPI_DOUBLE_PRECISION,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_dpr3")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_dpr3")) continue
       end subroutine
 
       subroutine allgatherv_dpc1(sc,data,tot,count,disp)
@@ -1947,8 +1947,8 @@
             call MPI_ALLGATHERV(data,n,MPI_DOUBLE_COMPLEX,tot,count,disp,MPI_DOUBLE_COMPLEX,the_mpi%kgroup_comm,the_mpi%error)
           end select
         end if
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
-        if (error("Exit mpi_mod::allgatherv_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) continue
+        if (error(FLERR,"Exit mpi_mod::allgatherv_dpc1")) continue
       end subroutine
 
 !doc$ subroutine alltoallv(sc,data_in,count_in,disp_in,data_out,count_out,disp_out)
@@ -1980,8 +1980,8 @@
           call MPI_ALLTOALLV(data_in,count_in,disp_in,MPI_DOUBLE_COMPLEX, &
                              data_out,count_out,disp_out,MPI_DOUBLE_COMPLEX,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ALLTOALLV,the_mpi%error")) continue
-        if (error("Exit mpi_mod::alltoallv_dpc1_2")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ALLTOALLV,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::alltoallv_dpc1_2")) continue
       end subroutine
 
       subroutine alltoallv_dpc2_1(sc,data_in,count_in,disp_in,data_out,count_out,disp_out)
@@ -2003,8 +2003,8 @@
           call MPI_ALLTOALLV(data_in,count_in,disp_in,MPI_DOUBLE_COMPLEX, &
                              data_out,count_out,disp_out,MPI_DOUBLE_COMPLEX,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ALLTOALLV,the_mpi%error")) continue
-        if (error("Exit mpi_mod::alltoallv_dpc2_1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ALLTOALLV,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::alltoallv_dpc2_1")) continue
       end subroutine
 
 !doc$ subroutine blocking_send(sc,data,dest,tag)
@@ -2026,8 +2026,8 @@
         case (KGROUP)
           call MPI_SEND(data,count,MPI_INTEGER,dest,tag,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_SEND,the_mpi%error")) continue
-        if (error("Exit mpi_mod::blocking_send_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_SEND,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::blocking_send_int0")) continue
       end subroutine
 
       subroutine blocking_send_dpc1(sc,data,dest,tag)
@@ -2040,8 +2040,8 @@
         case (KGROUP)
           call MPI_SEND(data,count,MPI_DOUBLE_COMPLEX,dest,tag,the_mpi%kgroup_comm,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_SEND,the_mpi%error")) continue
-        if (error("Exit mpi_mod::blocking_send_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_SEND,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::blocking_send_dpc1")) continue
       end subroutine
 
 !doc$ subroutine nonblocking_send(sc,data,dest,tag)
@@ -2063,8 +2063,8 @@
         case (KGROUP)
           call MPI_ISEND(data,count,MPI_INTEGER,dest,tag,the_mpi%kgroup_comm,request,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ISEND,the_mpi%error")) continue
-        if (error("Exit mpi_mod::nonblocking_send_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ISEND,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::nonblocking_send_int0")) continue
       end subroutine
 
       subroutine nonblocking_send_dpc1(sc,data,dest,tag)
@@ -2077,8 +2077,8 @@
         case (KGROUP)
           call MPI_ISEND(data,count,MPI_DOUBLE_COMPLEX,dest,tag,the_mpi%kgroup_comm,request,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ISEND,the_mpi%error")) continue
-        if (error("Exit mpi_mod::nonblocking_send_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_ISEND,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::nonblocking_send_dpc1")) continue
       end subroutine
 
 !doc$ subroutine blocking_recv(sc,data,origin,tag)
@@ -2101,8 +2101,8 @@
         case (KGROUP)
           call MPI_RECV(data,count,MPI_INTEGER,origin,tag,the_mpi%kgroup_comm,status,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_RECV,the_mpi%error")) continue
-        if (error("Exit mpi_mod::blocking_recv_int0")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_RECV,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::blocking_recv_int0")) continue
       end subroutine
 
       subroutine blocking_recv_dpc1(sc,data,origin,tag)
@@ -2116,8 +2116,8 @@
         case (KGROUP)
           call MPI_RECV(data,count,MPI_DOUBLE_COMPLEX,origin,tag,the_mpi%kgroup_comm,status,the_mpi%error)
         end select
-        if (error(the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_RECV,the_mpi%error")) continue
-        if (error("Exit mpi_mod::blocking_recv_dpc1")) continue
+        if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status from MPI_RECV,the_mpi%error")) continue
+        if (error(FLERR,"Exit mpi_mod::blocking_recv_dpc1")) continue
       end subroutine
 
 !doc$ subroutine xcomm_broadcast(sc,root,data)
@@ -2139,23 +2139,23 @@
           if (mpi_nconfigs() > 1) then
             call MPI_BCAST(data(1,1),n,MPI_DOUBLE_COMPLEX,root,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
           case (2)
             call MPI_BCAST(data(1,1),n,MPI_DOUBLE_COMPLEX,root,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() > 1) then
             call MPI_BCAST(data(1,1),n,MPI_DOUBLE_COMPLEX,root,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_broadcast_dpc2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_broadcast_dpc2")) continue
       end subroutine
 
 !doc$ subroutine xcomm_reduce(sc,op,data,tot)
@@ -2185,7 +2185,7 @@
               tot = 0
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2202,7 +2202,7 @@
               tot = 0
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2218,10 +2218,10 @@
               tot = 0
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_int0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_int0")) continue
       end subroutine
 
       subroutine xcomm_reduce_int1(sc,op,data,tot)
@@ -2244,7 +2244,7 @@
               tot = 0
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2261,7 +2261,7 @@
               tot = 0
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2277,10 +2277,10 @@
               tot = 0
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_int1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_int1")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpr1(sc,op,data,tot)
@@ -2303,7 +2303,7 @@
               tot = 0.0_double
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2320,7 +2320,7 @@
               tot = 0.0_double
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2336,10 +2336,10 @@
               tot = 0.0_double
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpr1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpr1")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpr3(sc,op,data,tot)
@@ -2362,7 +2362,7 @@
               tot = 0.0_double
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2379,7 +2379,7 @@
               tot = 0.0_double
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2395,10 +2395,10 @@
               tot = 0.0_double
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpr3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpr3")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpr4(sc,op,data,tot)
@@ -2421,7 +2421,7 @@
               tot = 0.0_double
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2438,7 +2438,7 @@
               tot = 0.0_double
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2454,10 +2454,10 @@
               tot = 0.0_double
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpr4")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpr4")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpc1(sc,op,data,tot)
@@ -2480,7 +2480,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2497,7 +2497,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2513,10 +2513,10 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpc1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpc1")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpc2(sc,op,data,tot)
@@ -2539,7 +2539,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2556,7 +2556,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2572,10 +2572,10 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpc2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpc2")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpc3(sc,op,data,tot)
@@ -2598,7 +2598,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2615,7 +2615,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2631,10 +2631,10 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpc3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpc3")) continue
       end subroutine
 
       subroutine xcomm_reduce_dpc4(sc,op,data,tot)
@@ -2657,7 +2657,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -2674,7 +2674,7 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -2690,10 +2690,10 @@
               tot = (0.0_double,0.0_double)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_reduce_dpc4")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_reduce_dpc4")) continue
       end subroutine
 
 !doc$ subroutine xcomm_allreduce(sc,op,data,tot)
@@ -2717,7 +2717,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_LOGICAL,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2729,7 +2729,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_LOGICAL,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2740,11 +2740,11 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_LOGICAL,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_log0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_log0")) continue
       end subroutine
 
       subroutine xcomm_allreduce_int0(sc,op,data,tot)
@@ -2759,7 +2759,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_INTEGER,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2771,7 +2771,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_INTEGER,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2782,11 +2782,11 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_INTEGER,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_int0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_int0")) continue
       end subroutine
 
       subroutine xcomm_allreduce_int1(sc,op,data,tot)
@@ -2803,7 +2803,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_INTEGER,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2815,7 +2815,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_INTEGER,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2826,11 +2826,11 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_INTEGER,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_int1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_int1")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpr0(sc,op,data,tot)
@@ -2845,7 +2845,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2857,7 +2857,7 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2868,11 +2868,11 @@
               call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpr0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpr0")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpr1(sc,op,data,tot)
@@ -2889,7 +2889,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2901,7 +2901,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2912,11 +2912,11 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpr1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpr1")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpr2(sc,op,data,tot)
@@ -2933,7 +2933,7 @@
               call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2945,7 +2945,7 @@
               call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -2956,11 +2956,11 @@
               call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpr2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpr2")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpr3(sc,op,data,tot)
@@ -2977,7 +2977,7 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -2989,7 +2989,7 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3000,11 +3000,11 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpr3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpr3")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpr4(sc,op,data,tot)
@@ -3021,7 +3021,7 @@
               call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3033,7 +3033,7 @@
               call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3044,11 +3044,11 @@
               call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpr4")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpr4")) continue
       end subroutine
 
 
@@ -3068,7 +3068,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3080,7 +3080,7 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3091,11 +3091,11 @@
               call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpc1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpc1")) continue
       end subroutine
 
       subroutine xcomm_allreduce_dpc3(sc,op,data,tot)
@@ -3112,7 +3112,7 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3124,7 +3124,7 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3135,11 +3135,11 @@
               call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allreduce_dpc3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allreduce_dpc3")) continue
       end subroutine
 
 !doc$ subroutine xcomm_allgather(sc,data,tot)
@@ -3164,7 +3164,7 @@
               call MPI_ALLGATHER(data,1,MPI_INTEGER,tot,1,MPI_INTEGER,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3176,7 +3176,7 @@
               call MPI_ALLGATHER(data,1,MPI_INTEGER,tot,1,MPI_INTEGER,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3187,11 +3187,11 @@
               call MPI_ALLGATHER(data,1,MPI_INTEGER,tot,1,MPI_INTEGER,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allgather_int0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allgather_int0")) continue
       end subroutine
 
       subroutine xcomm_allgather_dpr0(sc,data,tot)
@@ -3207,7 +3207,7 @@
               call MPI_ALLGATHER(data,1,MPI_DOUBLE_PRECISION,tot,1,MPI_DOUBLE_PRECISION,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3219,7 +3219,7 @@
               call MPI_ALLGATHER(data,1,MPI_DOUBLE_PRECISION,tot,1,MPI_DOUBLE_PRECISION,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3230,11 +3230,11 @@
               call MPI_ALLGATHER(data,1,MPI_DOUBLE_PRECISION,tot,1,MPI_DOUBLE_PRECISION,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allgather_dpr0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allgather_dpr0")) continue
       end subroutine
 
       subroutine xcomm_allgather_dpr1(sc,data,tot)
@@ -3252,7 +3252,7 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3264,7 +3264,7 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3275,11 +3275,11 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xconfig_allgather_dpr1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xconfig_allgather_dpr1")) continue
       end subroutine
 
       subroutine xcomm_allgather_dpr2(sc,data,tot)
@@ -3297,7 +3297,7 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xconfig_comm,the_mpi%error)
             end if
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(CONFIG,tot)
           end if
         case (XSGROUP)
@@ -3309,7 +3309,7 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xsgroup_comm,the_mpi%error)
             end if
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(SGROUP,tot)
           end select
         case (XKGROUP)
@@ -3320,11 +3320,11 @@
               call MPI_ALLGATHER(data,n,MPI_DOUBLE_PRECISION,tot,n,MPI_DOUBLE_PRECISION,the_mpi%xkgroup_comm,the_mpi%error)
             end if
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
             call broadcast(KGROUP,tot)
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_allgather_dpr2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_allgather_dpr2")) continue
       end subroutine
 
 !doc$ subroutine xcomm_rank_allreduce(sc,op,data,tot)
@@ -3348,7 +3348,7 @@
           else
             call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -3357,7 +3357,7 @@
           case (2)
             call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -3365,10 +3365,10 @@
           else
             call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_rank_allreduce_dpr1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_rank_allreduce_dpr1")) continue
       end subroutine
 
       subroutine xcomm_rank_allreduce_dpr2(sc,op,data,tot)
@@ -3383,7 +3383,7 @@
           else
             call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -3392,7 +3392,7 @@
           case (2)
             call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -3400,10 +3400,10 @@
           else
             call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_rank_allreduce_dpr2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_rank_allreduce_dpr2")) continue
       end subroutine
 
       subroutine xcomm_rank_allreduce_dpr3(sc,op,data,tot)
@@ -3418,7 +3418,7 @@
           else
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -3427,7 +3427,7 @@
           case (2)
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -3435,10 +3435,10 @@
           else
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_rank_allreduce_dpr3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_rank_allreduce_dpr3")) continue
       end subroutine
 
       subroutine xcomm_rank_allreduce_dpr4(sc,op,data,tot)
@@ -3453,7 +3453,7 @@
           else
             call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -3462,7 +3462,7 @@
           case (2)
             call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -3470,10 +3470,10 @@
           else
             call MPI_ALLREDUCE(data(1,1,1,1),tot(1,1,1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_rank_allreduce_dpr4")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_rank_allreduce_dpr4")) continue
       end subroutine
 
       subroutine xcomm_rank_allreduce_dpc3(sc,op,data,tot)
@@ -3488,7 +3488,7 @@
           else
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xconfig_comm,the_mpi%error)
             call broadcast(CONFIG,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         case (XSGROUP)
           select case (mpi_nsgroups())
@@ -3497,7 +3497,7 @@
           case (2)
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xsgroup_comm,the_mpi%error)
             call broadcast(SGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case (XKGROUP)
           if (mpi_nkgroups() == 1) then
@@ -3505,10 +3505,10 @@
           else
             call MPI_ALLREDUCE(data(1,1,1),tot(1,1,1),n,MPI_DOUBLE_COMPLEX,op,the_mpi%xkgroup_comm,the_mpi%error)
             call broadcast(KGROUP,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end if
         end select
-100     if (error("Exit mpi_mod::xcomm_rank_allreduce_dpc3")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_rank_allreduce_dpc3")) continue
       end subroutine
 
 !doc$ subroutine xcomm_pair_allreduce(sc,op,data,tot)
@@ -3532,12 +3532,12 @@
             tot = data
           case (2)
             call MPI_ALLREDUCE(data,tot,1,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case default
-          if (error(.true.,"ERROR: sc is not equal to XSGROUP")) continue
+          if (error(FLERR,.true.,"ERROR: sc is not equal to XSGROUP")) continue
         end select
-100     if (error("Exit mpi_mod::xcomm_pair_allreduce_dpr0")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_pair_allreduce_dpr0")) continue
       end subroutine
 
       subroutine xcomm_pair_allreduce_dpr1(sc,op,data,tot)
@@ -3552,12 +3552,12 @@
             tot = data
           case (2)
             call MPI_ALLREDUCE(data(1),tot(1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case default
-          if (error(.true.,"ERROR: sc is not equal to XSGROUP")) continue
+          if (error(FLERR,.true.,"ERROR: sc is not equal to XSGROUP")) continue
         end select
-100     if (error("Exit mpi_mod::xcomm_pair_allreduce_dpr1")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_pair_allreduce_dpr1")) continue
       end subroutine
 
       subroutine xcomm_pair_allreduce_dpr2(sc,op,data,tot)
@@ -3572,12 +3572,12 @@
             tot = data
           case (2)
             call MPI_ALLREDUCE(data(1,1),tot(1,1),n,MPI_DOUBLE_PRECISION,op,the_mpi%xsgroup_comm,the_mpi%error)
-            if (error(the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
+            if (error(FLERR,the_mpi%error /= 0,"ERROR: Non-zero error status",the_mpi%error)) goto 100
           end select
         case default
-          if (error(.true.,"ERROR: sc is not equal to XSGROUP")) continue
+          if (error(FLERR,.true.,"ERROR: sc is not equal to XSGROUP")) continue
         end select
-100     if (error("Exit mpi_mod::xcomm_pair_allreduce_dpr2")) continue
+100     if (error(FLERR,"Exit mpi_mod::xcomm_pair_allreduce_dpr2")) continue
       end subroutine
 
       end module

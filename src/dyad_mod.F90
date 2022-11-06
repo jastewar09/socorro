@@ -112,7 +112,7 @@
         call my(do)
         call my(dk)
 
-        if (error((ik .lt. 1) .or. (ik .gt. size(do%o%dyads)),"ERROR: Index ik is out of range")) goto 100
+        if (error(FLERR,(ik .lt. 1) .or. (ik .gt. size(do%o%dyads)),"ERROR: Index ik is out of range")) goto 100
 
         call own_i(do)
         do%o%g = x_ghost()
@@ -121,7 +121,7 @@
  100    call glean(thy(dk))
         call glean(thy(do))
 
-        if (error("Exit dyad_mod::update_do")) continue
+        if (error(FLERR,"Exit dyad_mod::update_do")) continue
 
       end subroutine
 
@@ -225,12 +225,12 @@
 
 !cod$
         call my(do)
-        if (error(((ik .lt. 1) .or. (ik .gt. size(do%o%dyads))),"ERROR: Index ik is out of range")) goto 100
+        if (error(FLERR,((ik .lt. 1) .or. (ik .gt. size(do%o%dyads))),"ERROR: Index ik is out of range")) goto 100
         call my(do%o%dyads(ik),dk)
         call bequeath(thy(dk))
 
 100     call glean(thy(do))
-        if (error("Exit dyad_mod::x_dyad_kpoint")) continue
+        if (error(FLERR,"Exit dyad_mod::x_dyad_kpoint")) continue
 
       end function
 
@@ -244,7 +244,7 @@
         call my(do)
         nk = size(do%o%dyads)
 100     call glean(thy(do))
-        if (error("Exit dyad_mod::x_n_kpoints")) continue
+        if (error(FLERR,"Exit dyad_mod::x_n_kpoints")) continue
 
       end function
 

@@ -242,7 +242,7 @@
           ! open the ATOMIC_TYPE block
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_TYPE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_TYPE block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_TYPE block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
 
           ! find the atomic representation tag
@@ -251,7 +251,7 @@
           if (tios == TAG_NOT_FOUND) then
             if (i_access(restf)) tios = findfirsttag(restf,"NCP")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: atomic representation  was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: atomic representation  was not found")) goto 100
             ao%type = NCP
           else
             ao%type = PAW
@@ -272,7 +272,7 @@
           case ("paw")
             ao%type = PAW
           case default
-            if (error(.true.,"ERROR: atomic_representation tag was not recognized")) goto 200
+            if (error(FLERR,.true.,"ERROR: atomic_representation tag was not recognized")) goto 200
           end select
 
         end if
@@ -298,7 +298,7 @@
 
 200     if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_operators_mod::constructor_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_mod::constructor_ao")) continue
 
       end function
 
@@ -341,7 +341,7 @@
         case (PAW)
           call update(ao%ao_paw,cr,lay,sg)
         end select
-        if (error("Exit atomic_operators_mod::update_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_mod::update_ao")) continue
       end subroutine
 
       subroutine my_ao(ao)
@@ -836,9 +836,9 @@
         case (NCP)
           psfv = projector_stress_f_values(ao%ao_ncp,q,it,ip)
         case (PAW)
-         if (error(.true.,"ERROR: stress tensor calculation is not yet implemented for PAW")) continue
+         if (error(FLERR,.true.,"ERROR: stress tensor calculation is not yet implemented for PAW")) continue
         end select
-        if (error("Exit atomic_operators_mod::ao_projector_stress_f_values")) continue
+        if (error(FLERR,"Exit atomic_operators_mod::ao_projector_stress_f_values")) continue
       end function
 
       function ao_projector_r_value(ao,ip,r,gi,go) result(prv)
@@ -1032,7 +1032,7 @@
           call write_restart(ao%ao_paw,nrestf)
         end select
 
-        if (error("Exit atomic_operators_mod::write_restart_ao")) continue
+        if (error(FLERR,"Exit atomic_operators_mod::write_restart_ao")) continue
 
       end subroutine
 

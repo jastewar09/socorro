@@ -283,7 +283,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit shortcuts_mod::update_config_pos_cart")) continue
+        if (error(FLERR,"Exit shortcuts_mod::update_config_pos_cart")) continue
 
       end subroutine
 
@@ -328,7 +328,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit shortcuts_mod::update_config_pos_cart")) continue
+        if (error(FLERR,"Exit shortcuts_mod::update_config_pos_cart")) continue
 
       end subroutine
 

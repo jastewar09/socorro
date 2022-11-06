@@ -211,7 +211,7 @@
         call start_timer("config_sc: constructor")
 
         call sync_configuration_errors()
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           cfg%ref = 0
           allocate( cfg%o )
           cfg%o%ref = 0
@@ -233,17 +233,17 @@
           cfg%o%cvg_mode = ENERGY
           call arg("energy_tolerance",cfg%o%energy_tol,found)
           if (.not.found) cfg%o%energy_tol = 1.0e-6_double
-          if (error(cfg%o%energy_tol < 0.0_double,"ERROR: energy_tolerance < 0")) goto 300
+          if (error(FLERR,cfg%o%energy_tol < 0.0_double,"ERROR: energy_tolerance < 0")) goto 300
         case ("density")
           cfg%o%cvg_mode = DENSITY
         case ("wavefunctions")
           cfg%o%cvg_mode = WAVEFUNCTIONS
         case default
-          if (error(.true.,"ERROR: config_convergence was not recognized")) goto 300
+          if (error(FLERR,.true.,"ERROR: config_convergence was not recognized")) goto 300
         end select
         call arg("config_steps",cfg%o%max_steps,found)
         if (.not.found) cfg%o%max_steps = 40
-        if (error(cfg%o%max_steps < 0,"ERROR: config_steps < 0")) goto 300
+        if (error(FLERR,cfg%o%max_steps < 0,"ERROR: config_steps < 0")) goto 300
 
         ! read whether or not to null the residual force
         call arglc("null_residual_force",tag,found)
@@ -254,7 +254,7 @@
         case ("off")
           cfg%o%null_residual_force = .false.
         case default
-          if (error(.true.,"ERROR: null_residual_force tag was not recognized")) goto 300
+          if (error(FLERR,.true.,"ERROR: null_residual_force tag was not recognized")) goto 300
         end select
 
         ! read the restart mode
@@ -274,19 +274,19 @@
           call my(tagio(trim(restart_path),TAGIO_READ,mkey,len(mkey)),restf)
           if (i_access(restf)) iosl = x_tagfd(restf)
           if (i_comm(restf)) call broadcast(FILE_SCOPE,iosl)
-          if (error(iosl == 0,"ERROR: restart file was not found")) goto 300
+          if (error(FLERR,iosl == 0,"ERROR: restart file was not found")) goto 300
 
           ! check the version number
           if (i_access(restf)) tios = findfirsttag(restf,"VERSION")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: VERSION tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: VERSION tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
             call readf(version,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,version)
-          if (error(version /= es_version,"ERROR: incorrect version of the restart file")) goto 100
+          if (error(FLERR,version /= es_version,"ERROR: incorrect version of the restart file")) goto 100
 
           ! read the number of sgroups
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_SGROUPS")
@@ -302,7 +302,7 @@
               r_nsg = s4
             end if
             if (i_comm(restf)) call broadcast(FILE_SCOPE,r_nsg)
-            if (error(r_nsg /= mpi_nsgroups(),"ERROR: different numbers of sgroups")) goto 100
+            if (error(FLERR,r_nsg /= mpi_nsgroups(),"ERROR: different numbers of sgroups")) goto 100
           end if
 
           ! construct the external, fields, and electrons
@@ -333,7 +333,7 @@
 
         case default
 
-          if (error(.true.,"ERROR: restart tag was not recognized")) goto 300
+          if (error(FLERR,.true.,"ERROR: restart tag was not recognized")) goto 300
 
         end select
 
@@ -354,7 +354,7 @@
 
 300     continue
 
-999     if (error("Exit config_sc_mod::constructor_cfg")) continue
+999     if (error(FLERR,"Exit config_sc_mod::constructor_cfg")) continue
 
         if (.not.error()) call stop_timer("config_sc: constructor")
 
@@ -419,7 +419,7 @@
         call glean(thy(cfg))
         if (present(ext)) call glean(thy(ext))
 
-        if (error("Exit config_sc_mod::update_cfg")) continue
+        if (error(FLERR,"Exit config_sc_mod::update_cfg")) continue
 
         if (.not.error()) call stop_timer("config_sc: update")
 
@@ -593,7 +593,7 @@
         end if
         f = cfg%o%forces
 100     call glean(thy(cfg))
-        if (error("Exit config_sc_mod::cfg_forces")) continue
+        if (error(FLERR,"Exit config_sc_mod::cfg_forces")) continue
       end function
 
       function cfg_pressure(cfg) result(p)
@@ -611,7 +611,7 @@
         end if
         p = cfg%o%pressure
 100     call glean(thy(cfg))
-        if (error("Exit config_sc_mod::cfg_pressure")) continue
+        if (error(FLERR,"Exit config_sc_mod::cfg_pressure")) continue
       end function
 
       function cfg_stress_tensor(cfg) result(s)
@@ -629,7 +629,7 @@
         end if
         s = cfg%o%stress_tensor
 100     call glean(thy(cfg))
-        if (error("Exit config_sc_mod::cfg_stress_tensor")) continue
+        if (error(FLERR,"Exit config_sc_mod::cfg_stress_tensor")) continue
       end function
            
       function cfg_cell_energy(cfg) result(ce)
@@ -665,12 +665,12 @@
         case ("off",".false.")
           continue
         case default
-          if (error(.true.,"ERROR: forces tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: forces tag was not recognized")) goto 100
         end select
 
 100     call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::forces")) continue
+        if (error(FLERR,"Exit config_sc_mod::forces")) continue
 
       end subroutine
 
@@ -695,12 +695,12 @@
         case ("off",".false.")
           continue
         case default
-          if (error(.true.,"ERROR: pressure tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: pressure tag was not recognized")) goto 100
         end select
 
 100     call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::pressure")) continue
+        if (error(FLERR,"Exit config_sc_mod::pressure")) continue
 
       end subroutine
 
@@ -726,7 +726,7 @@
         case ("off",".false.")
           continue
         case default
-          if (error(.true.,"ERROR: stress_tensor tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: stress_tensor tag was not recognized")) goto 100
         end select
 
 100     if (allocated( s )) deallocate( s )
@@ -734,7 +734,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::stress_tensor")) continue
+        if (error(FLERR,"Exit config_sc_mod::stress_tensor")) continue
 
       end subroutine
 
@@ -767,7 +767,7 @@
         case ("off")
           goto 700
         case default
-          if (error(.true.,"ERROR: decomposition tag is not recognized")) goto 700
+          if (error(FLERR,.true.,"ERROR: decomposition tag is not recognized")) goto 700
         end select
 
         call start_timer("config_sc: decompose")
@@ -778,7 +778,7 @@
         case ("l","lm","xyz")
           continue
         case default
-          if (error(.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
+          if (error(FLERR,.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
         end select
 
         call my(x_lattice(x_crystal(cfg%o%external)),lat)
@@ -792,10 +792,10 @@
         if (exist_file) then
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open dsites file")) goto 200
+          if (error(FLERR,ios /= 0,"ERROR: unable to open dsites file")) goto 200
           if (i_access(f)) read(x_unit(f),*,iostat=ios) nu
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read the number of sites")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read the number of sites")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,nu)
         end if
         na = x_n_atoms(ats)
@@ -805,7 +805,7 @@
         do is = 1,nu
           if (i_access(f)) read(x_unit(f),*,iostat=ios) pos_lat, radius
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read dsites data")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read dsites data")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,pos_lat)
           site_data(1:3,is) = lat2r(lat,pos_lat)
           if (i_comm(f)) call broadcast(FILE_SCOPE,radius)
@@ -831,7 +831,7 @@
         call my(file(trim(dcomp_path)),f)
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open dcomp file")) goto 400
+        if (error(FLERR,ios /= 0,"ERROR: unable to open dcomp file")) goto 400
 
         if (i_access(f)) then
           select case (trim(mode))
@@ -876,7 +876,7 @@
 
 700     call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::decompose_cfg")) continue
+        if (error(FLERR,"Exit config_sc_mod::decompose_cfg")) continue
 
       end subroutine
 
@@ -894,7 +894,7 @@
         call diary_energy(cfg) 
 
 100     call glean(thy(cfg))
-        if (error("Exit config_sc_mod::diary_cfg")) continue
+        if (error(FLERR,"Exit config_sc_mod::diary_cfg")) continue
       end subroutine
 
       subroutine diary_atom_step(cfg,step)
@@ -911,7 +911,7 @@
         call diary_forces(cfg)              ; if (error()) goto 100
         call diary_energy(cfg,all=.false.)  ; if (error()) goto 100
 100     call glean(thy(cfg))
-        if (error("Exit config_sc_mod::diary_atom_step")) continue
+        if (error(FLERR,"Exit config_sc_mod::diary_atom_step")) continue
       end subroutine
 
       subroutine diary_energy_sc(cfg,all)
@@ -1005,7 +1005,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::diary_forces_sc")) continue
+        if (error(FLERR,"Exit config_sc_mod::diary_forces_sc")) continue
 
       end subroutine
 
@@ -1027,7 +1027,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::diary_pressure_sc")) continue
+        if (error(FLERR,"Exit config_sc_mod::diary_pressure_sc")) continue
 
       end subroutine
 
@@ -1052,7 +1052,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::diary_stress_tensor_sc")) continue
+        if (error(FLERR,"Exit config_sc_mod::diary_stress_tensor_sc")) continue
 
       end subroutine
 
@@ -1082,7 +1082,7 @@
         case ("off",".false.")
           continue
         case default
-          if (error(.true.,"ERROR: write_els_potential tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: write_els_potential tag was not recognized")) goto 100
         end select
 
 100     call glean(thy(lat))
@@ -1090,7 +1090,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::write_els_potential_cfg")) continue
+        if (error(FLERR,"Exit config_sc_mod::write_els_potential_cfg")) continue
 
       end subroutine
 
@@ -1164,7 +1164,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit config_sc_mod::write_restart_cfg")) continue
+        if (error(FLERR,"Exit config_sc_mod::write_restart_cfg")) continue
 
       end subroutine
 
@@ -1178,7 +1178,7 @@
 
         lc = 0
         do
-          if (error(user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
           lc = lc + 1
           !write(*,*) "Here 1",mpi_myproc(world)
           call update(cfgr%fields,cfgr%external,cfgr%electrons) ; if (error()) goto 100
@@ -1188,7 +1188,7 @@
           call update(cfgr%electrons,cfgr%external,x_potential(cfgr%fields)) ; if (error()) goto 100
         end do
 
-100     if (error("Exit config_sc_mod::iterator_i")) continue
+100     if (error(FLERR,"Exit config_sc_mod::iterator_i")) continue
 
       end subroutine
 
@@ -1446,7 +1446,7 @@
         end if
         cfgr%have_forces = .true.
 100     if (allocated( ft )) deallocate( ft )
-        if (error("Exit config_sc_mod::forces_i")) continue
+        if (error(FLERR,"Exit config_sc_mod::forces_i")) continue
         call stop_timer("config_sc: forces_i")
       end subroutine
 
@@ -1461,7 +1461,7 @@
         p = p + pt
         cfgr%pressure = p
         cfgr%have_pressure = .true.
-100     if (error("Exit config_sc_mod::pressure_i")) continue
+100     if (error(FLERR,"Exit config_sc_mod::pressure_i")) continue
         if (.not.error()) call stop_timer("config_sc: pressure_i")
       end subroutine
 
@@ -1482,7 +1482,7 @@
         cfgr%have_stress_tensor = .true.
 100     if (allocated( s )) deallocate( s )
         if (allocated( st )) deallocate( st )
-        if (error("Exit config_sc_mod::stress_tensor_i")) continue
+        if (error(FLERR,"Exit config_sc_mod::stress_tensor_i")) continue
         if (.not.error()) call stop_timer("config_sc: stress_tensor_i")
       end subroutine
 

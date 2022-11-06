@@ -123,7 +123,7 @@
         call glean(thy(apot))
         if (present(dpot)) call glean(thy(dpot))
 
-        if (error("Exit gen_potential_mod::constructor_gp")) continue
+        if (error(FLERR,"Exit gen_potential_mod::constructor_gp")) continue
 
       end function
 
@@ -180,7 +180,7 @@
 
         call glean(thy(gp))
 
-        if (error("Exit gen_potential_mod::update_gp")) continue
+        if (error(FLERR,"Exit gen_potential_mod::update_gp")) continue
 
       end subroutine
 
@@ -326,12 +326,12 @@
 
 !cod$
         call my(gp)
-        if (error((.not. associated(gp%o%dpot)),"ERROR: dpot has not been initialized")) goto 100
+        if (error(FLERR,(.not. associated(gp%o%dpot)),"ERROR: dpot has not been initialized")) goto 100
         call my(gp%o%dpot,dpot)
         call bequeath(thy(dpot))
 
 100     call glean(thy(gp))
-        if (error("Exit gen_potential_mod::x_dyadic_potential")) continue
+        if (error(FLERR,"Exit gen_potential_mod::x_dyadic_potential")) continue
 
       end function
 

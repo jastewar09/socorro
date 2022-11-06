@@ -175,27 +175,27 @@
         call my(file(prefix//"lattice"),f)
         if (i_access(f)) inquire(file=x_name(f),exist=exist_file)
         if (i_comm(f)) call broadcast(FILE_SCOPE,exist_file)
-        if (error(.not.exist_file,"ERROR: file does not exist")) goto 200
+        if (error(FLERR,.not.exist_file,"ERROR: file does not exist")) goto 200
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 200
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 200
 
         if (i_access(f)) read(x_unit(f),*,iostat=ios) latc
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice constant")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice constant")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,latc)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v1
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v1)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v2
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v2)
         if (i_access(f)) read(x_unit(f),*,iostat=ios) v3
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read lattice vector")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read lattice vector")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,v3)
 
         lat%ref = 0
@@ -212,7 +212,7 @@
 100     if (i_access(f)) close(x_unit(f))
 200     call glean(thy(f))
 
-        if (error("Exit lattice_mod::constructor_lat_2")) continue
+        if (error(FLERR,"Exit lattice_mod::constructor_lat_2")) continue
 
       end function
 
@@ -238,13 +238,13 @@
         ! open the LATTICE block
         if (i_access(restf)) tios = findfirsttag(restf,"LATTICE")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: LATTICE block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: LATTICE block was not found")) goto 200
         if (i_access(restf)) call openblock(restf)
 
         ! read the lattice constant       
         if (i_access(restf)) tios = findfirsttag(restf,"LATTICE_CONSTANT")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: LATTICE_CONSTANT tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: LATTICE_CONSTANT tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double ; ndata = 1
           call readf(lat%o%lconstant,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -254,7 +254,7 @@
         ! read the real-space vectors
         if (i_access(restf)) tios = findfirsttag(restf,"REAL-SPACE_VECTORS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: REAL-SPACE_VECTORS tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: REAL-SPACE_VECTORS tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double ; ndata = 9
           call readf(lat%o%vectors,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -264,7 +264,7 @@
         ! read the reciprocal-space vectors
         if (i_access(restf)) tios = findfirsttag(restf,"RECIPROCAL-SPACE_VECTORS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: RECIPROCAL-SPACE_VECTORS tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: RECIPROCAL-SPACE_VECTORS tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double ; ndata = 9
           call readf(lat%o%ivectors,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -276,7 +276,7 @@
 
 200     call glean(thy(restf))
 
-        if (error("Exit lattice_mod::constructor_lat_3")) continue
+        if (error(FLERR,"Exit lattice_mod::constructor_lat_3")) continue
 
       end function
 
@@ -577,7 +577,7 @@
         call my(file(prefix//"lat"),f);
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
         if (i_access(f)) then 
           write(x_unit(f),*) lat%o%vectors/lat%o%lconstant
           write(x_unit(f),*) lat%o%lconstant
@@ -585,7 +585,7 @@
         end if
 100     call glean(thy(lat))
         call glean(thy(f))
-        if (error("Exit lattice_mod::save_lat")) continue
+        if (error(FLERR,"Exit lattice_mod::save_lat")) continue
       end subroutine
 
       function cubic_cell(lat) result(cc)
@@ -650,7 +650,7 @@
           v2 = lat2f(lat,real((/0,1,0/),double))
           v3 = lat2f(lat,real((/0,0,1/),double))
         case default
-          if (error(.true.,"ERROR: unrecognized lattice mode")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized lattice mode")) goto 100
         end select
         volume = abs(dot_product(v1,cross_product(v2,v3)))
         radius = 0.0_double
@@ -756,7 +756,7 @@
 
         call glean(thy(lat))
 
-        if (error("Exit lattice_mod::wigner_seitz_vectors")) continue
+        if (error(FLERR,"Exit lattice_mod::wigner_seitz_vectors")) continue
 
       end subroutine
 
@@ -839,7 +839,7 @@
         call glean(thy(lat))
         call glean(thy(nrestf))
 
-        if (error("Exit lattice_mod::write_restart_lat")) continue
+        if (error(FLERR,"Exit lattice_mod::write_restart_lat")) continue
 
       end subroutine
 

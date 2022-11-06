@@ -184,7 +184,7 @@
           call bequeath(thy(ad%ad_paw))
         end select
 
-100     if (error("Exit atomic_density_mod::constructor_ad")) continue
+100     if (error(FLERR,"Exit atomic_density_mod::constructor_ad")) continue
 
       end function
 
@@ -204,7 +204,7 @@
           call update(ad%ad_paw,x_atomic_operators_paw(ao))
         end select
 
-        if (error("Exit atomic_density_mod::update_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::update_ad")) continue
 
       end subroutine
 
@@ -389,7 +389,7 @@
         case (PAW)
           d = distance(ad1%ad_paw,ad2%ad_paw)
         end select
-        if (error("Exit atomic_density_mod::distance_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::distance_ad")) continue
       end function
 
       subroutine symmetrize_ad(ad,sg)
@@ -525,9 +525,9 @@
         case (PAW)
           call glean(den)
           call glean(xcp)
-          if (error(.true.,"ERROR: atomic_pressure_ad is not yet implemented for type = PAW")) continue
+          if (error(FLERR,.true.,"ERROR: atomic_pressure_ad is not yet implemented for type = PAW")) continue
         end select
-        if (error("Exit atomic_density_mod::atomic_pressure_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::atomic_pressure_ad")) continue
       end subroutine
 
       subroutine atomic_stress_tensor_ad(ad,den,xcp,s)
@@ -547,9 +547,9 @@
         case (PAW)
           call glean(den)
           call glean(xcp)
-          if (error(.true.,"ERROR: atomic_stress_tensor_ad is not yet implemented for type = PAW")) continue
+          if (error(FLERR,.true.,"ERROR: atomic_stress_tensor_ad is not yet implemented for type = PAW")) continue
         end select
-        if (error("Exit atomic_density_mod::atomic_stress_tensor_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::atomic_stress_tensor_ad")) continue
       end subroutine
 
       subroutine extract_density_ad(ad,c1d)
@@ -568,7 +568,7 @@
         case (PAW)
           call extract_density(ad%ad_paw,c1d)
         end select
-        if (error("Exit atomic_density_mod::extract_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::extract_density_ad")) continue
       end subroutine
 
       subroutine insert_density_ad(c1d,ad)
@@ -585,7 +585,7 @@
         case (PAW)
           call insert_density(c1d,ad%ad_paw)
         end select
-        if (error("Exit atomic_density_mod::insert_density_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::insert_density_ad")) continue
       end subroutine
 
       subroutine get_normalization_ad(ad,ne)
@@ -602,7 +602,7 @@
         case (PAW)
           call get_normalization(ad%ad_paw,ne)
         end select
-        if (error("Exit atomic_density_mod::get_normalization_ad")) continue
+        if (error(FLERR,"Exit atomic_density_mod::get_normalization_ad")) continue
       end subroutine
 
       subroutine write_restart_ad(ad,nrestf)

@@ -232,7 +232,7 @@
 
         call start_timer("Socorro: total time")
 
-100      if ( error("Exiting system_mod::system_start_()") ) continue
+100      if ( error(FLERR,"Exiting system_mod::system_start_()") ) continue
 
       end subroutine system_start_
 
