@@ -27,6 +27,7 @@
       use kind_mod
       use mpi
       use path_mod
+      use utils_mod
 
 !cod$
       implicit none ; private
@@ -276,7 +277,7 @@
          if (c_error_state) then
             select case (file_status)
             case (EF_ON)
-               write(error_unit,'(a)') msg
+               write(error_unit,'("ERROR: ",a," (",a,":",i0,")")') msg,basename(file),line
                call flush_i()
             end select
          end if
@@ -312,7 +313,7 @@
          if (test) then
             select case (file_status)
             case (EF_ON)
-               write(error_unit,'(a)') msg
+               write(error_unit,'("ERROR: ",a," (",a,":",i0,")")') msg,basename(file),line
                call flush_i()
             end select
          end if
@@ -359,7 +360,7 @@
          if (test) then
             select case (file_status)
             case (EF_ON)
-               write(error_unit,'(a," ",i0)') msg, n
+               write(error_unit,'("ERROR: ",a," ",i0," (",a,":",i0,")")') msg,n,basename(file),line
                call flush_i()
             end select
          end if
