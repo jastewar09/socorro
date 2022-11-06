@@ -157,7 +157,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_orbital_mod::constructor_xco")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::constructor_xco")) continue
 
       end function
 
@@ -182,7 +182,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_orbital_mod::update_xco")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::update_xco")) continue
 
       end subroutine
 
@@ -398,7 +398,7 @@
         call glean(thy(xco))
         call glean(thy(el))
 
-        if (error("Exit xc_orbital_mod::exx_energy_xco")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::exx_energy_xco")) continue
 
       end subroutine
 
@@ -488,7 +488,7 @@
         call glean(thy(el))
         call glean(thy(mvo))
 
-        if (error("Exit xco::exx_derivative_xco")) continue
+        if (error(FLERR,"Exit xco::exx_derivative_xco")) continue
 
       end subroutine
 
@@ -587,7 +587,7 @@
         call glean(thy(el))
         call glean(thy(mvo))
 
-        if (error("Exit xc_orbital_mod::exx_energy_and_derivative_xco")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::exx_energy_and_derivative_xco")) continue
 
       end subroutine
 
@@ -647,13 +647,13 @@
 !            A value of alpha must be provided here
 !            afi = (cv/two_pi**3)*two_pi*sqrt(pi/alpha)  ! I don't know if the cv/two_pi**3 factor should be here??
 !          case (SIF_CRG)  ! Carrier, Rohra, Gorling: PRB 75. 205126 (2007)
-!            if (error(.true.,"ERROR: crg exx_si_aux_form is not yet available")) goto 100
+!            if (error(FLERR,.true.,"ERROR: crg exx_si_aux_form is not yet available")) goto 100
 !          end select
         end select
 
 100     call glean(thy(lat))
 
-        if (error("Exit xc_orbital_mod::aux_function_integral_i")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::aux_function_integral_i")) continue
 
       end function
 
@@ -722,7 +722,7 @@
 !            end do
 !            call allreduce(CONFIG,MPI_SUM,afv_local,afv)
 !          case (SIF_CRG)  ! Carrier, Rohra, Gorling: PRB 75. 205126 (2007)
-!            if (error(.true.,"ERROR: crg exx_si_aux_form is not yet available")) goto 100
+!            if (error(FLERR,.true.,"ERROR: crg exx_si_aux_form is not yet available")) goto 100
 !          end select
         end select
 
@@ -733,7 +733,7 @@
 
         call glean(thy(lat))
 
-        if (error("Exit xc_orbital_mod::aux_function_value_i")) continue
+        if (error(FLERR,"Exit xc_orbital_mod::aux_function_value_i")) continue
 
       end function
 

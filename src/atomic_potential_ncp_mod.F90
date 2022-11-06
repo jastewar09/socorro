@@ -135,13 +135,13 @@
           ! open the ATOMIC_POTENTIAL block
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMIC_POTENTIAL")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMIC_POTENTIAL block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMIC_POTENTIAL block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
 
           ! find the NCP tag
           if (i_access(restf)) tios = findfirsttag(restf,"NCP")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NCP tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NCP tag was not found")) goto 100
 
           ! close the ATOMIC_POTENTIAL block
 100       if (i_access(restf)) call closeblock(restf)
@@ -152,7 +152,7 @@
 200     call glean(thy(ad))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit atomic_potential_ncp_mod::constructor_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_ncp_mod::constructor_ap")) continue
 
       end function
 
@@ -178,7 +178,7 @@
         call glean(thy(ap))
         call glean(thy(ad))
 
-        if (error("Exit atomic_potential_ncp_mod::update_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_ncp_mod::update_ap")) continue
 
       end subroutine
 
@@ -387,7 +387,7 @@
         call glean(thy(ap))
         call glean(thy(nrestf))
 
-        if (error("Exit atomic_potential_ncp_mod::write_restart_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_ncp_mod::write_restart_ap")) continue
 
       end subroutine
 

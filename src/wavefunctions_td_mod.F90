@@ -189,7 +189,7 @@
         complex(double), dimension(:,:), pointer :: coefficients
 
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           wf%ref = 0
           allocate( wf%o )
           wf%o%ref = 0
@@ -225,7 +225,7 @@
 
                 call arg("tddft_thermalize_kt",ktd,found)
                 if (found) then
-                   if (error(ktd <= 0.0_double,"ERROR: tddft_thermalize_ktd <= 0.0")) goto 100
+                   if (error(FLERR,ktd <= 0.0_double,"ERROR: tddft_thermalize_ktd <= 0.0")) goto 100
                 else
                    ktd = 0.05_double
                 end if
@@ -275,7 +275,7 @@
                 write(x_unit(diaryfile()),'(/,t4,"Thermalized TDDFT wavefunction initialization")')
                 write(x_unit(diaryfile()),'(/,t6,"Maximum orthogonalization error = ",es7.1)') moe
              end if
-             if (error(moe > 1.0d-10,"ERROR: thermal wavefunctions are not sufficiently orthogonal")) goto 100
+             if (error(FLERR,moe > 1.0d-10,"ERROR: thermal wavefunctions are not sufficiently orthogonal")) goto 100
 
              call transform(wf%o%mv,coefficients)
 
@@ -304,7 +304,7 @@
 
         call glean(thy(wf_es))
 
-999     if (error("Exit wavefunctions_td_mod::constructor_wf")) continue
+999     if (error(FLERR,"Exit wavefunctions_td_mod::constructor_wf")) continue
 
       end function
 
@@ -322,7 +322,7 @@
         character(1)                :: tios
         integer(long)               :: dsize, ios, ndata, s4
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           wf%ref = 0
           allocate( wf%o )
           wf%o%ref = 0
@@ -340,7 +340,7 @@
 
         if (i_access(restf)) tios = findnexttag(restf,"WAVEFUNCTIONS_TD")
         if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: WAVEFUNCTIONS_TD block was not found")) goto 100
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: WAVEFUNCTIONS_TD block was not found")) goto 100
 
         if (i_access(restf)) call openblock(restf)
 
@@ -358,7 +358,7 @@
            !** Read in the expectation values
            if (i_access(restf)) tios = findfirsttag(restf,"EXPECTATIONVALUES")
            if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
-           if (error(tios == TAG_NOT_FOUND,"ERROR: EXPECTATIONVALUES tag was not found")) goto 100
+           if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: EXPECTATIONVALUES tag was not found")) goto 100
            nb = x_n_bands(mb)
            allocate( wf%o%exps(nb) )
            if (i_access(restf)) then
@@ -382,7 +382,7 @@
 
 100     call glean(thy(restf))
 
-999     if (error("Exit wavefunctions_td_mod::constructor_restart_wf")) continue
+999     if (error(FLERR,"Exit wavefunctions_td_mod::constructor_restart_wf")) continue
 
       end function
 
@@ -415,7 +415,7 @@
 
         if (present(mb)) then
           mb_change = ( x_ghost(x_multibasis(wf%o%mv)) /= x_ghost(mb) )
-          if (error(mb_change,"ERROR: multibasis change is not currently allowed")) goto 100
+          if (error(FLERR,mb_change,"ERROR: multibasis change is not currently allowed")) goto 100
         end if
 
         call own_i(wf)
@@ -430,7 +430,7 @@
         call glean(thy(hc))
         if (present(mb)) call glean(thy(mb))
 
-        if (error("Exit wavefunctions_td_mod::update_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::update_wf")) continue
 
         if (debug) call warn("wavefunctions_td::update_wf exiting")
 
@@ -625,7 +625,7 @@
         call my(wf)
         ke = kinetic_energy(wf%o%mv,wf%o%hk,wts)
         call glean(thy(wf))
-        if (error("Exit wavefunctions_td_mod::kinetic_energy_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::kinetic_energy_wf")) continue
       end function
 
       subroutine forces_wf(wf,wts,fwf)
@@ -642,7 +642,7 @@
         call my(wf)
         call forces(wf%o%mv,hamiltonian(wf%o%hk),wts,wf%o%exps,fwf) ; if (error()) goto 100
 100     call glean(thy(wf))
-        if (error("Exit wavefunctions_td_mod::forces_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::forces_wf")) continue
       end subroutine
 
       subroutine pressure_wf(wf,wts,p)
@@ -658,7 +658,7 @@
         call my(wf)
         call pressure(wf%o%mv,hamiltonian(wf%o%hk),wts,p) ; if (error()) goto 100
 100     call glean(thy(wf))
-        if (error("Exit wavefunctions_td_mod::pressure_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::pressure_wf")) continue
       end subroutine
 
       subroutine stress_tensor_wf(wf,wts,s)
@@ -675,7 +675,7 @@
         call my(wf)
         call stress_tensor(wf%o%mv,hamiltonian(wf%o%hk),wts,s) ; if (error()) goto 100
 100     call glean(thy(wf))
-        if (error("Exit wavefunctions_td_mod::stress_tensor_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::stress_tensor_wf")) continue
       end subroutine
 
       subroutine add_density_wf(wf,weights,den)
@@ -693,7 +693,7 @@
         call add_density(hamiltonian(wf%o%hk),wf%o%mv,weights,den) ; if (error()) goto 100
 100     call glean(thy(wf))
         call glean(thy(den))
-        if (error("Exit wavefunctions_td_mod::add_density_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::add_density_wf")) continue
       end subroutine
 
       function get_norm_wf(wf) result(norm)
@@ -742,7 +742,7 @@
 
         call glean(thy(wf))
 
-        if (error("Exit wavefunctions_mod::get_norm_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_mod::get_norm_wf")) continue
 
       end function
 
@@ -762,7 +762,7 @@
         call my(wf)
         call decompose(wf%o%mv,site_data,mode,rsa,b1) ; if (error()) goto 100
 100     call glean(thy(wf))
-        if (error("Exit wavefunctions_td_mod::decompose_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::decompose_wf")) continue
 
       end subroutine
 
@@ -815,7 +815,7 @@
 100     call glean(thy(wf))
         call glean(thy(nrestf))
 
-        if (error("Exit wavefunctions_td_mod::write_restart_wf")) continue
+        if (error(FLERR,"Exit wavefunctions_td_mod::write_restart_wf")) continue
 
       end subroutine
 

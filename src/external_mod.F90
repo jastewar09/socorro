@@ -168,7 +168,7 @@
         real(double), dimension(:,:), allocatable :: pos
         type(atoms_obj) :: at_tmp
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           ext%ref = 0
           allocate( ext%o )
           ext%o%ref = 0
@@ -185,10 +185,10 @@
 
         ! open the EXTERNAL block
         if (present(restf)) then
-          if (error(present(cr),"ERROR: optional arguments restf and cr are incompatible")) goto 300
+          if (error(FLERR,present(cr),"ERROR: optional arguments restf and cr are incompatible")) goto 300
           if (i_access(restf)) tios = findfirsttag(restf,"EXTERNAL")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: EXTERNAL block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: EXTERNAL block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -250,7 +250,7 @@
         case (PAW)
           select case (x_functional_dependence(ext%o%xc_type))
           case (FD_ORBITAL,FD_HYBRID)
-            if (error(.true.,"ERROR: hybrid and orbital-dependent functionals are not supported in the PAW method")) goto 200
+            if (error(FLERR,.true.,"ERROR: hybrid and orbital-dependent functionals are not supported in the PAW method")) goto 200
           end select
         end select
 
@@ -266,7 +266,7 @@
         if (present(cr)) call glean(thy(cr))
         if (present(restf)) call glean(thy(restf))
 
-999     if (error("Exit external_mod::constructor_ext")) continue
+999     if (error(FLERR,"Exit external_mod::constructor_ext")) continue
 
       end function
 
@@ -284,7 +284,7 @@
         call my(ext)
         if (present(cr)) then
           call my(cr)
-          if (error(x_ghost(x_lattice(cr)) /= x_ghost(x_lattice(ext%o%layout)),"ERROR: inconsistent lattices")) goto 100
+          if (error(FLERR,x_ghost(x_lattice(cr)) /= x_ghost(x_lattice(ext%o%layout)),"ERROR: inconsistent lattices")) goto 100
           crystal_change = ( x_ghost(ext%o%crystal) /= x_ghost(cr) )
         else
           crystal_change = .false.
@@ -307,7 +307,7 @@
         end if
 100     if (present(cr)) call glean(thy(cr))
         call glean(thy(ext))
-        if (error("Exit external_mod::update_ext")) continue
+        if (error(FLERR,"Exit external_mod::update_ext")) continue
       end subroutine
 
       subroutine my_ext(ext)
@@ -454,7 +454,7 @@
         call my(ext%o%ao,ao)
         call glean(thy(ext))
         call bequeath(thy(ao))
-        if (error("Exit external_mod::ext_atomic_operators")) continue
+        if (error(FLERR,"Exit external_mod::ext_atomic_operators")) continue
       end function
 
       function ext_lattice_group(ext) result(lg)
@@ -520,7 +520,7 @@
         call my(ext)
         call symmetrize_vectors(ext%o%space_group,v) ; if (error()) goto 100
 100     call glean(thy(ext))
-        if (error("Exit external_mod::symmetrize_vectors_ext")) continue
+        if (error(FLERR,"Exit external_mod::symmetrize_vectors_ext")) continue
       end subroutine
      
       subroutine symmetrize_tensor_ext(ext,t)
@@ -535,7 +535,7 @@
         call my(ext)
         call symmetrize_tensor(ext%o%space_group,t) ; if (error()) goto 100
 100     call glean(thy(ext))
-        if (error("Exit external_mod::symmetrize_tensor_ext")) continue
+        if (error(FLERR,"Exit external_mod::symmetrize_tensor_ext")) continue
       end subroutine
      
       subroutine symmetrize_grid_ext(ext,g)
@@ -549,7 +549,7 @@
         call my(ext)
         call symmetrize_grid(ext%o%space_group,g) ; if (error()) goto 100
 100     call glean(thy(ext))
-        if (error("Exit external_mod::symmetrize_grid_ext")) continue
+        if (error(FLERR,"Exit external_mod::symmetrize_grid_ext")) continue
       end subroutine
 
       subroutine write_restart_ext(ext,nrestf)
@@ -585,7 +585,7 @@
 100     call glean(thy(ext))
         call glean(thy(nrestf))
 
-        if (error("Exit external_mod::write_restart_ext")) continue
+        if (error(FLERR,"Exit external_mod::write_restart_ext")) continue
 
       end subroutine
 
@@ -604,7 +604,7 @@
         call diary(ext%o%space_group,lat=x_lattice(ext%o%crystal))
         call diary(ext%o%layout)
 100     call glean(thy(ext))
-        if (error("Exit external_mod::diary_ext")) continue
+        if (error(FLERR,"Exit external_mod::diary_ext")) continue
       end subroutine
 
       subroutine diary_crystal_step(ext,step)
@@ -620,7 +620,7 @@
         call diary(ext%o%crystal,step)
         call diary_atom_neighbors_i(ext%o)
 100     call glean(thy(ext))
-        if (error("Exit external_mod::diary_crystal_step")) continue
+        if (error(FLERR,"Exit external_mod::diary_crystal_step")) continue
       end subroutine
 
 ! private routines
@@ -670,7 +670,7 @@
         end if
         call diary(extr%layout)
         call diary(extr%xc_type)
-        if (error("Exit external_mod::diary_construction_i")) continue
+        if (error(FLERR,"Exit external_mod::diary_construction_i")) continue
       end subroutine
 
       subroutine diary_matching_radii_i(extr)
@@ -687,7 +687,7 @@
             end do
           end if
         end if
-        if (error("Exit external_mod::diary_matching_radii_i")) continue
+        if (error(FLERR,"Exit external_mod::diary_matching_radii_i")) continue
       end subroutine
 
       subroutine diary_atom_neighbors_i(extr)
@@ -729,7 +729,7 @@
           end do
         end if
         if (allocated( atom_overlap )) deallocate( atom_overlap )
-        if (error("Exit external_mod::diary_atom_neighbors_i")) continue
+        if (error(FLERR,"Exit external_mod::diary_atom_neighbors_i")) continue
       end subroutine
 
       end module

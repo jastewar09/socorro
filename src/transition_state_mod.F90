@@ -183,7 +183,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::transition_state")) continue
+        if (error(FLERR,"Exit transition_state_mod::transition_state")) continue
         
       end function
 
@@ -248,23 +248,23 @@
         nullify( dmr%o%pos_cart_01, dmr%o%pos_cart_02, dmr%o%pos_cart_center, dmr%o%separation_dir )
         nullify( dmr%o%force_01, dmr%o%force_02, dmr%o%force_center, dmr%o%eff_force, dmr%o%torque, dmr%o%torque_dir )
 
-        if (error(mpi_nconfigs() /= 2,"ERROR: number of configurations /= 2")) goto 100
+        if (error(FLERR,mpi_nconfigs() /= 2,"ERROR: number of configurations /= 2")) goto 100
 
         call arg("dimer_force_tol",dmr%o%force_tol,found)
         if (.not.found) dmr%o%force_tol = 0.001_double
-        if (error(dmr%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
+        if (error(FLERR,dmr%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
 
         call arg("dimer_torque_tol",dmr%o%torque_tol,found)
         if (.not.found) dmr%o%torque_tol = 0.0001_double
-        if (error(dmr%o%torque_tol < 0.0_double,"ERROR: torque_tol < 0")) goto 100
+        if (error(FLERR,dmr%o%torque_tol < 0.0_double,"ERROR: torque_tol < 0")) goto 100
 
         call arg("dimer_separation",dmr%o%separation_mag,found)
         if (.not.found) dmr%o%separation_mag = 0.01_double
-        if (error(dmr%o%separation_mag < 0.0_double,"ERROR: dimer_separation < 0")) goto 100
+        if (error(FLERR,dmr%o%separation_mag < 0.0_double,"ERROR: dimer_separation < 0")) goto 100
 
         call arg("dimer_max_steps",dmr%o%max_steps,found)
         if (.not.found) dmr%o%max_steps = 100
-        if (error(dmr%o%max_steps < 0,"ERROR: max_steps < 0")) goto 100
+        if (error(FLERR,dmr%o%max_steps < 0,"ERROR: max_steps < 0")) goto 100
         dmr%o%n_steps = 0
 
         na = x_n_atoms(cfg)
@@ -291,7 +291,7 @@
           if (i_access(diaryfile())) write(x_unit(diaryfile()),'("  Conjugate-gradient optimization")')
           if (i_access(output)) write(x_unit(output),'("  Conjugate-gradient optimization")')
         case default
-          if (error(.true.,"ERROR: unrecognized dimer_optimizer")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized dimer_optimizer")) goto 100
         end select
 
         if (i_access(diaryfile())) write(x_unit(diaryfile()),'("Completed optimization of dimer")')
@@ -299,7 +299,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::constructor_dmr")) continue
+        if (error(FLERR,"Exit transition_state_mod::constructor_dmr")) continue
         
       end function
 
@@ -330,7 +330,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::initialize_dimer_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::initialize_dimer_i")) continue
 
       end subroutine
 
@@ -347,7 +347,7 @@
 
         call arg("dimer_sd_alpha",alpha,found)
         if (.not.found) alpha = 3.5_double
-        if (error(alpha < 0.0_double,"ERROR: dimer_sd_alpha < 0")) goto 100
+        if (error(FLERR,alpha < 0.0_double,"ERROR: dimer_sd_alpha < 0")) goto 100
 
         na = size(dmrr%eff_force,2)
         allocate( direction(3,na) )
@@ -396,7 +396,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_dimer_sd_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_dimer_sd_i")) continue
 
       end subroutine
 
@@ -420,11 +420,11 @@
 
         call arg("dimer_cg_finite_diff",finite_diff,found)
         if (.not.found) finite_diff = 0.01_double
-        if (error(finite_diff < 0.0_double,"ERROR: dimer_cg_finite_diff < 0")) goto 100
+        if (error(FLERR,finite_diff < 0.0_double,"ERROR: dimer_cg_finite_diff < 0")) goto 100
 
         call arg("dimer_cg_max_move",max_move,found)
         if (.not.found) max_move = 6.0_double
-        if (error(max_move < 0.0_double,"ERROR: max_move < 0")) goto 100
+        if (error(FLERR,max_move < 0.0_double,"ERROR: max_move < 0")) goto 100
 
         direction = 0.0_double
         direction_old = 0.0_double
@@ -506,7 +506,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_dimer_cg_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_dimer_cg_i")) continue
 
       end subroutine
 
@@ -557,7 +557,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::update_dimer_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::update_dimer_i")) continue
 
       end subroutine
 
@@ -581,7 +581,7 @@
         
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_rotation_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_rotation_i")) continue
 
       end subroutine
 
@@ -613,7 +613,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::translate_dimer_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::translate_dimer_i")) continue
 
       end subroutine
 
@@ -660,7 +660,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_rotation_in_plane_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_rotation_in_plane_i")) continue
         
       end subroutine
 
@@ -689,7 +689,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit: transition_state_mod::rotate_dimer_i")) continue
+        if (error(FLERR,"Exit: transition_state_mod::rotate_dimer_i")) continue
 
       end subroutine
 
@@ -709,7 +709,7 @@
         na = size(dmrr%torque,2)
         if (sqrt(atom_dot_product(dmrr%torque,dmrr%torque)/(3.0_double*real(na,double))) < dmrr%torque_tol ) go = .false.
 
-100     if (error("Exit transition_state_mod::rotate_test_i")) continue
+100     if (error(FLERR,"Exit transition_state_mod::rotate_test_i")) continue
 
       end function
 
@@ -831,7 +831,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_dmr_pfe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_dmr_pfe_i")) continue
 
       end subroutine
 
@@ -867,7 +867,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_dmr_fe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_dmr_fe_i")) continue
 
       end subroutine
 
@@ -929,18 +929,18 @@
 
         call arg("neb_force_tol",neb%o%force_tol,found)
         if (.not.found) neb%o%force_tol = 1.0e-3_double
-        if (error(neb%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
+        if (error(FLERR,neb%o%force_tol < 0.0_double,"ERROR: force_tol < 0")) goto 100
 
         call arg("neb_climbing_image",neb%o%climbing_image,found)
         if (.not.found) neb%o%climbing_image = .true.
 
         call arg("neb_spring",neb%o%spring,found)
         if (.not.found) neb%o%spring = 1.0e-2_double
-        if (error(neb%o%spring < 0.0_double,"ERROR: neb_spring < 0")) goto 100
+        if (error(FLERR,neb%o%spring < 0.0_double,"ERROR: neb_spring < 0")) goto 100
 
         call arg("neb_max_steps",neb%o%max_steps,found)
         if (.not.found) neb%o%max_steps = 100
-        if (error(neb%o%max_steps < 0,"ERROR: max_steps < 0")) goto 100
+        if (error(FLERR,neb%o%max_steps < 0,"ERROR: max_steps < 0")) goto 100
         neb%o%n_steps = 0
 
         call arg("neb_force_test",tag,found)
@@ -951,7 +951,7 @@
         case ("CLIMBING_IMAGE","Climbing_image","climbing_image","CI","ci","C","c")
           neb%o%force_test = CLIMBING_IMAGE
         case default
-          if (error(.true.,"ERROR: unrecognized neb_force_test")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized neb_force_test")) goto 100
         end select
 
         na = x_n_atoms(cfg)
@@ -997,12 +997,12 @@
           if (i_access(diaryfile())) write(x_unit(diaryfile()),'("  Quickmin optimization")')
           if (i_access(output)) write(x_unit(output),'("  Quickmin optimization")')
         case default
-          if (error(.true.,"ERROR: unrecognized neb_optimizer")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized neb_optimizer")) goto 100
         end select
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::constructor_neb_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::constructor_neb_i")) continue
         
       end function
 
@@ -1044,7 +1044,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_neb_sd_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_neb_sd_i")) continue
 
       end subroutine
       
@@ -1106,7 +1106,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_neb_qm_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_neb_qm_i")) continue
 
       end subroutine
       
@@ -1125,7 +1125,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::update_neb_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::update_neb_i")) continue
 
       end subroutine
 
@@ -1271,7 +1271,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::project_force_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::project_force_i")) continue
 
       end subroutine
 
@@ -1334,7 +1334,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_neb_pfe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_neb_pfe_i")) continue
 
       end subroutine
 
@@ -1369,7 +1369,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_neb_fe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_neb_fe_i")) continue
 
       end subroutine
 
@@ -1433,27 +1433,27 @@
         nullify( ccts%o%pos_cart_01, ccts%o%pos_cart_02,ccts%o%force_01, ccts%o%force_02)
         nullify( ccts%o%last_pos_cart, ccts%o%force_sum, ccts%o%force_diff, ccts%o%eff_force)
 
-        if (error(mpi_nconfigs() /= 2,"ERROR: number of configurations /= 2")) goto 100
+        if (error(FLERR,mpi_nconfigs() /= 2,"ERROR: number of configurations /= 2")) goto 100
 
         call arg("ccts_force_tol",ccts%o%force_tol,found)
         if (.not.found) ccts%o%force_tol = 0.001_double
-        if (error(ccts%o%force_tol < 0.0_double,"ERROR: ccts_force_tol < 0")) goto 100
+        if (error(FLERR,ccts%o%force_tol < 0.0_double,"ERROR: ccts_force_tol < 0")) goto 100
 
         call arg("ccts_energy_tol",ccts%o%level_tol,found)
         if (.not.found) ccts%o%level_tol = 0.0001_double
-        if (error(ccts%o%level_tol < 0.0_double,"ERROR: ccts_energy_tol < 0")) goto 100
+        if (error(FLERR,ccts%o%level_tol < 0.0_double,"ERROR: ccts_energy_tol < 0")) goto 100
 
         call arg("ccts_relax_step",ccts%o%step,found)
         if (.not.found) ccts%o%step = 0.1_double
-        if (error(ccts%o%step < 0.0_double,"ERROR: ccts_relax_step < 0")) goto 100
+        if (error(FLERR,ccts%o%step < 0.0_double,"ERROR: ccts_relax_step < 0")) goto 100
 
         call arg("ccts_newton_scaling",ccts%o%newton_scaling,found)
         if (.not.found) ccts%o%newton_scaling = 1.0_double
-        if (error(ccts%o%newton_scaling < 0.0_double,"ERROR: ccts_newton_scaling < 0")) goto 100
+        if (error(FLERR,ccts%o%newton_scaling < 0.0_double,"ERROR: ccts_newton_scaling < 0")) goto 100
 
         call arg("ccts_max_steps",ccts%o%max_steps,found)
         if (.not.found) ccts%o%max_steps = 100
-        if (error(ccts%o%max_steps < 0,"ERROR: ccts_max_steps < 0")) goto 100
+        if (error(FLERR,ccts%o%max_steps < 0,"ERROR: ccts_max_steps < 0")) goto 100
         ccts%o%n_steps = 0
 
         call arg("ccts_move_length",ccts%o%move_length,found)
@@ -1461,7 +1461,7 @@
 
         call arg("ccts_max_moves",ccts%o%max_moves,found)
         if (.not.found) ccts%o%max_moves = 10
-        if (error(ccts%o%max_moves < 0,"ERROR: ccts_max_moves < 0")) goto 100
+        if (error(FLERR,ccts%o%max_moves < 0,"ERROR: ccts_max_moves < 0")) goto 100
         ccts%o%n_moves = 0
         ccts%o%path_length = 0.0_double
 
@@ -1495,7 +1495,7 @@
           if (i_access(output)) write(x_unit(output),'(" Using steepest-descent optimization")')
           call optimize_ccts_sd_i(ccts%o,cfg) ; if (error()) goto 100
         case default
-          if (error(.true.,"ERROR: unrecognized ccts_optimizer")) goto 100
+          if (error(FLERR,.true.,"ERROR: unrecognized ccts_optimizer")) goto 100
         end select
 
         if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,"Completed optimization of ccts")')
@@ -1503,7 +1503,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::constructor_ccts")) continue
+        if (error(FLERR,"Exit transition_state_mod::constructor_ccts")) continue
         
       end function
 
@@ -1521,7 +1521,7 @@
         na = size(cctsr%eff_force,2)
 
         pos_diff_sq_norm = sum((cctsr%pos_cart_01 - cctsr%pos_cart_02)**2)
-        if (error(pos_diff_sq_norm.gt.machine_precision,"ERROR: 01/crystal and 02/crystal must be the same")) goto 100
+        if (error(FLERR,pos_diff_sq_norm.gt.machine_precision,"ERROR: 01/crystal and 02/crystal must be the same")) goto 100
 
         cctsr%pos_cart_02 = cctsr%pos_cart_01
 
@@ -1541,7 +1541,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::initialize_ccts_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::initialize_ccts_i")) continue
 
       end subroutine
 
@@ -1710,7 +1710,7 @@
 100     if (allocated( move )) deallocate( move )
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::optimize_ccts_sd_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::optimize_ccts_sd_i")) continue
 
       end subroutine
 
@@ -1751,7 +1751,7 @@
 
 100     call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::update_ccts_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::update_ccts_i")) continue
 
       end subroutine
 
@@ -1806,7 +1806,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_ccts_pfe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_ccts_pfe_i")) continue
 
       end subroutine
 
@@ -1842,7 +1842,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit transition_state_mod::share_ccts_fe_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::share_ccts_fe_i")) continue
 
       end subroutine
 
@@ -1896,7 +1896,7 @@
 
         call glean(thy(lat))
 
-        if (error("Exit transition_state_mod::reduce_vectors_i")) continue
+        if (error(FLERR,"Exit transition_state_mod::reduce_vectors_i")) continue
 
       end subroutine
  

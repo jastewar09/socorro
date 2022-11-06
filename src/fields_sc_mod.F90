@@ -280,7 +280,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"FIELDS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -301,7 +301,7 @@
             case ("optimized-effective-potential","oep")
               fd%o%self_consistency_method = OE_POT
             case default
-              if (error(.true.,"ERROR: self-consistency_method was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: self-consistency_method was not recognized")) goto 100
             end select
           end if
         case (FD_HYBRID)
@@ -314,7 +314,7 @@
             case ("optimized-effective-potential","oep")
               fd%o%self_consistency_method = OE_POT
             case default
-              if (error(.true.,"ERROR: self-consistency_method was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: self-consistency_method was not recognized")) goto 100
             end select
           end if
         case (FD_ORBITAL)
@@ -327,7 +327,7 @@
             case ("optimized-effective-potential","oep")
               continue
             case default
-              if (error(.true.,"ERROR: self-consistency_method was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: self-consistency_method was not recognized")) goto 100
             end select
           end if
         end select
@@ -343,7 +343,7 @@
           case ("potential","p")
             fd%o%mixing_type = POTENTIAL
           case default
-            if (error(.true.,"ERROR: mix_type was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: mix_type was not recognized")) goto 100
           end select
         end select
 
@@ -356,7 +356,7 @@
         case ("guess_density","gd")
           fd%o%extrapolation_method = GUES_DENSITY
         case default
-          if (error(.true.,"ERROR: extrapolation_method tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: extrapolation_method tag was not recognized")) goto 100
         end select
 
         ! atomic and grid densities
@@ -459,7 +459,7 @@
         fd%o%res_norm = 1.0_double
         call arg("density_tolerance",fd%o%res_norm_tol,found)
         if (.not.found) fd%o%res_norm_tol = 1.0e-8_double
-        if (error(fd%o%res_norm_tol < 0.0_double,"ERROR: density_tolerance < 0")) goto 100
+        if (error(FLERR,fd%o%res_norm_tol < 0.0_double,"ERROR: density_tolerance < 0")) goto 100
 
         ! energies: This is an optimization assuming that energies are not accessed until the update routine has been called.
         fd%o%atomic_energy = 0.0_double
@@ -484,7 +484,7 @@
         call glean(thy(ext))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit fields_sc_mod::constructor_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::constructor_fd")) continue
 
         if (.not.error()) call stop_timer("fields_sc: constructor")
 
@@ -829,7 +829,7 @@
         call glean(thy(ext))
         call glean(thy(el))
 
-        if (error("Exit fields_sc_mod::update_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::update_fd")) continue
 
         if (.not.error()) call stop_timer("fields_sc: update")
 
@@ -1038,7 +1038,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_sc_mod::forces_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::forces_fd")) continue
 
       end subroutine
 
@@ -1070,7 +1070,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_sc_mod::pressure_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::pressure_fd")) continue
 
       end subroutine
 
@@ -1109,7 +1109,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_sc_mod::stress_tensor_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::stress_tensor_fd")) continue
 
       end subroutine
 
@@ -1128,7 +1128,7 @@
         g = f%o%gden
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_field_density_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_field_density_fd")) continue
       end subroutine
 
       subroutine put_local_potential_fd(f,g)
@@ -1146,7 +1146,7 @@
         g = f%o%total
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_local_potential_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_local_potential_fd")) continue
       end subroutine
 
       subroutine put_hartree_potential_fd(f,g)
@@ -1164,7 +1164,7 @@
         g = f%o%hap
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_hartree_potential_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_hartree_potential_fd")) continue
       end subroutine
 
       subroutine put_xc_potential_fd(f,g)
@@ -1182,7 +1182,7 @@
         g = f%o%xcp
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_xc_potential_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_xc_potential_fd")) continue
       end subroutine
 
       subroutine put_atomic_xc_density_fd(f,g)
@@ -1200,7 +1200,7 @@
         g = f%o%axcd
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_atomic_xc_density_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_atomic_xc_density_fd")) continue
       end subroutine
 
       subroutine put_atomic_hartree_density_fd(f,g)
@@ -1218,7 +1218,7 @@
         g = f%o%ahd
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_atomic_hartree_density_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_atomic_hartree_density_fd")) continue
       end subroutine
 
       subroutine put_atomic_grid_potential_fd(f,g)
@@ -1236,7 +1236,7 @@
         g = f%o%agp
         call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_sc_mod::put_atomic_grid_potential_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::put_atomic_grid_potential_fd")) continue
       end subroutine
 
       subroutine write_els_potential_fd(fd,lat,at)
@@ -1293,7 +1293,7 @@
         call my(file(trim(els_potential_path)),f)
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open els_potential file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open els_potential file")) goto 100
         if (i_access(f)) then
 
 !         Write the lattice vectors
@@ -1340,7 +1340,7 @@
         call glean(thy(lat))
         call glean(thy(at))
 
-        if (error("Exit fields_sc_mod::write_els_potential_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::write_els_potential_fd")) continue
 
       end subroutine
 
@@ -1485,7 +1485,7 @@
           case("reciprocalspace","reciprocal","fourier","f")
              kind = CSF_KIND
           case default
-             if (error(.true.,"Error: unrecognized write_potential_rep tag")) goto 300
+             if (error(FLERR,.true.,"Error: unrecognized write_potential_rep tag")) goto 300
           end select
 
           ! Grab the grid potential
@@ -1626,7 +1626,7 @@
         call glean(thy(fd))
         call glean(thy(nrestf))
 
-        if (error("Exit fields_sc_mod::write_restart_fd")) continue
+        if (error(FLERR,"Exit fields_sc_mod::write_restart_fd")) continue
 
       end subroutine
 
@@ -1702,7 +1702,7 @@
 
 100     call glean(thy(lay))
 
-        if (error("Exit fields_sc_mod::form_coulomb_kernel_i")) continue
+        if (error(FLERR,"Exit fields_sc_mod::form_coulomb_kernel_i")) continue
 
       end subroutine
 
@@ -1750,7 +1750,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"COMPENSATION")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: COMPENSATION block was not found")) goto 300
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: COMPENSATION block was not found")) goto 300
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -1758,7 +1758,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"CHARGE_STATE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 200
           if (i_access(restf)) then
             dsize = sizeof_double
             ndata = 1
@@ -1774,11 +1774,11 @@
             if (.not.found) fdr%charge_state = 0.0_double
           case ("integer_ratio")
             call arg("charge_state_ratio",csr,found)
-            if (error(.not.found,"ERROR: charge_state_ratio was not found")) goto 200
-            if (error(csr(2) == 0,"ERROR: denominator = 0")) goto 200
+            if (error(FLERR,.not.found,"ERROR: charge_state_ratio was not found")) goto 200
+            if (error(FLERR,csr(2) == 0,"ERROR: denominator = 0")) goto 200
             fdr%charge_state = real(csr(1),double)/real(csr(2),double)
           case default
-            if (error(.true.,"ERROR: charge_state_mode was not recognized")) goto 200
+            if (error(FLERR,.true.,"ERROR: charge_state_mode was not recognized")) goto 200
           end select
         end if
 
@@ -1796,7 +1796,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"COMPENSATION_METHOD")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: COMPENSATION_METHOD tag was not found")) goto 200
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: COMPENSATION_METHOD tag was not found")) goto 200
           if (i_access(restf)) then
             dsize = sizeof_long
             ndata = 1
@@ -1812,9 +1812,9 @@
             fdr%compensation_method = UBC
           case ("lmcc")
             fdr%compensation_method = LMCC
-            if (error(x_type(x_atomic_operators(ext)) == PAW,"ERROR: lmcc is not supported with the paw method")) goto 200
+            if (error(FLERR,x_type(x_atomic_operators(ext)) == PAW,"ERROR: lmcc is not supported with the paw method")) goto 200
           case default
-            if (error(.true.,"ERROR: compensation tag was not recognized")) goto 200
+            if (error(FLERR,.true.,"ERROR: compensation tag was not recognized")) goto 200
           end select
         end if
 
@@ -1835,7 +1835,7 @@
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"LMCC_SITE")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: LMCC_SITE tag was not found")) goto 200
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: LMCC_SITE tag was not found")) goto 200
             if (i_access(restf)) then
               dsize = sizeof_double
               ndata = 3
@@ -1844,18 +1844,18 @@
             if (i_comm(restf)) call broadcast(FILE_SCOPE,fdr%lmcc_site)
           else
             call arg("lmcc_site",fdr%lmcc_site,found)
-            if (error(.not.found,"ERROR: lmcc_site tag was not found")) goto 200
+            if (error(FLERR,.not.found,"ERROR: lmcc_site tag was not found")) goto 200
             s = fdr%lmcc_site
             call centralize_position_i(fdr%lmcc_site)
             if (any(fdr%lmcc_site /= s)) call warn("WARNING: the counter charge was translated into the central parallelpiped")
-            if (error(.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
+            if (error(FLERR,.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
           end if
 
           ! read the lmcc width
           if (present(restf)) then
             if (i_access(restf)) tios = findfirsttag(restf,"LMCC_WIDTH")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: LMCC_WIDTH tag was not found")) goto 200
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: LMCC_WIDTH tag was not found")) goto 200
             if (i_access(restf)) then
               dsize = sizeof_double
               ndata = 1
@@ -1865,7 +1865,7 @@
           else
             call arg("lmcc_width",fdr%lmcc_width,found)
             if (.not.found) fdr%lmcc_width = 1.50_double
-            if (error(fdr%lmcc_width < 0.50_double,"ERROR: lmcc_width is too small")) goto 200
+            if (error(FLERR,fdr%lmcc_width < 0.50_double,"ERROR: lmcc_width is too small")) goto 200
           end if
 
         end select
@@ -1924,7 +1924,7 @@
         cc_local = -sum(ccd)                                      ! CHECK THAT THE COUNTER CHARGE IS WITHIN THE SUPERCELL
         call allreduce(SGROUP,MPI_SUM,cc_local,cc_global)
         cc_global = cc_global*x_cell_volume(lat)/real(n,double)
-        if (error(cc_global .out. nbhd(fdr%charge_state,tol_cc),"ERROR: counter charge extends outside the supercell")) goto 200
+        if (error(FLERR,cc_global .out. nbhd(fdr%charge_state,tol_cc),"ERROR: counter charge extends outside the supercell")) goto 200
 
         rsum_local = sum(ccp)                                     ! ERROR FUNCTION POTENTIAL WITH AVERAGE VALUE = 0 (ccp0)
         call allreduce(SGROUP,MPI_SUM,rsum_local,rsum_global)     !  AND ASSOCIATED ENERGY CONTRIBUTION: -0.5*q*ccp0
@@ -1983,11 +1983,11 @@
 
           if (i_access(bulk_restf)) iosl = x_tagfd(bulk_restf)
           if (i_comm(bulk_restf)) call broadcast(FILE_SCOPE,iosl)
-          if (error(iosl == 0,"ERROR: bulk restart file was not found")) goto 200
+          if (error(FLERR,iosl == 0,"ERROR: bulk restart file was not found")) goto 200
 
           if (i_access(bulk_restf)) tios = findfirsttag(bulk_restf,"FIELDS")
           if (i_comm(bulk_restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 100
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 100
 
           if (i_access(bulk_restf)) call openblock(bulk_restf)
 
@@ -2065,7 +2065,7 @@
        call glean(thy(ext))
        if (present(restf)) call glean(thy(restf))
 
-       if (error("Exit fields_sc_mod::form_compensation_i")) continue
+       if (error(FLERR,"Exit fields_sc_mod::form_compensation_i")) continue
 
       end subroutine
 
@@ -2125,7 +2125,7 @@
 
 200    call glean(thy(ext))
 
-        if (error("Exit fields_sc_mod::update_compensation_i")) continue
+        if (error(FLERR,"Exit fields_sc_mod::update_compensation_i")) continue
 
       end subroutine
 
@@ -2243,7 +2243,7 @@
         call glean(thy(gr1))
         call glean(thy(lay))
 
-        if (error("Exit fields_sc_mod::hartree_pressure_i")) continue
+        if (error(FLERR,"Exit fields_sc_mod::hartree_pressure_i")) continue
 
       end subroutine
 
@@ -2267,7 +2267,7 @@
         if (associated( c1 )) deallocate( c1 )
         if (associated( c2 )) deallocate( c2 )
 
-100     if (error("Exit fields_sc_mod::atomic_grid_pressure_i")) continue
+100     if (error(FLERR,"Exit fields_sc_mod::atomic_grid_pressure_i")) continue
 
       end subroutine
 
@@ -2321,7 +2321,7 @@
         call glean(thy(gr1))
         call glean(thy(lay))
 
-        if (error("Exit fields_sc_mod::hartree_stress_tensor_i")) continue
+        if (error(FLERR,"Exit fields_sc_mod::hartree_stress_tensor_i")) continue
 
       end subroutine
 
@@ -2358,7 +2358,7 @@
         if (associated( c2 )) deallocate( c2 )
         if (allocated( s_local )) deallocate( s_local )
 
-100     if (error("Exit fields_sc_mod::atomic_grid_stress_tensor_i")) continue
+100     if (error(FLERR,"Exit fields_sc_mod::atomic_grid_stress_tensor_i")) continue
 
       end subroutine
 

@@ -228,7 +228,7 @@
         case ("on")
           mx%o%report = .true.
         case default
-          if (error(.true.,"WARNING: mix_report not recognized")) continue
+          if (error(FLERR,.true.,"WARNING: mix_report not recognized")) continue
         end select
 
         ! determine the size of field arrays
@@ -265,7 +265,7 @@
         case ("pulay")
           mx%o%method = PULAY
         case default
-          if (error(.true.,"ERROR: mix_method not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: mix_method not recognized")) goto 100
         end select
 
         ! get the weight profile type
@@ -277,7 +277,7 @@
         case ("ramped")
           mx%o%wgt_profile = RAMPED
         case default
-          if (error(.true.,"ERROR: mix_wgt_profile not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: mix_wgt_profile not recognized")) goto 100
         end select
 
         ! get the damping type
@@ -289,7 +289,7 @@
         case ("kerker")
           mx%o%damping_type = KERKER
         case default
-          if (error(.true.,"ERROR: mix_damping_type not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: mix_damping_type not recognized")) goto 100
         end select
 
         ! get the kerker damping profile
@@ -303,7 +303,7 @@
           case ("ramped")
             mx%o%dgc_profile = RAMPED
           case default
-            if (error(.true.,"ERROR: mix_dgc_profile not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: mix_dgc_profile not recognized")) goto 100
           end select
         end select
 
@@ -318,7 +318,7 @@
           case ("stepped")
             mx%o%mxh_profile = STEPPED
           case default
-            if (error(.true.,"ERROR: mix_mxh_profile not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: mix_mxh_profile not recognized")) goto 100
           end select
         end select
 
@@ -330,23 +330,23 @@
         allocate( mx%o%wgt(mx%o%max_steps) )
         call arg("mix_weight",wti,found)
           if (.not.found) wti = 0.8_double
-          if (error(wti <= 0.0_double,"ERROR: mix_weight <= 0")) goto 100
-          if (error(wti > 1.0_double,"ERROR: mix_weight > 1")) goto 100
+          if (error(FLERR,wti <= 0.0_double,"ERROR: mix_weight <= 0")) goto 100
+          if (error(FLERR,wti > 1.0_double,"ERROR: mix_weight > 1")) goto 100
         select case (mx%o%wgt_profile)
         case (FIXED)
           mx%o%wgt = wti
         case (RAMPED)
           call arg("mix_wgt_final",wtf,found)
             if (.not.found) wtf = wti + 0.2_double
-            if (error(wtf <= 0.0_double,"ERROR: mix_wgt_final <= 0")) goto 100
-            if (error(wtf > 1.0_double,"ERROR: mix_wgt_final > 1")) goto 100
-            if (error(wtf == wti,"ERROR: mix_wgt_final = mix_weight")) goto 100
+            if (error(FLERR,wtf <= 0.0_double,"ERROR: mix_wgt_final <= 0")) goto 100
+            if (error(FLERR,wtf > 1.0_double,"ERROR: mix_wgt_final > 1")) goto 100
+            if (error(FLERR,wtf == wti,"ERROR: mix_wgt_final = mix_weight")) goto 100
           call arg("mix_wgt_ramp_start",ramp_start,found)
             if (.not.found) ramp_start = 8
-            if (error(ramp_start < 2,"ERROR: mix_wgt_ramp_start < 2")) goto 100
+            if (error(FLERR,ramp_start < 2,"ERROR: mix_wgt_ramp_start < 2")) goto 100
           call arg("mix_wgt_ramp_stop",ramp_stop,found)
             if (.not.found) ramp_stop = ramp_start + 6
-            if (error(ramp_stop < ramp_start,"ERROR: mix_wgt_ramp_stop < mix_wgt_ramp_start")) goto 100
+            if (error(FLERR,ramp_stop < ramp_start,"ERROR: mix_wgt_ramp_stop < mix_wgt_ramp_start")) goto 100
           ramp_rate = (wtf - wti)/real((ramp_stop - ramp_start + 1),double)
           do is = 1,mx%o%max_steps
             if (is < ramp_start) then
@@ -364,7 +364,7 @@
         case (KERKER)
           call arg("mix_damping_gc",gci,found)
             if (.not.found) gci = 0.8_double
-            if (error(gci <= 0.0_double,"ERROR: mix_damping_gc <= 0")) goto 100
+            if (error(FLERR,gci <= 0.0_double,"ERROR: mix_damping_gc <= 0")) goto 100
           allocate( mx%o%dgc(mx%o%max_steps) )
           select case (mx%o%dgc_profile)
           case (FIXED)
@@ -372,14 +372,14 @@
           case (RAMPED)
             call arg("mix_dgc_final",gcf,found)
               if (.not.found) gcf = gci + 0.2_double
-              if (error(gcf <= 0.0_double,"ERROR: mix_dgc_final <= 0")) goto 100
-              if (error(gcf == gci,"ERROR: mix_dgc_final = mix_damping_gc")) goto 100
+              if (error(FLERR,gcf <= 0.0_double,"ERROR: mix_dgc_final <= 0")) goto 100
+              if (error(FLERR,gcf == gci,"ERROR: mix_dgc_final = mix_damping_gc")) goto 100
             call arg("mix_dgc_ramp_start",ramp_start,found)
               if (.not.found) ramp_start = 8
-              if (error(ramp_start < 2,"ERROR: mix_dgc_ramp_start < 2")) goto 100
+              if (error(FLERR,ramp_start < 2,"ERROR: mix_dgc_ramp_start < 2")) goto 100
             call arg("mix_dgc_ramp_stop",ramp_stop,found)
               if (.not.found) ramp_stop = ramp_start + 6
-              if (error(ramp_stop < ramp_start,"ERROR: mix_dgc_ramp_stop < mix_dgc_ramp_start")) goto 100
+              if (error(FLERR,ramp_stop < ramp_start,"ERROR: mix_dgc_ramp_stop < mix_dgc_ramp_start")) goto 100
             ramp_rate = (gcf - gci)/real((ramp_stop - ramp_start + 1),double)
             do is = 1,mx%o%max_steps
               if (is < ramp_start) then
@@ -396,8 +396,8 @@
         ! determine mixing weight for the dyad potential
         call arg("mix_weight_dp",mx%o%wgt_dp,found)
         if (.not.found) mx%o%wgt_dp = 0.8_double
-        if (error(mx%o%wgt_dp <= 0.0_double,"ERROR: mix_weight_dp <= 0")) goto 100
-        if (error(mx%o%wgt_dp > 1.0_double,"ERROR: mix_weight_dp > 1")) goto 100
+        if (error(FLERR,mx%o%wgt_dp <= 0.0_double,"ERROR: mix_weight_dp <= 0")) goto 100
+        if (error(FLERR,mx%o%wgt_dp > 1.0_double,"ERROR: mix_weight_dp > 1")) goto 100
 
         ! set the inverse g^2 array
         select case (mx%o%damping_type)
@@ -421,27 +421,27 @@
         case (PULAY)
           call arg("mix_history",h1,found)
             if (.not.found) h1 = 5
-            if (error(h1 < 1,"ERROR: mix_history < 1")) goto 100
-            if (error(h1 > 20,"ERROR: mix_history > 20")) goto 100
-            if (error(h1 > mx%o%max_steps,"ERROR: mix_history > max_steps")) goto 100
+            if (error(FLERR,h1 < 1,"ERROR: mix_history < 1")) goto 100
+            if (error(FLERR,h1 > 20,"ERROR: mix_history > 20")) goto 100
+            if (error(FLERR,h1 > mx%o%max_steps,"ERROR: mix_history > max_steps")) goto 100
           allocate( mx%o%mxh(mx%o%max_steps) )
           select case (mx%o%mxh_profile)
           case (FIXED)
             mx%o%mxh = h1
           case (STEPPED)
             call arg("mix_mxh_levels",nl,found)
-              if (error(.not.found,"ERROR: mix_mxh_levels not found")) goto 100
-              if (error(nl < 2,"ERROR: mix_mxh_levels < 2")) goto 100
-              if (error(nl > 3,"ERROR: mix_mxh_levels > 3")) goto 100
+              if (error(FLERR,.not.found,"ERROR: mix_mxh_levels not found")) goto 100
+              if (error(FLERR,nl < 2,"ERROR: mix_mxh_levels < 2")) goto 100
+              if (error(FLERR,nl > 3,"ERROR: mix_mxh_levels > 3")) goto 100
             call arg("mix_mxh_step_1-2",s12,found)
-              if (error(.not.found,"ERROR: mix_mxh_step_1-2 not found")) goto 100
-              if (error(s12 < (h1 + 1),"ERROR: mix_mxh_step_1-2 < mix_history + 1")) goto 100
-              if (error(s12 > (mx%o%max_steps - 1),"ERROR: mix_mxh_step_1-2 out of bounds")) goto 100
+              if (error(FLERR,.not.found,"ERROR: mix_mxh_step_1-2 not found")) goto 100
+              if (error(FLERR,s12 < (h1 + 1),"ERROR: mix_mxh_step_1-2 < mix_history + 1")) goto 100
+              if (error(FLERR,s12 > (mx%o%max_steps - 1),"ERROR: mix_mxh_step_1-2 out of bounds")) goto 100
             call arg("mix_mxh_2",h2,found)
-              if (error(.not.found,"ERROR: mix_mxh_2 not found")) goto 100
-              if (error(h2 < 1,"ERROR: mix_mxh_2 < 1")) goto 100
-              if (error(h2 > 20,"ERROR: mix_mxh_2 > 20")) goto 100
-              if (error(h2 == h1,"ERROR: mix_mxh_2 = mix_history")) goto 100
+              if (error(FLERR,.not.found,"ERROR: mix_mxh_2 not found")) goto 100
+              if (error(FLERR,h2 < 1,"ERROR: mix_mxh_2 < 1")) goto 100
+              if (error(FLERR,h2 > 20,"ERROR: mix_mxh_2 > 20")) goto 100
+              if (error(FLERR,h2 == h1,"ERROR: mix_mxh_2 = mix_history")) goto 100
             do is = 1,(s12-1)
               mx%o%mxh(is) = h1
             end do
@@ -451,14 +451,14 @@
               end do
             else
               call arg("mix_mxh_step_2-3",s23,found)
-                if (error(.not.found,"ERROR: mix_mxh_step_2-3 not found")) goto 100
-                if (error(s23 <= (s12 + h2),"ERROR: mix_mxh_step_2-3 <= mix_mxh_step_1-2 + mix_mxh_2")) goto 100
-                if (error(s23 >= (mx%o%max_steps - 1),"ERROR: mix_mxh_step_2-3 out of bounds")) goto 100
+                if (error(FLERR,.not.found,"ERROR: mix_mxh_step_2-3 not found")) goto 100
+                if (error(FLERR,s23 <= (s12 + h2),"ERROR: mix_mxh_step_2-3 <= mix_mxh_step_1-2 + mix_mxh_2")) goto 100
+                if (error(FLERR,s23 >= (mx%o%max_steps - 1),"ERROR: mix_mxh_step_2-3 out of bounds")) goto 100
               call arg("mix_mxh_3",h3,found)
-                if (error(.not.found,"ERROR: mix_mxh_3 not found")) goto 100
-                if (error(h3 < 1,"ERROR: mix_mxh_3 < 1")) goto 100
-                if (error(h3 > 20,"ERROR: mix_mxh_3 > 20")) goto 100
-                if (error(h3 == h2,"ERROR: mix_mxh_3 = mix_mxh_2")) goto 100
+                if (error(FLERR,.not.found,"ERROR: mix_mxh_3 not found")) goto 100
+                if (error(FLERR,h3 < 1,"ERROR: mix_mxh_3 < 1")) goto 100
+                if (error(FLERR,h3 > 20,"ERROR: mix_mxh_3 > 20")) goto 100
+                if (error(FLERR,h3 == h2,"ERROR: mix_mxh_3 = mix_mxh_2")) goto 100
               do is = s12,(s23-1)
                 mx%o%mxh(is) = h2
               end do
@@ -481,9 +481,9 @@
             mx%o%metric_type = KERKER
             call arg("mix_metric_gc",mx%o%metric_gc,found)
             if (.not.found) mx%o%metric_gc = 0.8_double
-            if (error(mx%o%metric_gc <= 0.0_double,"ERROR: mix_metric_gc <= 0")) goto 100
+            if (error(FLERR,mx%o%metric_gc <= 0.0_double,"ERROR: mix_metric_gc <= 0")) goto 100
           case default
-            if (error(.true.,"ERROR: mix_metric_type not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: mix_metric_type not recognized")) goto 100
           end select
         end select
 
@@ -563,7 +563,7 @@
         if (present(ad)) call glean(thy(ad))
         if (present(ap)) call glean(thy(ap))
 
-        if (error("Exit mixer_mod::constructor_mx")) continue
+        if (error(FLERR,"Exit mixer_mod::constructor_mx")) continue
 
       end function
 
@@ -584,7 +584,7 @@
         if (present(ad)) call my(ad)
         if (present(ap)) call my(ap)
 
-        if (error(mx%o%g_layout /= x_ghost(x_layout(fq)),"ERROR: layout changes are not currently allowed")) goto 100
+        if (error(FLERR,mx%o%g_layout /= x_ghost(x_layout(fq)),"ERROR: layout changes are not currently allowed")) goto 100
 
         call own_mx_i(mx)
         mx%o%g = x_ghost()
@@ -611,7 +611,7 @@
         if (present(ad)) call glean(thy(ad))
         if (present(ap)) call glean(thy(ap))
 
-        if (error("Exit mixer_mod::update_mx")) continue
+        if (error(FLERR,"Exit mixer_mod::update_mx")) continue
 
       end subroutine
 
@@ -732,13 +732,13 @@
         if (present(ad)) call my(ad)
         if (present(ap)) call my(ap)
 
-        if (error(x_ghost(x_layout(fq)) .ne. mx%o%g_layout,"ERROR: inconsistent layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(fq)) .ne. mx%o%g_layout,"ERROR: inconsistent layouts")) goto 100
 
         call own_mx_i(mx)
         mx%o%g = x_ghost()
 
         mx%o%step = mx%o%step + 1
-        if (error(mx%o%step > size(mx%o%wgt),"ERROR: step is out of bounds")) goto 100
+        if (error(FLERR,mx%o%step > size(mx%o%wgt),"ERROR: step is out of bounds")) goto 100
 
         select case (mx%o%method)
         case (SIMPLE)
@@ -754,7 +754,7 @@
         if (present(ad)) call glean(thy(ad))
         if (present(ap)) call glean(thy(ap))
 
-        if (error("Exit mixer_mod::mix_mx")) continue
+        if (error(FLERR,"Exit mixer_mod::mix_mx")) continue
 
       end subroutine
 
@@ -785,7 +785,7 @@
               if (is_empty(x_dyad_kpoint(dp,ik))) cycle
               call my(x_dyad_kpoint(dp,ik),dk)
               call my(x_dyad_kpoint(mx%o%dp_val,ik),dko)
-              if (error(is_empty(dko),"ERROR: Inconsistency between old and new dyad potentials")) goto 100
+              if (error(FLERR,is_empty(dko),"ERROR: Inconsistency between old and new dyad potentials")) goto 100
               call my(x_v(dk),v)
               call my(x_w(dk),w)
               call my(apply(dko,w),xow)
@@ -812,7 +812,7 @@
 100     call glean(thy(mx))
         call glean(thy(dp))
 
-        if (error("Exit mixer_mod::mix_mx_dp")) continue
+        if (error(FLERR,"Exit mixer_mod::mix_mx_dp")) continue
 
       end subroutine
 
@@ -959,7 +959,7 @@
         if (present(ad)) call glean(thy(ad))
         if (present(ap)) call glean(thy(ap))
 
-        if (error("Exit mixer_mod::simple_mx_i")) continue
+        if (error(FLERR,"Exit mixer_mod::simple_mx_i")) continue
 
       end subroutine
 
@@ -1096,7 +1096,7 @@
         if (present(ad)) call glean(thy(ad))
         if (present(ap)) call glean(thy(ap))
 
-        if (error("Exit mixer_mod::pulay_mx_i")) continue
+        if (error(FLERR,"Exit mixer_mod::pulay_mx_i")) continue
 
       end subroutine
 
@@ -1212,7 +1212,7 @@
 
         call glean(thy(g))
 
-        if (error("Exit mixer_mod::grid_to_c1d_i")) continue
+        if (error(FLERR,"Exit mixer_mod::grid_to_c1d_i")) continue
 
       end subroutine
 
@@ -1243,7 +1243,7 @@
 
         call glean(thy(g))
 
-        if (error("Exit mixer_mod::c1d_to_grid_i")) continue
+        if (error(FLERR,"Exit mixer_mod::c1d_to_grid_i")) continue
 
       end subroutine
 
@@ -1265,7 +1265,7 @@
 
         b = a_in
         call dgesvd('A','A',n,n,b(1,1),lda,s(1),u(1,1),lda,vt(1,1),lda,work(1),lwork,ierr)
-        if (error(ierr /= 0,"ERROR: dgesdd error condition")) goto 100
+        if (error(FLERR,ierr /= 0,"ERROR: dgesdd error condition")) goto 100
 
         s_mat = 0
         tol = abs(s(1)/condition_no)
@@ -1278,7 +1278,7 @@
         a(1:n,1:n) = matmul(s_mat(1:n,1:n),transpose(u(1:n,1:n)))
         b(1:n,1:n) = matmul(transpose(vt(1:n,1:n)),a(1:n,1:n))
 
-100     if (error("Exit mixer_mod::invert_i")) continue
+100     if (error(FLERR,"Exit mixer_mod::invert_i")) continue
 
       end subroutine
 

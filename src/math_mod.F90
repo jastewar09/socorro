@@ -582,13 +582,13 @@
 	integer, dimension(size(m,2)) :: ipiv
         integer :: info
         real(double), dimension(size(m,1),size(m,2)) :: tmp
-        if (error(size(m,1) /= size(m,2),"ERROR: matrix m must be square")) goto 100
-        if (error(size(x,1) /= size(m,1),"ERROR: dimensions of x and m are incompatable")) goto 100
+        if (error(FLERR,size(m,1) /= size(m,2),"ERROR: matrix m must be square")) goto 100
+        if (error(FLERR,size(x,1) /= size(m,1),"ERROR: dimensions of x and m are incompatable")) goto 100
 	y = x
         tmp = m
         call dgesv(size(m,1),1,tmp,size(m,1),ipiv,y,size(m,1),info)
-        if (error(info /= 0,"ERROR: non-zero variable info in LAPACK call")) goto 100
-100     if (error("Exit math_mod::solve_r")) continue
+        if (error(FLERR,info /= 0,"ERROR: non-zero variable info in LAPACK call")) goto 100
+100     if (error(FLERR,"Exit math_mod::solve_r")) continue
       end function
       
       function complementary_error(x) result(f)
@@ -669,7 +669,7 @@
           end if
         end if
         f = 0.0_double
-100     if (error("Exit math_mod::complementary_error")) continue
+100     if (error(FLERR,"Exit math_mod::complementary_error")) continue
       end function
 
       function inits_i(os,eta) result(f)
@@ -700,8 +700,8 @@
         integer :: i, ni
         real(double) :: b0, b1, b2, twox
         f = 0.0_double
-        if (error(x < -1.0_double,"ERROR: x < -1")) goto 100
-        if (error(x > +1.0_double,"ERROR: x > +1")) goto 100
+        if (error(FLERR,x < -1.0_double,"ERROR: x < -1")) goto 100
+        if (error(FLERR,x > +1.0_double,"ERROR: x > +1")) goto 100
         b1 = 0.0_double
         b0 = 0.0_double
         twox = 2.0_double*x
@@ -712,7 +712,7 @@
           b0 = twox*b1 - b2 + cs(ni)
         end do
         f = 0.5_double*(b0 - b2)
-100     if (error("Exit math_mod::csevl_i")) continue
+100     if (error(FLERR,"Exit math_mod::csevl_i")) continue
       end function
 
       function spherical_bessel(x,l,switch) result(spb)
@@ -746,7 +746,7 @@
               bs = bs + t
               if (abs(t) <= tol_t) exit
             end do
-            if (error(n == n_limit,"ERROR: n_limit reached")) goto 100
+            if (error(FLERR,n == n_limit,"ERROR: n_limit reached")) goto 100
             if (l > 0) then  ! Needed to properly handle the case x(i) = 0 when l = 0.
               do n = 1,l
                 bs = bs/real(2*n+1,double)
@@ -772,7 +772,7 @@
           spb(i) = bs
         end do 
 
-100     if (error("Exit math_mod::spherical_bessel")) continue
+100     if (error(FLERR,"Exit math_mod::spherical_bessel")) continue
 
       end function
 
@@ -920,12 +920,12 @@
         end do
         uplo = 'u'
         call zpotrf(uplo,n,ans,n,ierr)
-        if (error(ierr /= 0,"ERROR: zpotrf ierr /= 0")) goto 100
+        if (error(FLERR,ierr /= 0,"ERROR: zpotrf ierr /= 0")) goto 100
         diag = 'n'
         call ztrtri(uplo,diag,n,ans,n,ierr)
-        if (error(ierr /= 0,"ERROR: ztrtri ierr /= 0")) goto 100
+        if (error(FLERR,ierr /= 0,"ERROR: ztrtri ierr /= 0")) goto 100
 
-100     if (error("Exit math_mod::inverse_cholesky")) continue
+100     if (error(FLERR,"Exit math_mod::inverse_cholesky")) continue
 
       end subroutine
 
@@ -993,7 +993,7 @@
         real(double) :: ylm_norm, r, costheta, cosphi, sinphi, tmp
         complex(double) :: phase
 
-        if (error(l > 6,"ERROR: l > 6")) goto 100
+        if (error(FLERR,l > 6,"ERROR: l > 6")) goto 100
 
         r = sqrt(x*x + y*y + z*z)
         if (present(do_norm)) then
@@ -1035,7 +1035,7 @@
           end do
         end select
 
-100     if (error("Exit math_mod::spharm")) continue
+100     if (error(FLERR,"Exit math_mod::spharm")) continue
 
       end function
 
@@ -1055,7 +1055,7 @@
         real(double) :: ylm_norm, r, costheta, cosphi, sinphi, tmp
         complex(double) :: phase, iphase
 
-        if (error(l > 6,"ERROR: l > 6")) goto 100
+        if (error(FLERR,l > 6,"ERROR: l > 6")) goto 100
 
         dtheta = cmplx(0,0,double)
         dphi = cmplx(0,0,double)
@@ -1090,7 +1090,7 @@
           end do
         end select
 
-100     if (error("Exit math_mod::gradylm")) continue
+100     if (error(FLERR,"Exit math_mod::gradylm")) continue
   
       end subroutine
 
@@ -1366,12 +1366,12 @@
 !cod$
         integer :: ia, na
         f = 0.0_double
-        if (error(size(fa,2) /= size(fb,2),"ERROR: incompatable array sizes")) goto 100
+        if (error(FLERR,size(fa,2) /= size(fb,2),"ERROR: incompatable array sizes")) goto 100
         na = size(fa,2)
         do ia = 1,na
           f = f + dot_product(fa(:,ia),fb(:,ia))
         end do
-100     if (error("Exit math_mod::all_atom_dot_product_2")) continue  
+100     if (error(FLERR,"Exit math_mod::all_atom_dot_product_2")) continue  
       end function
 
 

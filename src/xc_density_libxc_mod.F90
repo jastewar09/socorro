@@ -202,7 +202,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_density_libxc_mod::constructor_xcd")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::constructor_xcd")) continue
 
       end function 
 
@@ -596,7 +596,7 @@
         call glean(thy(n_total))
         call glean(thy(n_valence))
 
-        if (error("Exit xc_density_libxc_mod::xcd_energy_libxc")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::xcd_energy_libxc")) continue
 
       end function
 
@@ -880,7 +880,7 @@
         call glean(thy(n_total))
         call glean(thy(n_valence))
 
-        if (error("Exit xc_density_libxc_mod::xcd_potential_libxc")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::xcd_potential_libxc")) continue
 
       end function
 
@@ -1218,7 +1218,7 @@
         call glean(thy(n_total))
         call glean(thy(n_valence))
 
-        if (error("Exit xc_density_libxc_mod::xcd_energy_and_potential_libxc")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::xcd_energy_and_potential_libxc")) continue
 
       end function
 
@@ -1244,7 +1244,7 @@
         call glean(thy(xcd))
         call glean(thy(n))
 
-        if (error("Exit xc_density_libxc_mod::xcd_grid_pressure_libxc")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::xcd_grid_pressure_libxc")) continue
 
       end subroutine
 
@@ -1269,7 +1269,7 @@
         type(xc_f90_pointer_t) :: xc_info
         integer :: arraysize
 
-        if (error(.true.,'Error: stress tensor not supported with libxc functionals (yet)')) goto 200
+        if (error(FLERR,.true.,'Error: stress tensor not supported with libxc functionals (yet)')) goto 200
 
 !        call my(xcd)
 !        call my(n_g)
@@ -1426,7 +1426,7 @@
 !        call glean(thy(xcd))
 !        call glean(thy(n_g))
 
-200     if (error("Exit xc_density_libxc_mod::xcd_grid_stress_tensor_libxc")) continue
+200     if (error(FLERR,"Exit xc_density_libxc_mod::xcd_grid_stress_tensor_libxc")) continue
 
       end subroutine
 
@@ -1597,7 +1597,7 @@
 
         ! contribution due to the laplacian
         if (xcd%o%uses_laplacian) then
-           if (error(.true.,'laplacian not supported for LIBXC')) goto 100
+           if (error(FLERR,.true.,'laplacian not supported for LIBXC')) goto 100
           !r1 = dfxcdlapl
           !call put(r1,gr1,RD_KIND)
           !call take(c1,gr1,CDF_KIND)
@@ -1616,7 +1616,7 @@
         call glean(thy(xcd))
         call glean(thy(lay))
 
-        if (error("Exit xc_density_libxc_mod::white_bird_i")) continue
+        if (error(FLERR,"Exit xc_density_libxc_mod::white_bird_i")) continue
 
       end subroutine
 
@@ -1793,7 +1793,7 @@
         end if
         
         if (xcd%o%uses_laplacian) then
-          if (error(.true.,"Error: laplacian not supported with libxc")) goto 100
+          if (error(FLERR,.true.,"Error: laplacian not supported with libxc")) goto 100
 !          call alloc(c2,lay,D_TYPE,SGROUP)
 !          c2 = -c1*(xcd%o%gx**2 + xcd%o%gy**2 + xcd%o%gz**2)
 !          call put(c2,gr1,CDF_KIND)
@@ -1851,7 +1851,7 @@
         call glean(thy(xcd))
         call glean(thy(lay))
 
-100     if (error("xcd_libxc::form_nder_i")) continue
+100     if (error(FLERR,"xcd_libxc::form_nder_i")) continue
 
       end subroutine
 

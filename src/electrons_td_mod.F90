@@ -207,7 +207,7 @@
 !cod$
         call start_timer("electrons_td: constructor")
 
-        if (error("  Error on entry")) goto 999
+        if (error(FLERR,"  Error on entry")) goto 999
 
         call my(el_sc)
         call my(ext)
@@ -222,7 +222,7 @@
 100     call glean(thy(ext))
         call glean(thy(el_sc))
 
-999     if (error("Exit electrons_td_mod::constructor_el")) continue
+999     if (error(FLERR,"Exit electrons_td_mod::constructor_el")) continue
 
         if (.not.error()) call stop_timer("electrons_td: constructor")
 
@@ -240,7 +240,7 @@
 !cod$
         call start_timer("electrons_td: restart constructor")
 
-        if (error("  Error on entry")) goto 999
+        if (error(FLERR,"  Error on entry")) goto 999
 
         call my(restf)
 
@@ -253,7 +253,7 @@
 
 100     call glean(thy(restf))
 
-999     if (error("Exit electrons_td_mod::constructor_el")) continue
+999     if (error(FLERR,"Exit electrons_td_mod::constructor_el")) continue
 
         if (.not.error()) call stop_timer("electrons_td: restart constructor")
 
@@ -307,7 +307,7 @@
         call glean(thy(ext))
         call glean(thy(gp))
 
-        if (error("Exit electrons_td_mod::update_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::update_el")) continue
 
         if (.not.error()) call stop_timer("electrons_td: update")
 
@@ -424,7 +424,7 @@
         call my(el)
         e = el%o%kinetic_energy
         call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_energy")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_energy")) continue
 
       end function
 
@@ -450,11 +450,11 @@
 
 !cod$
         call my(el)
-        if ( error((ik < 1) .or. (ik > size(el%o%wf)),"ERROR: ik is out of range")) goto 100
+        if ( error(FLERR,(ik < 1) .or. (ik > size(el%o%wf)),"ERROR: ik is out of range")) goto 100
         call my(el%o%wf(ik),wf)
         call bequeath(thy(wf))
 100     call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_wavefunctions")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_wavefunctions")) continue
       end function 
 
       function el_density(el) result(dens)
@@ -467,7 +467,7 @@
         call my(el%o%density,dens)
         call bequeath(thy(dens))
 100     call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_density")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_density")) continue
       end function 
 
       function el_kpoints(el) result(kp)
@@ -493,7 +493,7 @@
         call my(el)
         n = size(el%o%exps,2)
 100     call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_n_bands")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_n_bands")) continue
       end function
 
       function el_expectation_value(el,ik,ib) result(ev)
@@ -506,11 +506,11 @@
 
 !cod$
         call my(el)
-        if (error((ik < 1) .or. (ik > size(el%o%exps,1)),"ERROR: ik is out of range")) goto 100
-        if (error((ib < 1) .or. (ib > size(el%o%exps,2)),"ERROR: ib is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(el%o%exps,1)),"ERROR: ik is out of range")) goto 100
+        if (error(FLERR,(ib < 1) .or. (ib > size(el%o%exps,2)),"ERROR: ib is out of range")) goto 100
         ev = el%o%exps(ik,ib)
 100     call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_expectation_value")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_expectation_value")) continue
       end function
 
       function el_expectation_values(el) result(evs)
@@ -535,11 +535,11 @@
 
 !cod$
         call my(el)
-        if (error((ik < 1) .or. (ik > size(el%o%occs,1)),"ERROR: ik is out of range")) goto 100
-        if (error((ib < 1) .or. (ib > size(el%o%occs,2)),"ERROR: ib is out of range")) goto 100
+        if (error(FLERR,(ik < 1) .or. (ik > size(el%o%occs,1)),"ERROR: ik is out of range")) goto 100
+        if (error(FLERR,(ib < 1) .or. (ib > size(el%o%occs,2)),"ERROR: ib is out of range")) goto 100
         occ = el%o%occs(ik,ib)
 100     call glean(thy(el))
-        if (error("Exit electrons_td_mod::el_occupation")) continue
+        if (error(FLERR,"Exit electrons_td_mod::el_occupation")) continue
       end function
 
       function el_occupations(el) result(occs)
@@ -587,7 +587,7 @@
 
 100     call glean(thy(el))
 
-        if (error("Exit electrons_td_mod::forces_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::forces_el")) continue
 
       end subroutine
 
@@ -620,7 +620,7 @@
 
 100     call glean(thy(el))
 
-        if (error("Exit electrons_td_mod::pressure_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::pressure_el")) continue
 
       end subroutine
 
@@ -654,7 +654,7 @@
 
 100     call glean(thy(el))
 
-        if (error("Exit electrons_td_mod::stress_tensor_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::stress_tensor_el")) continue
 
       end subroutine
 
@@ -755,7 +755,7 @@
         end do
 
 100     call glean(thy(el))
-        if (error("Exit electrons_mod::get_norm_el")) continue
+        if (error(FLERR,"Exit electrons_mod::get_norm_el")) continue
 
       end function
 
@@ -779,7 +779,7 @@
            if (num_h_ops < num_h_ops_tmp) num_h_ops = num_h_ops_tmp
         end do
 100     call glean(thy(el))
-        if (error("Exit electrons_mod::num_hamiltonian_ops")) continue
+        if (error(FLERR,"Exit electrons_mod::num_hamiltonian_ops")) continue
 
       end function
 
@@ -809,7 +809,7 @@
 
         call arg("dcomp_range",range,found)
         if (found) then
-          if (error(range < 0.0_double,"ERROR: dcomp_range < 0")) goto 100
+          if (error(FLERR,range < 0.0_double,"ERROR: dcomp_range < 0")) goto 100
           do ib = 1,nb
             if (el%o%occs(1,ib) <= 0.5_double) then
               emid = el%o%exps(1,ib)
@@ -917,7 +917,7 @@
 100     call glean(thy(el))
         call glean(thy(f))
 
-        if (error("Exit electrons_td_mod::decompose_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::decompose_el")) continue
 
       end subroutine
 
@@ -1019,7 +1019,7 @@
         call glean(thy(hc_ext))
         call glean(thy(nrestf))
 
-        if (error("Exit electrons_td_mod::write_restart_el")) continue
+        if (error(FLERR,"Exit electrons_td_mod::write_restart_el")) continue
 
       end subroutine
 
@@ -1046,7 +1046,7 @@
         nb = size(elr_sc%eigs,2)
 
         
-        if (error((elr_sc%g_external /= x_ghost(ext)),"ERROR: el_sc is not consistent with ext")) goto 100
+        if (error(FLERR,(elr_sc%g_external /= x_ghost(ext)),"ERROR: el_sc is not consistent with ext")) goto 100
 !        elr%g_external = elr_sc%g_external
 
         ! copy the common part of the hamiltonian
@@ -1103,7 +1103,7 @@
 
         case default
 
-           if (error(.true.,"ERROR: tddft_occupations tag value not recognized")) goto 100    
+           if (error(FLERR,.true.,"ERROR: tddft_occupations tag value not recognized")) goto 100    
 
         end select
 
@@ -1124,7 +1124,7 @@
 100     call glean(thy(ext))
         call glean(thy(el_sc))
 
-        if (error("Exit electrons_td_mod::standard_portal_i")) continue
+        if (error(FLERR,"Exit electrons_td_mod::standard_portal_i")) continue
 
       end subroutine
 
@@ -1152,14 +1152,14 @@
 
         if (i_access(restf)) tios = findfirsttag(restf,"ELECTRONS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: ELECTRONS block was not found")) goto 100
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ELECTRONS block was not found")) goto 100
 
         if (i_access(restf)) call openblock(restf)
 
 !        !** First read in the external object that was stored from the hc object
 !        if (i_access(restf)) tios = findfirsttag(restf,"HC_EXT")
 !        if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-!        if (error(tios == TAG_NOT_FOUND,"ERROR: HC_EXT tag was not found")) goto 100
+!        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: HC_EXT tag was not found")) goto 100
         call my(external(restf),ext)
         
         call my(x_layout(ext),lay)
@@ -1168,14 +1168,14 @@
 !        ! read in the grid density object
 !        if (i_access(restf)) tios = findfirsttag(restf,"DENSITY_GDEN")
 !        if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-!        if (error(tios == TAG_NOT_FOUND,"ERROR: DENSITY_GDEN tag was not found")) goto 100
+!        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DENSITY_GDEN tag was not found")) goto 100
 !        call my(grid(x_layout(ext),MOD_SCOPE),gridden)
 !        call read_restart(gridden,restf) ; if (error()) goto 100
         
 !        ! read in the atomic density object
 !        if (i_access(restf)) tios = findfirsttag(restf,"DENSITY_ADEN")
 !        if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-!        if (error(tios == TAG_NOT_FOUND,"ERROR: DENSITY_ADEN tag was not found")) goto 100
+!        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DENSITY_ADEN tag was not found")) goto 100
 !        call my(atomic_density(x_atomic_operators(ext),restf),adens)
 
 !        ! construct the density object from the grid density and atomic density
@@ -1186,14 +1186,14 @@
 !        !  grid potential
 !        if (i_access(restf)) tios = findfirsttag(restf,"HC_GRIDPOT")
 !        if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-!        if (error(tios == TAG_NOT_FOUND,"ERROR: HC_GRIDPOT tag was not found")) goto 100
+!        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: HC_GRIDPOT tag was not found")) goto 100
 !        call my(grid(x_layout(ext),MOD_SCOPE),gridpot)
 !        call read_restart(gridpot,restf) ; if (error()) goto 100
 
 !        !  atomic potential
 !        if (i_access(restf)) tios = findfirsttag(restf,"HC_APOT")
 !        if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-!        if (error(tios == TAG_NOT_FOUND,"ERROR: HC_APOT tag was not found")) goto 100
+!        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: HC_APOT tag was not found")) goto 100
 !        call my(atomic_potential(adens,restf=restf),apot)
 
 !        ! construct generalized potential object
@@ -1201,7 +1201,7 @@
 
         if (i_access(restf)) tios = findfirsttag(restf,"HC_PROTOBASIS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: HC_PROTOBASIS tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: HC_PROTOBASIS tag was not found")) goto 100
 
         ! read the wavefunctions cutoff and number of bands, and then form the protobasis
         if (i_access(restf)) then
@@ -1225,7 +1225,7 @@
         nk = x_n_kpoints(elr%kpoints)
 
         ! Divide the k-points among processors
-        if (error(nk < mpi_nkgroups(),"ERROR: nk is less than kgroups")) then
+        if (error(FLERR,nk < mpi_nkgroups(),"ERROR: nk is less than kgroups")) then
           call notify("Number of k-points = ",nk)
           goto 100
         end if
@@ -1240,7 +1240,7 @@
         !** Read in the wavefunctions
         if (i_access(restf)) tios = findfirsttag(restf,"EL_WAVEFUNCS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: EL_WAVEFUNCS tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: EL_WAVEFUNCS tag was not found")) goto 100
         ! initialize the wavefunctions
         allocate( elr%wf(nk) )
         do ik = 1,nk
@@ -1253,7 +1253,7 @@
         !** Read in the expectation values
         if (i_access(restf)) tios = findfirsttag(restf,"EXPECTATIONVALUES")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: EXPECTATIONVALUES tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: EXPECTATIONVALUES tag was not found")) goto 100
         allocate(elr%exps(nk,nb), exps(nb))
         do ik = 1,nk
           if (i_access(restf)) then
@@ -1269,7 +1269,7 @@
         !** Read in the occupations
         if (i_access(restf)) tios = findfirsttag(restf,"OCCUPATIONS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: OCCUPATIONS tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: OCCUPATIONS tag was not found")) goto 100
         allocate(elr%occs(nk,nb), occs(nb))
         do ik=1,nk
            if (i_access(restf)) then
@@ -1299,7 +1299,7 @@
         call glean(thy(genpot))
         call glean(thy(restf))
 
-100     if (error("Exit electrons_td_mod::restart_portal_i")) continue
+100     if (error(FLERR,"Exit electrons_td_mod::restart_portal_i")) continue
 
       end subroutine
 
@@ -1326,7 +1326,7 @@
 
 100     call glean(thy(ext))
 
-        if (error("Exit electrons_td_mod::accumulate_density_i")) continue
+        if (error(FLERR,"Exit electrons_td_mod::accumulate_density_i")) continue
 
       end subroutine
 
@@ -1348,7 +1348,7 @@
 
         if (allocated( wts )) deallocate( wts )
 
-100     if (error("Exit electrons_td_mod::kinetic_energy_i")) continue
+100     if (error(FLERR,"Exit electrons_td_mod::kinetic_energy_i")) continue
 
       end subroutine
 
@@ -1396,7 +1396,7 @@
 
 100     call glean(thy(lay))
 
-        if (error("Exit electrons_td_mod::diary_restart_construction_i")) continue
+        if (error(FLERR,"Exit electrons_td_mod::diary_restart_construction_i")) continue
 
       end subroutine
 

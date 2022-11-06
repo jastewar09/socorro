@@ -277,7 +277,7 @@
         case("user")
           pg%o%mode = USER
         case default
-          if (error(.true.,"ERROR: lattice_symmetry tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: lattice_symmetry tag is not recognized")) goto 100
         end select
 
         call arg("save_lattice_group",pg%o%save,fnd)
@@ -289,14 +289,14 @@
           call generate_lattice_group_i(pg%o,lat) ; if (error()) goto 100
         case (USER)
           call read_lattice_group_i(pg%o,lat) ; if (error()) goto 100
-          if (error(.not.valid_lattice_group_i(pg%o,lat),"ERROR: User-supplied lattice group is not valid")) goto 100
+          if (error(FLERR,.not.valid_lattice_group_i(pg%o,lat),"ERROR: User-supplied lattice group is not valid")) goto 100
         end select
 
         if (pg%o%save) call save_pg_i(pg%o)
 
 100     call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::constructor_pg_lat")) continue
+        if (error(FLERR,"Exit symmetry_mod::constructor_pg_lat")) continue
 
       end function
 
@@ -331,17 +331,17 @@
             end if
           case (USER)
             if (source_change) then
-              if (error(.not.valid_lattice_group_i(pg%o,lat),"ERROR: User-supplied lattice group is not valid")) goto 100
+              if (error(FLERR,.not.valid_lattice_group_i(pg%o,lat),"ERROR: User-supplied lattice group is not valid")) goto 100
             end if
           end select
         case default
-          if (error(.true.,"ERROR: incorrect source")) goto 100
+          if (error(FLERR,.true.,"ERROR: incorrect source")) goto 100
         end select
 
 100     call glean(thy(pg))
         call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::update_pg_lat")) continue
+        if (error(FLERR,"Exit symmetry_mod::update_pg_lat")) continue
 
       end subroutine
 
@@ -374,7 +374,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::constructor_pg_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::constructor_pg_sg")) continue
 
       end function
 
@@ -431,13 +431,13 @@
             end if
           end select
         case default
-          if (error(.true.,"ERROR: incorrect source")) goto 100
+          if (error(FLERR,.true.,"ERROR: incorrect source")) goto 100
         end select
 
 100     call glean(thy(pg))
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::update_pg_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::update_pg_sg")) continue
 
       end subroutine
 
@@ -727,7 +727,7 @@
         call glean(thy(pg))
         call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::reduction_pg")) continue
+        if (error(FLERR,"Exit symmetry_mod::reduction_pg")) continue
 
       end subroutine
 
@@ -785,7 +785,7 @@
         call glean(thy(pg))
         call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::kpoint_map_pg")) continue
+        if (error(FLERR,"Exit symmetry_mod::kpoint_map_pg")) continue
 
       end subroutine
 
@@ -832,7 +832,7 @@
 
 100     call glean(thy(pg))
 
-        if (error("Exit symmetry_mod::check_monkhorst_pack_pg")) continue
+        if (error(FLERR,"Exit symmetry_mod::check_monkhorst_pack_pg")) continue
 
       end subroutine
 
@@ -920,7 +920,7 @@
 100     call glean(thy(pg))
         if (present(lat)) call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::diary_pg")) continue
+        if (error(FLERR,"Exit symmetry_mod::diary_pg")) continue
 
       end subroutine
 
@@ -946,7 +946,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         ns = size(pg%o%sym)
         if (i_access(f)) then
@@ -964,7 +964,7 @@
 100     call glean(thy(pg))
         call glean(thy(f))
 
-        if (error("Exit symmetry_mod::save_pg")) continue
+        if (error(FLERR,"Exit symmetry_mod::save_pg")) continue
 
       end subroutine
 
@@ -1007,7 +1007,7 @@
         case("off")
           sg%o%mode = OFF
         case default
-          if (error(.true.,"ERROR: symmetry tag was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: symmetry tag was not recognized")) goto 100
         end select
 
         call arg("sg_tolerance",tol_in,fnd)
@@ -1051,7 +1051,7 @@
         call glean(thy(lat))
         if (present(lay)) call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::constructor_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::constructor_sg")) continue
 
       end function
 
@@ -1137,7 +1137,7 @@
         call glean(thy(lat))
         call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::update_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::update_sg")) continue
 
       end subroutine
 
@@ -1313,8 +1313,8 @@
           ns = size(sg%o%atom)
           na = size(sg%o%atom(1)%perm,1)
           nt = size(sg%o%atom(1)%perm,2)
-          if (error(size(c,1) /= 3,"ERROR: improper first dimension for c")) goto 100
-          if (error(size(c,2) /= na,"ERROR: improper second dimension for c")) goto 100
+          if (error(FLERR,size(c,1) /= 3,"ERROR: improper first dimension for c")) goto 100
+          if (error(FLERR,size(c,2) /= na,"ERROR: improper second dimension for c")) goto 100
           allocate( c_sum(3,na) )
           c_sum = 0.0_double
           do is = 1,ns
@@ -1333,7 +1333,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::symmetrize_coordinates_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetrize_coordinates_sg")) continue
 
       end subroutine
 
@@ -1357,8 +1357,8 @@
           ns = size(sg%o%atom)
           na = size(sg%o%atom(1)%perm,1)
           nt = size(sg%o%atom(1)%perm,2)
-          if (error(size(v,1) /= 3,"ERROR: improper first dimension for v")) goto 100
-          if (error(size(v,2) /= na,"ERROR: improper second dimension for v")) goto 100
+          if (error(FLERR,size(v,1) /= 3,"ERROR: improper first dimension for v")) goto 100
+          if (error(FLERR,size(v,2) /= na,"ERROR: improper second dimension for v")) goto 100
           allocate( v_sum(3,na) )
           v_sum = 0.0_double
           do is = 1,ns
@@ -1377,7 +1377,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::symmetrize_vectors_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetrize_vectors_sg")) continue
 
       end subroutine
 
@@ -1407,7 +1407,7 @@
 
 100     call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::symmetrize_tensor_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetrize_tensor_sg")) continue
 
       end subroutine
 
@@ -1465,7 +1465,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::symmetrize_spherical_tensor_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetrize_spherical_tensor_sg")) continue
 
       end subroutine
 
@@ -1543,7 +1543,7 @@
         call glean(thy(sg))
         call glean(thy(g))
 
-        if (error("Exit symmetry_mod::symmetrize_grid_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetrize_grid_sg")) continue
 
       end subroutine
 
@@ -1576,7 +1576,7 @@
 
 100     call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::invariant_site_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::invariant_site_sg")) continue
 
       end function
 
@@ -1641,7 +1641,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::symmetry_unique_atoms_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::symmetry_unique_atoms_sg")) continue
 
       end subroutine
 
@@ -1692,7 +1692,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::distribute_spherical_tensor_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::distribute_spherical_tensor_sg")) continue
 
       end subroutine
 
@@ -1733,7 +1733,7 @@
 
         call glean(thy(sg))
 
-        if (error("Exit symmetry_mod::distribute_energy_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::distribute_energy_sg")) continue
 
       end subroutine
 
@@ -1816,7 +1816,7 @@
 100     call glean(thy(sg))
         if (present(lat)) call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::diary_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::diary_sg")) continue
 
       end subroutine
 
@@ -1881,7 +1881,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         ns = size(sg%o%sym)
         nt = size(sg%o%sym(1)%translation,2)
@@ -1903,7 +1903,7 @@
 100     call glean(thy(sg))
         call glean(thy(f))
 
-        if (error("Exit symmetry_mod::save_sg")) continue
+        if (error(FLERR,"Exit symmetry_mod::save_sg")) continue
 
       end subroutine
 
@@ -1981,7 +1981,7 @@
           test_mat = matmul(matmul(transpose(mat),unitary_form),mat)
           if (test_mat .in. nbhd(unitary_form,tol_matrix)) then
             ns = ns + 1
-            if (error(ns > 48,"ERROR: more than 48 point group operations")) goto 100
+            if (error(FLERR,ns > 48,"ERROR: more than 48 point group operations")) goto 100
             tpo(:,:,ns) = mat
           end if
         end do
@@ -1998,7 +1998,7 @@
 
         call glean(thy(lat))
 
-        if (error("Exit symmetry_mod::generate_lattice_group_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::generate_lattice_group_i")) continue
 
       end subroutine
 
@@ -2021,15 +2021,15 @@
 
         if (i_access(f)) inquire(file=x_name(f),exist=exist_file)
         if (i_comm(f)) call broadcast(FILE_SCOPE,exist_file)
-        if (error(.not.exist_file,"ERROR: lattice group file was not found")) goto 200
+        if (error(FLERR,.not.exist_file,"ERROR: lattice group file was not found")) goto 200
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 200
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 200
 
         if (i_access(f)) read(x_unit(f),*,iostat=ios) ns
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to read the number of symmetry operations")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to read the number of symmetry operations")) goto 100
         if (i_comm(f)) call broadcast(FILE_SCOPE,ns)
 
         allocate( tpo(3,3,ns) )
@@ -2048,7 +2048,7 @@
           pgr%sym(is)%point_op = real(tpo(:,:,is),double)
         end do
 
-        if (error(.not.valid_lattice_group_i(pgr,lat),"ERROR: Lattice group is not valid")) goto 100
+        if (error(FLERR,.not.valid_lattice_group_i(pgr,lat),"ERROR: Lattice group is not valid")) goto 100
 
 100     if (i_access(f)) close(x_unit(f))
 
@@ -2057,7 +2057,7 @@
         call glean(thy(lat))
         call glean(thy(f))
 
-        if (error("Exit symmetry_mod::read_lattice_group_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::read_lattice_group_i")) continue
 
       end subroutine
 
@@ -2156,7 +2156,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         ns = size(pgr%sym)
         if (i_access(f)) then
@@ -2173,7 +2173,7 @@
 
 100     call glean(thy(f))
 
-        if (error("Exit symmetry_mod::save_pg_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::save_pg_i")) continue
 
       end subroutine
 
@@ -2313,7 +2313,7 @@
         na = x_n_atoms(ats)
         ns_pg = size(pg%o%sym)
 
-        if (error(na < 1,"ERROR: atoms must have at least one atom in it")) goto 100
+        if (error(FLERR,na < 1,"ERROR: atoms must have at least one atom in it")) goto 100
 
         allocate( type_count(na), temp_type(na) )                              ! SELECT A BASE ATOM FOR DETERMINING TRANSLATIONS
         type_count = na
@@ -2414,8 +2414,8 @@
           end do
         end do
 
-        if (error(ns == 0,"ERROR: no point operations were found")) goto 100
-        if (error(nt == 0,"ERROR: no translations were found")) goto 100
+        if (error(FLERR,ns == 0,"ERROR: no point operations were found")) goto 100
+        if (error(FLERR,nt == 0,"ERROR: no translations were found")) goto 100
 
         call sort_by_magnitude_i(lat,nt,pure_trans,trans_map)                              ! SORT THE PURE TRANSLATIONS
         call group_by_translation_i(lat,ns,temp_sym,temp_tau,temp_map)                     ! GROUP THE SPACE-GROUP OPERATIONS
@@ -2477,7 +2477,7 @@
         call glean(thy(lat))
         if (present(lay)) call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::generate_space_group_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::generate_space_group_i")) continue
 
       end subroutine
 
@@ -2690,12 +2690,12 @@
         call my(sg1)
         call my(sg2)
         ns1 = size(sg1%o%atom) ; ns2 = size(sg2%o%atom)
-        if (error(ns1 /= ns2,"ERROR: different numbers of point operations")) goto 100
+        if (error(FLERR,ns1 /= ns2,"ERROR: different numbers of point operations")) goto 100
         ns = size(sg1%o%atom)
         na1 = size(sg1%o%atom(1)%perm,1) ; na2 = size(sg2%o%atom(1)%perm,1)
-        if (error(na1 /= na2,"ERROR: different numbers of atoms")) goto 100
+        if (error(FLERR,na1 /= na2,"ERROR: different numbers of atoms")) goto 100
         nt1 = size(sg1%o%atom(1)%perm,2) ; nt2 = size(sg2%o%atom(1)%perm,2)
-        if (error(nt1 /= nt2,"ERROR: different numbers of translations")) goto 100
+        if (error(FLERR,nt1 /= nt2,"ERROR: different numbers of translations")) goto 100
         do is1 = 1,ns
           do is2 = 1,ns
             spo = ( sg1%o%sym(is1)%point_op .in. nbhd(sg2%o%sym(is2)%point_op,tol_equal) )
@@ -2704,12 +2704,12 @@
               exit
             end if
           end do
-          if (error(.not.spo,"ERROR: cannot match point operations")) goto 100
+          if (error(FLERR,.not.spo,"ERROR: cannot match point operations")) goto 100
           if (.not.sap) exit
         end do
 100     call glean(thy(sg1))
         call glean(thy(sg2))
-        if (error("Exit symmetry_mod::compare_atom_perms_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::compare_atom_perms_i")) continue
       end function
 
       function compare_field_ops_i(sg1,sg2) result(sfo)
@@ -2722,7 +2722,7 @@
         call my(sg1)
         call my(sg2)
         ns1 = size(sg1%o%field) ; ns2 = size(sg2%o%field)
-        if (error(ns1 /= ns2,"ERROR: different numbers of point operations")) goto 100
+        if (error(FLERR,ns1 /= ns2,"ERROR: different numbers of point operations")) goto 100
         ns = ns1
         n_ps1 = size(sg1%o%field(1)%perm) ; n_ps2 = size(sg2%o%field(1)%perm)
         if (n_ps1 /= n_ps2) then
@@ -2745,13 +2745,13 @@
               exit
             end if
           end do
-          if (error(.not.spo,"ERROR: cannot match point operations")) goto 100
+          if (error(FLERR,.not.spo,"ERROR: cannot match point operations")) goto 100
           if (.not.sfo) exit
         end do
         sfo = sfo .and. ( size(sg1%o%class) /= size(sg2%o%class) )
 100     call glean(thy(sg1))
         call glean(thy(sg2))
-        if (error("Exit symmetry_mod::compare_field_ops_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::compare_field_ops_i")) continue
       end function
 
       subroutine own_sg_i(sg)
@@ -3032,13 +3032,13 @@
           if (related_23) exit
         end do
 
-        if (error(related_12 .and. (dims(1) /= dims(2)),"ERROR: mesh dimensions 1 and 2 are not equal")) continue
-        if (error(related_13 .and. (dims(1) /= dims(3)),"ERROR: mesh dimensions 1 and 3 are not equal")) continue
-        if (error(related_23 .and. (dims(2) /= dims(3)),"ERROR: mesh dimensions 2 and 3 are not equal")) goto 100
+        if (error(FLERR,related_12 .and. (dims(1) /= dims(2)),"ERROR: mesh dimensions 1 and 2 are not equal")) continue
+        if (error(FLERR,related_13 .and. (dims(1) /= dims(3)),"ERROR: mesh dimensions 1 and 3 are not equal")) continue
+        if (error(FLERR,related_23 .and. (dims(2) /= dims(3)),"ERROR: mesh dimensions 2 and 3 are not equal")) goto 100
 
 100     call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::check_mesh_dimensions_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::check_mesh_dimensions_i")) continue
 
       end subroutine
 
@@ -3072,7 +3072,7 @@
 100     call glean(thy(lat))
         call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::form_symmetrizing_structures_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::form_symmetrizing_structures_i")) continue
 
       end subroutine
 
@@ -3217,9 +3217,9 @@
             tgl(2) = mat(2,1)*gl(1,i_ps) + mat(2,2)*gl(2,i_ps) + mat(2,3)*gl(3,i_ps)
             tgl(3) = mat(3,1)*gl(1,i_ps) + mat(3,2)*gl(2,i_ps) + mat(3,3)*gl(3,i_ps)
             ta = fl2a(tgl,lay,S_TYPE)
-            if (error(any(ta < o) .or. any(ta > m),"ERROR: transformed 3-d array indices are out-of-bounds")) goto 100
+            if (error(FLERR,any(ta < o) .or. any(ta > m),"ERROR: transformed 3-d array indices are out-of-bounds")) goto 100
             i_ss = map(ta(1),ta(2),ta(3))
-            if (error((i_ss < 1) .or. (i_ss > n_ss),"ERROR: transformed 1-d array indices are out-of-bounds")) goto 100
+            if (error(FLERR,(i_ss < 1) .or. (i_ss > n_ss),"ERROR: transformed 1-d array indices are out-of-bounds")) goto 100
             sgr%field(is)%perm(i_ps) = i_ss
           end do
         end do
@@ -3229,7 +3229,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit symmetry_mod::form_field_permutations_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::form_field_permutations_i")) continue
 
       end subroutine
 
@@ -3443,10 +3443,10 @@
         elseif ( all(op_type == (/1,9,8,6,0,1,9,8,6,0/)) ) then
            st = 'O_h'
         else
-           if (error(.true.,"ERROR: unknown point-group type")) goto 100
+           if (error(FLERR,.true.,"ERROR: unknown point-group type")) goto 100
         end if
 
-100     if (error("Exit symmetry_mod::get_point_group_type_i")) continue
+100     if (error(FLERR,"Exit symmetry_mod::get_point_group_type_i")) continue
 
       end subroutine
 
@@ -3469,10 +3469,10 @@
         elseif ( all(op_type == (/1,9,8,6,0,1,9,8,6,0/)) ) then
            st = 'The lattice is cubic with point group O_h'
         else
-           if (error(.true.,"ERROR: unknown lattice type")) goto 100
+           if (error(FLERR,.true.,"ERROR: unknown lattice type")) goto 100
         end if
 
-100     if (error("Exit symmetry_mod::get_lattice_type_i")) continue
+100     if (error(FLERR,"Exit symmetry_mod::get_lattice_type_i")) continue
 
       end subroutine
 
@@ -3496,7 +3496,7 @@
            case(+2)
               cl(5) = 1
            case default
-              if (error(.true.,"ERROR: incorrect trace")) goto 100
+              if (error(FLERR,.true.,"ERROR: incorrect trace")) goto 100
            end select
         case(-1)
            select case(nint(trace(mat)))
@@ -3511,13 +3511,13 @@
            case(-2)
               cl(10) = 1
            case default
-              if (error(.true.,"ERROR: incorrect trace")) goto 100
+              if (error(FLERR,.true.,"ERROR: incorrect trace")) goto 100
            end select
         case default
-           if (error(.true.,"ERROR: incorrect determinant")) goto 100
+           if (error(FLERR,.true.,"ERROR: incorrect determinant")) goto 100
         end select
 
-100     if (error("Exit symmetry_mod::classify_op_i")) return
+100     if (error(FLERR,"Exit symmetry_mod::classify_op_i")) return
 
       end function
 
@@ -3652,7 +3652,7 @@
 
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
 
         ns = size(sgr%sym)
         nt = size(sgr%sym(1)%translation,2)
@@ -3673,7 +3673,7 @@
 
 100     call glean(thy(f))
 
-        if (error("Exit symmetry_mod::save_sg_i")) continue
+        if (error(FLERR,"Exit symmetry_mod::save_sg_i")) continue
 
       end subroutine
 

@@ -110,11 +110,11 @@
 #if defined(_OPENMP)
         fft_nthreads = omp_get_max_threads()
         call dfftw_init_threads(fft_rthreads)
-        if (error(fft_rthreads == 0,"FATAL ERROR: fft_rthreads = 0")) goto 100
+        if (error(FLERR,fft_rthreads == 0,"FATAL ERROR: fft_rthreads = 0")) goto 100
         call dfftw_plan_with_nthreads(fft_nthreads)
 #endif
 
-100     if (error("Exit fft_mod::fft_start")) continue
+100     if (error(FLERR,"Exit fft_mod::fft_start")) continue
 
       end subroutine
 
@@ -232,7 +232,7 @@
         ! plan for a non-indexed Q_TO_R (backward) FFT
         call dfftw_plan_dft(plan%bplan,rank,n,plan%data,plan%data,Q_TO_R,FFTW_ESTIMATE)
 
-100     if (error("Exit fft_mod::fft_create_serial_plan_ni")) continue
+100     if (error(FLERR,"Exit fft_mod::fft_create_serial_plan_ni")) continue
 
       end subroutine
 
@@ -447,7 +447,7 @@
                                                 & Q_TO_R,FFTW_ESTIMATE)
         end do
 
-100     if (error("Exit fft_mod::fft_create_serial_plan_i")) continue
+100     if (error(FLERR,"Exit fft_mod::fft_create_serial_plan_i")) continue
 
       end subroutine
 

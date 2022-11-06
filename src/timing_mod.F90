@@ -148,12 +148,12 @@ contains
       timer => get_timer_(name, create_timer = .true.)
 
       test = ( timer%state /= state_stopped )
-      if ( error(test,"The timer '"//trimstr(name)//"' was not stopped before starting") ) goto 90
+      if ( error(FLERR,test,"The timer '"//trimstr(name)//"' was not stopped before starting") ) goto 90
 
       timer%state = state_running
       timer%start_time = current_time_()
 
-90    if ( error("Exiting timing_mod::start_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::start_timer_()") ) continue
 
    end subroutine start_timer_
 
@@ -170,16 +170,16 @@ contains
       timer => get_timer_(name, create_timer = .false.)
 
       test = ( .not.associated( timer ) )
-      if ( error(test,"Unknown timer "//trimstr(name)) ) goto 90
+      if ( error(FLERR,test,"Unknown timer "//trimstr(name)) ) goto 90
 
       test = ( timer%state /= state_running )
-      if ( error(test,"The timer '"//trimstr(name)//"' was not running before stopping") ) goto 90
+      if ( error(FLERR,test,"The timer '"//trimstr(name)//"' was not running before stopping") ) goto 90
 
       timer%state = state_stopped
       timer%ncalls = timer%ncalls + 1
       timer%elapsed_time = timer%elapsed_time - timer%start_time + current_time_()
 
-90    if ( error("Exiting timing_mod::stop_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::stop_timer_()") ) continue
 
    end subroutine stop_timer_
 
@@ -196,15 +196,15 @@ contains
       timer => get_timer_(name, create_timer = .false.)
 
       test = ( .not.associated( timer ) )
-      if ( error(test,"Unknown timer "//trimstr(name)) ) goto 90
+      if ( error(FLERR,test,"Unknown timer "//trimstr(name)) ) goto 90
 
       test = ( timer%state /= state_running )
-      if ( error(test,"The timer '"//trimstr(name)//"' was not running before being paused") ) goto 90
+      if ( error(FLERR,test,"The timer '"//trimstr(name)//"' was not running before being paused") ) goto 90
 
       timer%state = state_paused
       timer%elapsed_time = timer%elapsed_time - timer%start_time + current_time_()
 
-90    if ( error("Exiting timing_mod::pause_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::pause_timer_()") ) continue
 
    end subroutine
 
@@ -221,15 +221,15 @@ contains
       timer => get_timer_(name, create_timer = .false.)
 
       test = ( .not.associated( timer ) )
-      if ( error(test,"Unknown timer "//trimstr(name)) ) goto 90
+      if ( error(FLERR,test,"Unknown timer "//trimstr(name)) ) goto 90
 
       test = ( timer%state /= state_paused )
-      if ( error(test,"The timer '"//trimstr(name)//"' was not paused before resuming") ) goto 90
+      if ( error(FLERR,test,"The timer '"//trimstr(name)//"' was not paused before resuming") ) goto 90
 
       timer%state = state_running
       timer%elapsed_time = current_time_()
 
-90    if ( error("Exiting timing_mod::resume_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::resume_timer_()") ) continue
 
    end subroutine
 
@@ -246,14 +246,14 @@ contains
       timer => get_timer_(name, create_timer = .false.)
 
       test = ( .not.associated( timer ) )
-      if ( error(test,"Unknown timer "//trimstr(name)) ) goto 90
+      if ( error(FLERR,test,"Unknown timer "//trimstr(name)) ) goto 90
 
       timer%state = state_stopped
       timer%ncalls = 0
       timer%start_time = 0.0d0
       timer%elapsed_time = 0.0d0
 
-90    if ( error("Exiting timing_mod::reset_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::reset_timer_()") ) continue
 
    end subroutine
 
@@ -305,7 +305,7 @@ contains
          end if
       end if
 
-90    if ( error("Exiting timing_mod::get_timer_()") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::get_timer_()") ) continue
 
    end function get_timer_
 
@@ -335,8 +335,8 @@ contains
 
       call binary_tree_insert_(root,item,success)
 
-      if ( error((.not.success),"There was a problem inserting the '"//trimstr(name)//"' timer") ) continue
-90    if ( error("Exiting timing_mod::add_timer_()") ) continue
+      if ( error(FLERR,(.not.success),"There was a problem inserting the '"//trimstr(name)//"' timer") ) continue
+90    if ( error(FLERR,"Exiting timing_mod::add_timer_()") ) continue
 
    end function add_timer_
 

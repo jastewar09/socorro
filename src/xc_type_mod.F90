@@ -256,7 +256,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"XC_TYPE")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: XC_TYPE block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: XC_TYPE block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -271,7 +271,7 @@
           case ("hybrid","h")
             xct%o%dependence = FD_HYBRID
           case default
-            if (error(.true.,"ERROR: xctype_dependence was not recognized")) goto 100
+            if (error(FLERR,.true.,"ERROR: xctype_dependence was not recognized")) goto 100
           end select
         else
           if (present(restf)) then
@@ -305,7 +305,7 @@
             case ("libxc","l")
               xct%o%ddf_source = DDFS_LIBXC
             case default
-              if (error(.true.,"ERROR: xctype_ddf_source was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: xctype_ddf_source was not recognized")) goto 100
             end select
           else
             if (present(restf)) then
@@ -334,17 +334,17 @@
           if (found) then
             select case(trim(tag))
             case ("native","n")
-              if (error(.true.,"ERROR: native xctype_ddf_source is not valid with hybrid functionals")) goto 100
+              if (error(FLERR,.true.,"ERROR: native xctype_ddf_source is not valid with hybrid functionals")) goto 100
             case ("libxc","l")
               xct%o%ddf_source = DDFS_LIBXC
             case default
-              if (error(.true.,"ERROR: xctype_ddf_source was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: xctype_ddf_source was not recognized")) goto 100
             end select
           else
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"DDF_SOURCE")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR: DDF_SOURCE tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DDF_SOURCE tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_long
                 ndata = 1
@@ -420,7 +420,7 @@
                 if (present(restf)) then
                   if (i_access(restf)) tios = findfirsttag(restf,"EXCHANGE")
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                  if (error(tios == TAG_NOT_FOUND,"ERROR: EXCHANGE tag was not found")) goto 100
+                  if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: EXCHANGE tag was not found")) goto 100
                   if (i_access(restf)) then
                     dsize = sizeof_long
                     ndata = 1
@@ -430,7 +430,7 @@
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%exchange)
                   if (i_access(restf)) tios = findfirsttag(restf,"CORRELATION")
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                  if (error(tios == TAG_NOT_FOUND,"ERROR: CORRELATION tag was not found")) goto 100
+                  if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CORRELATION tag was not found")) goto 100
                   if (i_access(restf)) then
                     dsize = sizeof_long
                     ndata = 1
@@ -439,7 +439,7 @@
                   end if
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%correlation)
                 else
-                  if (error(.true.,"ERROR: No exchange-correlation information was found")) goto 100
+                  if (error(FLERR,.true.,"ERROR: No exchange-correlation information was found")) goto 100
                 end if
               end if
             end if
@@ -457,34 +457,34 @@
           ! functional, exchange and correlation
           call arg("xctype_functional",xct%o%functional,found)
           if (found) then
-            if (error(.not.libxc_xc_is_valid_i(xct%o%functional),'ERROR: xctype_functional is not valid')) goto 100
+            if (error(FLERR,.not.libxc_xc_is_valid_i(xct%o%functional),'ERROR: xctype_functional is not valid')) goto 100
             select case (xc_f90_family_from_id(xct%o%functional))
             case (XC_FAMILY_LDA,XC_FAMILY_GGA)
-              if (error(xct%o%dependence == FD_HYBRID,"ERROR: xctype_functional is not valid for a hybrid calculation")) goto 100
+              if (error(FLERR,xct%o%dependence == FD_HYBRID,"ERROR: xctype_functional is not valid for a hybrid calculation")) goto 100
             case (XC_FAMILY_HYB_GGA)
-              if (error(xct%o%dependence == FD_DENSITY,"ERROR: xctype_functional is only valid for a hybrid calculation")) goto 100
+              if (error(FLERR,xct%o%dependence == FD_DENSITY,"ERROR: xctype_functional is only valid for a hybrid calculation")) goto 100
             end select
           else
             call arg("xctype_exchange",xct%o%exchange,found)
             if (found) then
-              if (error(.not.libxc_x_is_valid_i(xct%o%exchange),'ERROR: xctype_exchange is not valid')) goto 100
+              if (error(FLERR,.not.libxc_x_is_valid_i(xct%o%exchange),'ERROR: xctype_exchange is not valid')) goto 100
               select case (xc_f90_family_from_id(xct%o%exchange))
               case (XC_FAMILY_HYB_GGA)
-                if (error(xct%o%dependence == FD_DENSITY,"ERROR: xctype_exchange is only valid for a hybrid calculation")) goto 100
+                if (error(FLERR,xct%o%dependence == FD_DENSITY,"ERROR: xctype_exchange is only valid for a hybrid calculation")) goto 100
               end select
               call arg("xctype_correlation",xct%o%correlation,found)
               if (found) then
-                if (error(.not.libxc_c_is_valid_i(xct%o%correlation),'ERROR: xctype_correlation is not valid')) goto 100
+                if (error(FLERR,.not.libxc_c_is_valid_i(xct%o%correlation),'ERROR: xctype_correlation is not valid')) goto 100
               end if
               select case (xc_f90_family_from_id(xct%o%correlation))
               case (XC_FAMILY_HYB_GGA)
-                if (error(.true.,"ERROR: not prepared for a xctype_correlation in XC_FAMILY_HYB_GGA")) goto 100
+                if (error(FLERR,.true.,"ERROR: not prepared for a xctype_correlation in XC_FAMILY_HYB_GGA")) goto 100
               end select
             else
               if (present(restf)) then
                 if (i_access(restf)) tios = findfirsttag(restf,"FUNCTIONAL")
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                if (error(tios == TAG_NOT_FOUND,"ERROR: FUNCTIONAL tag was not found")) goto 100
+                if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: FUNCTIONAL tag was not found")) goto 100
                 if (i_access(restf)) then
                   dsize = sizeof_long
                   ndata = 1
@@ -494,7 +494,7 @@
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%functional)
                 if (i_access(restf)) tios = findfirsttag(restf,"EXCHANGE")
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                if (error(tios == TAG_NOT_FOUND,"ERROR: EXCHANGE tag was not found")) goto 100
+                if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: EXCHANGE tag was not found")) goto 100
                 if (i_access(restf)) then
                   dsize = sizeof_long
                   ndata = 1
@@ -504,7 +504,7 @@
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%exchange)
                 if (i_access(restf)) tios = findfirsttag(restf,"CORRELATION")
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                if (error(tios == TAG_NOT_FOUND,"ERROR: CORRELATION tag was not found")) goto 100
+                if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CORRELATION tag was not found")) goto 100
                 if (i_access(restf)) then
                   dsize = sizeof_long
                   ndata = 1
@@ -513,7 +513,7 @@
                 end if
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%correlation)
               else
-                if (error(.true.,"ERROR: exchange-correlation information was not found")) goto 100
+                if (error(FLERR,.true.,"ERROR: exchange-correlation information was not found")) goto 100
               end if
             end if
           end if
@@ -602,7 +602,7 @@
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"DERIVATIVE_METHOD")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR: DERIVATIVE_METHOD tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: DERIVATIVE_METHOD tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_long
                 ndata = 1
@@ -637,13 +637,13 @@
             case ("screened","hse","sx")
               xct%o%coulomb_kernel = CK_SCREENED
             case default
-              if (error(.true.,"ERROR: exx_coulomb_kernel was not recognized")) goto 100
+              if (error(FLERR,.true.,"ERROR: exx_coulomb_kernel was not recognized")) goto 100
             end select
           else
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"COULOMB_KERNEL")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR:COULOMB_KERNEL tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR:COULOMB_KERNEL tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_long
                 ndata = 1
@@ -668,10 +668,10 @@
               case ("structure_dependent","sd")
                 xct%o%auxiliary_type = AT_STRUCTURE_DEPENDENT
               case ("structure_independent","si")
-                if (error(.true.,"ERROR: structure independent auxiliary_type is not currently supported")) goto 100
+                if (error(FLERR,.true.,"ERROR: structure independent auxiliary_type is not currently supported")) goto 100
                 xct%o%auxiliary_type = AT_STRUCTURE_INDEPENDENT
               case default
-                if (error(.true.,"ERROR: exx_auxiliary_type was not recognized")) goto 100
+                if (error(FLERR,.true.,"ERROR: exx_auxiliary_type was not recognized")) goto 100
               end select
             else
               if (present(restf)) then
@@ -705,7 +705,7 @@
                 case ("fcc")
                   xct%o%sd_aux_form = SDF_FCC
                 case default
-                  if (error(.true.,"ERROR: exx_sd_aux_form was not recognized")) goto 100
+                  if (error(FLERR,.true.,"ERROR: exx_sd_aux_form was not recognized")) goto 100
                 end select
               else
                 if (present(restf)) then
@@ -721,13 +721,13 @@
                     if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%sd_aux_form)
                   end if
                 else
-                  if (error(.true.,"ERROR: exx_sd_aux_form was not found")) goto 100
+                  if (error(FLERR,.true.,"ERROR: exx_sd_aux_form was not found")) goto 100
                 end if
               end if
 
             case (AT_STRUCTURE_INDEPENDENT)
 
-              if (error(.true.,"ERROR: structure_independent auxiliary forms are not currently available")) goto 100
+              if (error(FLERR,.true.,"ERROR: structure_independent auxiliary forms are not currently available")) goto 100
 
               ! Determine the structure-independent form
               call arglc("exx_si_aux_form",tag,found)
@@ -738,7 +738,7 @@
                 case ("crg")
                   xct%o%si_aux_form = SIF_CRG
                 case default
-                  if (error(.true.,"ERROR: exx_si_aux_form was not recognized")) goto 100
+                  if (error(FLERR,.true.,"ERROR: exx_si_aux_form was not recognized")) goto 100
                 end select
               else
                 if (present(restf)) then
@@ -834,7 +834,7 @@
 
               !  Beginning of code for libxc 1.x.x
               !  if (xct%o%coulomb_kernel == CK_SCREENED) then
-              !    if (error(.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
+              !    if (error(FLERR,.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
               !  else
               !    call xc_f90_hyb_gga_exx_coef(xc_func,xct%o%hybrid_mixing)
               !  end if
@@ -842,7 +842,7 @@
 
               !  Code for earlier versions of libxc 2.x.x
               !  if (xct%o%coulomb_kernel == CK_SCREENED) then
-              !    if (error(.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
+              !    if (error(FLERR,.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
               !  else
               !    call xc_f90_hyb_exx_coef(xc_func,xct%o%hybrid_mixing)
               !  end if
@@ -853,16 +853,16 @@
               xct%o%omega_orb = omega
               xct%o%omega_den = omega
               if ((alpha > 0.0_double) .and. .not. (beta > 0.0_double)) then
-                if (error(xct%o%coulomb_kernel == CK_SCREENED,"ERROR: functional is inconsistent with screeened exchange")) goto 100
+                if (error(FLERR,xct%o%coulomb_kernel == CK_SCREENED,"ERROR: functional is inconsistent with screeened exchange")) goto 100
                 xct%o%hybrid_mixing = alpha
               elseif ((beta > 0.0_double) .and. .not. (alpha > 0.0_double)) then 
-                if (error(xct%o%coulomb_kernel == CK_NORMAL,"ERROR: functional requires screened exchange")) goto 100         
-                if (error(xct%o%coulomb_kernel == CK_ATTENUATED,"ERROR: functional requires screened exchange")) goto 100
+                if (error(FLERR,xct%o%coulomb_kernel == CK_NORMAL,"ERROR: functional requires screened exchange")) goto 100         
+                if (error(FLERR,xct%o%coulomb_kernel == CK_ATTENUATED,"ERROR: functional requires screened exchange")) goto 100
                 xct%o%hybrid_mixing = beta
               elseif ((beta > 0.0_double) .and. (alpha > 0.0_double)) then
-                if (error(.true.,"ERROR: functionals with both HF exchange and screened exchange are not implemented")) goto 100
+                if (error(FLERR,.true.,"ERROR: functionals with both HF exchange and screened exchange are not implemented")) goto 100
               else
-                if (error(.true.,"ERROR: mixing coefficents indicate functional is not a hybrid")) goto 100
+                if (error(FLERR,.true.,"ERROR: mixing coefficents indicate functional is not a hybrid")) goto 100
               end if
               !  End of code for later versions of libxc 2.x.x
 
@@ -875,7 +875,7 @@
 
               !  Beginning of code for libxc 1.x.x
               !  if (xct%o%coulomb_kernel == CK_SCREENED) then
-              !    if (error(.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
+              !    if (error(FLERR,.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
               !  else
               !    call xc_f90_hyb_gga_exx_coef(xc_func,xct%o%hybrid_mixing)
               !  end if
@@ -883,7 +883,7 @@
 
               !  Code for earlier versions of libxc 2.x.x
               !  if (xct%o%coulomb_kernel == CK_SCREENED) then
-              !    if (error(.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
+              !    if (error(FLERR,.not. have_defaults ,"ERROR: Screened exchange parameters are not known for this functional")) goto 100
               !  else
               !    call xc_f90_hyb_exx_coef(xc_func,xct%o%hybrid_mixing)
               !  end if
@@ -894,16 +894,16 @@
               xct%o%omega_orb = omega
               xct%o%omega_den = omega
               if ((alpha > 0.0_double) .and. .not. (beta > 0.0_double)) then
-                if (error(xct%o%coulomb_kernel == CK_SCREENED,"ERROR: functional is inconsistent with screeened exchange")) goto 100
+                if (error(FLERR,xct%o%coulomb_kernel == CK_SCREENED,"ERROR: functional is inconsistent with screeened exchange")) goto 100
                 xct%o%hybrid_mixing = alpha
               elseif ((beta > 0.0_double) .and. .not. (alpha > 0.0_double)) then
-                if (error(xct%o%coulomb_kernel == CK_NORMAL,"ERROR: functional requires screened exchange")) goto 100
-                if (error(xct%o%coulomb_kernel == CK_ATTENUATED,"ERROR: functional requires screened exchange")) goto 100
+                if (error(FLERR,xct%o%coulomb_kernel == CK_NORMAL,"ERROR: functional requires screened exchange")) goto 100
+                if (error(FLERR,xct%o%coulomb_kernel == CK_ATTENUATED,"ERROR: functional requires screened exchange")) goto 100
                 xct%o%hybrid_mixing = beta
               elseif ((beta > 0.0_double) .and. (alpha > 0.0_double)) then
-                if (error(.true.,"ERROR: functionals with both HF exchange and screened exchange are not implemented")) goto 100
+                if (error(FLERR,.true.,"ERROR: functionals with both HF exchange and screened exchange are not implemented")) goto 100
               else
-                if (error(.true.,"ERROR: mixing coefficents indicate functional is not a hybrid")) goto 100
+                if (error(FLERR,.true.,"ERROR: mixing coefficents indicate functional is not a hybrid")) goto 100
               end if
               !  End of code for later versions of libxc 2.x.x
 
@@ -912,13 +912,13 @@
               call arg("xctype_hybrid_mixing",xct%o%hybrid_mixing,found)
               if (found) then
                 if ((xct%o%hybrid_mixing < 0.0_double) .or. (xct%o%hybrid_mixing > 1.0_double)) then
-                  if (error(.true.,"ERROR: xctype_hybrid_mixing is not valid")) goto 100
+                  if (error(FLERR,.true.,"ERROR: xctype_hybrid_mixing is not valid")) goto 100
                 end if
               else
                 if (present(restf)) then
                   if (i_access(restf)) tios = findfirsttag(restf,"HYBRID_MIXING")
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-                  if (error(tios == TAG_NOT_FOUND,"ERROR: HYBRID_MIXING tag was not found")) goto 100
+                  if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: HYBRID_MIXING tag was not found")) goto 100
                   if (i_access(restf)) then
                     dsize = sizeof_double
                     ndata = 1
@@ -926,7 +926,7 @@
                   end if
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%hybrid_mixing)
                 else
-                  if (error(.not.found,"ERROR: hybrid-mixing information was not found")) goto 100
+                  if (error(FLERR,.not.found,"ERROR: hybrid-mixing information was not found")) goto 100
                 end if
               end if
             end select
@@ -937,14 +937,14 @@
                if (found_omega_orb) then
                   call warn("Warning: overriding default orbital screening length")
                   if (xct%o%omega_orb < 0.0_double) then
-                     if (error(.true.,"ERROR: omega_orb, screening length < 0. Not valid")) goto 100
+                     if (error(FLERR,.true.,"ERROR: omega_orb, screening length < 0. Not valid")) goto 100
                   end if
                end if
                call arg("xctype_omega_den", xct%o%omega_den, found_omega_den)
                if (found_omega_den) then
                   call warn("Warning: overriding default density screening length")
                   if (xct%o%omega_den < 0.0_double) then
-                     if (error(.true.,"ERROR: omega_den, screening length < 0. Not valid")) goto 100
+                     if (error(FLERR,.true.,"ERROR: omega_den, screening length < 0. Not valid")) goto 100
                   end if
                end if
             end if
@@ -960,7 +960,7 @@
               case("f","false",".false.","n","no","off")
                  xct%o%uses_nlcc = .false.
               case default
-                 if (error(.true.,"Unrecognized argument to xctype_nlcc in argvf")) goto 200
+                 if (error(FLERR,.true.,"Unrecognized argument to xctype_nlcc in argvf")) goto 200
               end select
           else
               xct%o%uses_nlcc = .false.
@@ -975,7 +975,7 @@
 
 200     if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit xc_type_mod::constructor_xc")) continue
+        if (error(FLERR,"Exit xc_type_mod::constructor_xc")) continue
 
       end function 
 
@@ -1507,7 +1507,7 @@
         call glean(thy(xct))
         call glean(thy(nrestf))
 
-        if (error("Exit xc_type_mod::write_restart_xct")) continue
+        if (error(FLERR,"Exit xc_type_mod::write_restart_xct")) continue
 
       end subroutine
 
@@ -1599,18 +1599,18 @@
           case ("am05")
             f = E_AM05
           case default
-            if (error(.true.,"ERROR: unknown exchange type")) continue
+            if (error(FLERR,.true.,"ERROR: unknown exchange type")) continue
           end select
         case (2)
           select case (trim(tag))
           case ("lsda")
             f = E_LSDA
           case default
-            if (error(.true.,"ERROR: unknown exchange type")) continue
+            if (error(FLERR,.true.,"ERROR: unknown exchange type")) continue
           end select
         end select
 
-        if (error("Exit xc_type_mod::exchange_i")) continue
+        if (error(FLERR,"Exit xc_type_mod::exchange_i")) continue
 
       end function
 

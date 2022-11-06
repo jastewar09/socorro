@@ -90,7 +90,7 @@
          call glean(thy(lg))
          call glean(thy(sg))
 
-900      if ( error("Exit check_symmetry") ) continue
+900      if ( error(FLERR,"Exit check_symmetry") ) continue
          if ( .not.error() ) call stop_timer("check_symmetry: total time")
 
       end subroutine

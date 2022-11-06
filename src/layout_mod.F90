@@ -247,7 +247,7 @@
         real(double) :: recip_space_volume
         real(double), dimension(3) :: b1, b2, b3
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           lay%ref = 0
           allocate( lay%o )
           lay%o%ref = 0
@@ -268,7 +268,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"LAYOUT")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: LAYOUT block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: LAYOUT block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -278,19 +278,19 @@
         else
           call arg("den_cutoff",lay%o%cutoff,found)
           if (found) then
-            if (error(lay%o%cutoff <= 0.0_double,"ERROR: den_cutoff <= 0")) goto 100
+            if (error(FLERR,lay%o%cutoff <= 0.0_double,"ERROR: den_cutoff <= 0")) goto 100
           else
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"CUTOFF")
               if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-              if (error(tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
+              if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CUTOFF tag was not found")) goto 100
               if (i_access(restf)) then
                 dsize = sizeof_double ; ndata = 1
                 call readf(lay%o%cutoff,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
               end if
               if (i_comm(restf)) call broadcast(FILE_SCOPE,lay%o%cutoff)
             else
-              if (error(.true.,"ERROR: den_cutoff was not found")) goto 100
+              if (error(FLERR,.true.,"ERROR: den_cutoff was not found")) goto 100
             end if
           end if
         end if
@@ -328,7 +328,7 @@
 200     call glean(thy(lat))
         if (present(restf)) call glean(thy(restf))
 
-999     if (error("Exit layout_mod::constructor_lay")) continue
+999     if (error(FLERR,"Exit layout_mod::constructor_lay")) continue
 
       end function
 
@@ -547,7 +547,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::alloc_l_lay")) continue
+        if (error(FLERR,"Exit layout_mod::alloc_l_lay")) continue
       end subroutine
 
       subroutine alloc_i_lay(data,lay,tp,sc)
@@ -578,7 +578,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::alloc_i_lay")) continue
+        if (error(FLERR,"Exit layout_mod::alloc_i_lay")) continue
       end subroutine
 
       subroutine alloc_r_lay(data,lay,tp,sc)
@@ -599,7 +599,7 @@
         case (S_TYPE)
           allocate( data(lay%o%dims(1),lay%o%dims(2),lay%o%dims(3)) )
         case (D_TYPE)
-          if (error(.not.present(sc),'Error: Must include scope in argument for D_TYPE alloc')) goto 100
+          if (error(FLERR,.not.present(sc),'Error: Must include scope in argument for D_TYPE alloc')) goto 100
           select case (sc)
           case (CONFIG)
             allocate( data(lay%o%config%locdims(1),lay%o%config%locdims(2),lay%o%config%locdims(3)) )
@@ -610,7 +610,7 @@
           end select
         end select
         call glean(thy(lay))
-100     if (error("Exit layout_mod::alloc_r_lay")) continue
+100     if (error(FLERR,"Exit layout_mod::alloc_r_lay")) continue
       end subroutine
 
       subroutine alloc_c_lay(data,lay,tp,sc)
@@ -641,7 +641,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::alloc_c_lay")) continue
+        if (error(FLERR,"Exit layout_mod::alloc_c_lay")) continue
       end subroutine
 
       subroutine alloc_mr_lay(data,lay,m,tp,sc)
@@ -672,7 +672,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::alloc_mr_lay")) continue
+        if (error(FLERR,"Exit layout_mod::alloc_mr_lay")) continue
       end subroutine
 
       subroutine alloc_mc_lay(data,lay,m,tp,sc)
@@ -703,7 +703,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::alloc_mc_lay")) continue
+        if (error(FLERR,"Exit layout_mod::alloc_mc_lay")) continue
       end subroutine
 
       function consistent_data_r(data,lay,tp,sc) result(c)
@@ -792,7 +792,7 @@
         call allreduce(sc,MPI_SUM,tmp,odata)
         if (allocated( tmp )) deallocate( tmp )
         call glean(thy(lay))
-        if (error("Exit layout_mod::gather_i_lay")) continue
+        if (error(FLERR,"Exit layout_mod::gather_i_lay")) continue
       end subroutine
 
       subroutine gather_r_lay(lay,sc,idata,odata)
@@ -827,7 +827,7 @@
         call allreduce(sc,MPI_SUM,tmp,odata)
         if (allocated( tmp )) deallocate( tmp )
         call glean(thy(lay))
-        if (error("Exit layout_mod::gather_r_lay")) continue
+        if (error(FLERR,"Exit layout_mod::gather_r_lay")) continue
       end subroutine
 
       subroutine gather_c_lay(lay,sc,idata,odata)
@@ -862,7 +862,7 @@
         call allreduce(sc,MPI_SUM,tmp,odata)
         if (allocated( tmp )) deallocate( tmp )
         call glean(thy(lay))
-        if (error("Exit layout_mod::gather_c_lay")) continue
+        if (error(FLERR,"Exit layout_mod::gather_c_lay")) continue
       end subroutine
 
       subroutine scatter_i_lay(lay,sc,idata,odata)
@@ -969,7 +969,7 @@
         data = c1
         nullify( c1 )
         call glean(thy(lay))
-        if (error("Exit layout_mod::fft_serial_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fft_serial_lay")) continue
       end subroutine
 
       subroutine fft_distributed_sc_lay(lay,sc,data,dir)
@@ -994,7 +994,7 @@
           call fft_distributed(data,dir,lay%o%kgroup%dplan)
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::fft_distributed_sc_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fft_distributed_sc_lay")) continue
       end subroutine
 
       subroutine mesh_lay(x,y,z,lay,tp,sc)
@@ -1014,9 +1014,9 @@
         integer, dimension(3) :: d, i, o, s
         real(double), dimension(3) :: rc, rl, rd
 
-        if (error(associated(x),"Error: x data associated, must be nullified")) goto 100
-        if (error(associated(y),"Error: y data associated, must be nullified")) goto 100
-        if (error(associated(z),"Error: z data associated, must be nullified")) goto 100
+        if (error(FLERR,associated(x),"Error: x data associated, must be nullified")) goto 100
+        if (error(FLERR,associated(y),"Error: y data associated, must be nullified")) goto 100
+        if (error(FLERR,associated(z),"Error: z data associated, must be nullified")) goto 100
         call my(lay)
         select case (tp)
         case (S_TYPE)
@@ -1053,7 +1053,7 @@
         end do
         end do
         call glean(thy(lay))
-100     if (error("Exit layout_mod::mesh_lay")) continue
+100     if (error(FLERR,"Exit layout_mod::mesh_lay")) continue
       end subroutine
 
       function a2rl_lay(a,lay,tp,sc) result(rl)
@@ -1091,7 +1091,7 @@
         i = a + s - o
         rl = real(i,double)/rd
         call glean(thy(lay))
-        if (error("Exit layout_mod::a2rl_lay")) continue
+        if (error(FLERR,"Exit layout_mod::a2rl_lay")) continue
       end function
 
       function a2rc_lay(a,lay,tp,sc) result(rc)
@@ -1117,7 +1117,7 @@
         end if
         rc = lat2r(lay%o%lattice,rl)
         call glean(thy(lay))
-        if (error("Exit layout_mod::a2rc_lay")) continue
+        if (error(FLERR,"Exit layout_mod::a2rc_lay")) continue
       end function
 
       function rl2a_lay(rl,lay,tp,sc) result(a)
@@ -1156,7 +1156,7 @@
         i = nint(rl*rd) - s + o
         a = modulo(i,d)
         call glean(thy(lay))
-        if (error("Exit layout_mod::rl2a_lay")) continue
+        if (error(FLERR,"Exit layout_mod::rl2a_lay")) continue
       end function
 
       function rc2a_lay(rc,lay,tp,sc) result(a)
@@ -1181,7 +1181,7 @@
           a = rl2a(rl,lay,tp)
         end if
         call glean(thy(lay))
-        if (error("Exit layout_mod::rc2a_lay")) continue
+        if (error(FLERR,"Exit layout_mod::rc2a_lay")) continue
       end function
 
       function ad2as_lay(ad,lay,sc) result(as)
@@ -1303,7 +1303,7 @@
         end do
         call glean(thy(lat))
         call glean(thy(lay))
-        if (error("Exit layout_mod::fmesh_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fmesh_lay")) continue
       end subroutine
 
       function a2fl_lay(a,lay,tp,sc) result(fl)
@@ -1348,7 +1348,7 @@
         i = a + s - o
         fl = modulo((i + n),m) - n
         call glean(thy(lay))
-        if (error("Exit layout_mod::a2fl_lay")) continue
+        if (error(FLERR,"Exit layout_mod::a2fl_lay")) continue
       end function
 
       function a2fc_lay(a,lay,tp,sc) result(fc)
@@ -1375,7 +1375,7 @@
         rfl = real(fl,double)
         fc = lat2f(lay%o%lattice,rfl)
         call glean(thy(lay))
-        if (error("Exit layout_mod::a2fc_lay")) continue
+        if (error(FLERR,"Exit layout_mod::a2fc_lay")) continue
       end function
 
       function a2f2_lay(a,lay,tp,sc) result(f2)
@@ -1400,7 +1400,7 @@
         end if
         f2 = fc(1)**2 + fc(2)**2 + fc(3)**2
         call glean(thy(lay))
-        if (error("Exit layout_mod::a2f2_lay")) continue
+        if (error(FLERR,"Exit layout_mod::a2f2_lay")) continue
       end function
 
       function fl2a_lay(fl,lay,tp,sc) result(a)
@@ -1434,7 +1434,7 @@
         o = lay%o%fft_origin
         a = modulo(fl,d) + o - s
         call glean(thy(lay))
-        if (error("Exit layout_mod::fl2a_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fl2a_lay")) continue
       end function
 
       function fc2a_lay(fc,lay,tp,sc) result(a)
@@ -1460,7 +1460,7 @@
           a = fl2a(fl,lay,tp)
         end if
         call glean(thy(lay))
-        if (error("Exit layout_mod::fc2a_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fc2a_lay")) continue
       end function
 
       subroutine fdel_lay(del,lay,tp,sc)
@@ -1488,7 +1488,7 @@
         del = x**2 + y**2 + z**2
         deallocate( x, y, z )
         call glean(thy(lay))
-        if (error("Exit layout_mod::fdel_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fdel_lay")) continue
       end subroutine
 
       subroutine fdelinv_lay(deli,lay,tp,sc)
@@ -1535,7 +1535,7 @@
           end select
         end select
         call glean(thy(lay))
-        if (error("Exit layout_mod::fdelinv_lay")) continue
+        if (error(FLERR,"Exit layout_mod::fdelinv_lay")) continue
       end subroutine
 
       subroutine filter_r_lay(data,lay,sc)
@@ -1768,7 +1768,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit layout_mod::diary_lay")) continue
+        if (error(FLERR,"Exit layout_mod::diary_lay")) continue
 
       end subroutine
 
@@ -1801,7 +1801,7 @@
         call glean(thy(lay))
         call glean(thy(nrestf))
 
-        if (error("Exit layout_mod::write_restart_lay")) continue
+        if (error(FLERR,"Exit layout_mod::write_restart_lay")) continue
 
       end subroutine
 

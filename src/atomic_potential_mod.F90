@@ -137,7 +137,7 @@
           call bequeath(thy(ap%ap_paw))
         end select
 
-100     if (error("Exit atomic_potential_mod::constructor_ap")) continue
+100     if (error(FLERR,"Exit atomic_potential_mod::constructor_ap")) continue
 
       end function
 
@@ -157,7 +157,7 @@
         case (PAW)
           call update(ap%ap_paw,x_atomic_density_paw(ad),hap)
         end select
-        if (error("Exit atomic_potential_mod::update_ap")) continue
+        if (error(FLERR,"Exit atomic_potential_mod::update_ap")) continue
       end subroutine
 
       subroutine my_ap(ap)

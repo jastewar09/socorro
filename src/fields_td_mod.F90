@@ -217,7 +217,7 @@
         call my(ext)
 
         if (present(el) .and. present(restf)) then
-           if (error(.true.,"Error: either electrons OR restartfile must be passed but not both")) goto 400
+           if (error(FLERR,.true.,"Error: either electrons OR restartfile must be passed but not both")) goto 400
         endif
 
         if (present(el)) call my(el)
@@ -268,7 +268,7 @@
         call my(atomic_hartree_density(fd%o%aden,lay),fd%o%ahd) ; if (error()) goto 100
 
         ! hartree potential and energy
-        gr1 = fd%o%gden ; if (error ("Error - gr1 = fd%o%gden for hartree potential and energy")) goto 100
+        gr1 = fd%o%gden ; if (error(FLERR,"Error - gr1 = fd%o%gden for hartree potential and energy")) goto 100
         call saxpby(1.0_double,gr1,1.0_double,fd%o%ahd)
         call take(c1,gr1,CDF_KIND)
         call alloc(c2,lay,D_TYPE,MOD_SCOPE)
@@ -338,7 +338,7 @@
         if (present(el)) call glean(thy(el))
         if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit fields_td_mod::constructor_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::constructor_fd")) continue
 
 400     if (.not.error()) call stop_timer("fields_td: constructor")
 
@@ -540,7 +540,7 @@
         call glean(thy(ext))
         call glean(thy(el))
 
-        if (error("Exit fields_td_mod::update_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::update_fd")) continue
 
         if (.not.error()) call stop_timer("fields_td: update")
 
@@ -711,7 +711,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_td_mod::forces_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::forces_fd")) continue
 
       end subroutine
 
@@ -742,7 +742,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_td_mod::pressure_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::pressure_fd")) continue
 
       end subroutine
 
@@ -781,7 +781,7 @@
 
         call glean(thy(fd))
 
-        if (error("Exit fields_td_mod::stress_tensor_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::stress_tensor_fd")) continue
 
       end subroutine
 
@@ -796,11 +796,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%gden)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%gden)),"ERROR: different layouts")) goto 100
         g = f%o%gden
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_smooth_density_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_smooth_density_fd")) continue
       end subroutine
 
       subroutine put_local_potential_fd(f,g)
@@ -814,11 +814,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%total)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%total)),"ERROR: different layouts")) goto 100
         g = f%o%total
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_local_potential_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_local_potential_fd")) continue
       end subroutine
 
       subroutine put_hartree_potential_fd(f,g)
@@ -832,11 +832,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%hap)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%hap)),"ERROR: different layouts")) goto 100
         g = f%o%hap
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_hartree_potential_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_hartree_potential_fd")) continue
       end subroutine
 
       subroutine put_xc_potential_fd(f,g)
@@ -850,11 +850,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%xcp)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%xcp)),"ERROR: different layouts")) goto 100
         g = f%o%xcp
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_xc_potential_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_xc_potential_fd")) continue
       end subroutine
 
       subroutine put_atomic_xc_density_fd(f,g)
@@ -868,11 +868,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%axcd)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%axcd)),"ERROR: different layouts")) goto 100
         g = f%o%axcd
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_atomic_xc_density_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_atomic_xc_density_fd")) continue
       end subroutine
 
       subroutine put_atomic_hartree_density_fd(f,g)
@@ -886,11 +886,11 @@
 !cod$
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%ahd)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%ahd)),"ERROR: different layouts")) goto 100
         g = f%o%ahd
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_atomic_hartree_density_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_atomic_hartree_density_fd")) continue
       end subroutine
 
       subroutine put_atomic_grid_potential_fd(f,g)
@@ -904,11 +904,11 @@
 !cod$ 
         call my(f)
         call my(g)
-        if (error(x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%agp)),"ERROR: different layouts")) goto 100
+        if (error(FLERR,x_ghost(x_layout(g)) /= x_ghost(x_layout(f%o%agp)),"ERROR: different layouts")) goto 100
         g = f%o%agp
 100     call glean(thy(f))
         call glean(thy(g))
-        if (error("Exit fields_td_mod::put_atomic_grid_potential_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::put_atomic_grid_potential_fd")) continue
       end subroutine
 
       function max_energy_fd(fd) result(e)
@@ -1032,7 +1032,7 @@
         call glean(thy(fd))
         call glean(thy(nrestf))
 
-        if (error("Exit fields_td_mod::write_restart_fd")) continue
+        if (error(FLERR,"Exit fields_td_mod::write_restart_fd")) continue
 
       end subroutine
 
@@ -1048,7 +1048,7 @@
         call filter(fdr%ck,lay,MOD_SCOPE)
 
         call glean(thy(lay))
-        if (error("Exit fields_td_mod::form_coulomb_kernel_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::form_coulomb_kernel_i")) continue
 
       end subroutine
 
@@ -1067,7 +1067,7 @@
 
         if (i_access(restf)) tios = findfirsttag(restf,"FIELDS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 200
         if (i_access(restf)) call openblock(restf)
 
         call my(atomic_density(x_atomic_operators(ext),restf),fdr%aden) ; if (error()) goto 100
@@ -1089,7 +1089,7 @@
 200     call glean(thy(ext))
         call glean(thy(restf))
 
-        if (error("Exit fields_td_mod::restart_portal_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::restart_portal_i")) continue
 
       end subroutine
 
@@ -1128,11 +1128,11 @@
           if (.not.found) fdr%charge_state = 0.0_double
         case ("integer_ratio")
           call arg("charge_state_ratio",csr,found)
-          if (error(.not.found,"ERROR: charge_state_ratio was not found")) goto 200
-          if (error(csr(2) == 0,"ERROR: denominator = 0")) goto 200
+          if (error(FLERR,.not.found,"ERROR: charge_state_ratio was not found")) goto 200
+          if (error(FLERR,csr(2) == 0,"ERROR: denominator = 0")) goto 200
           fdr%charge_state = real(csr(1),double)/real(csr(2),double)
         case default
-          if (error(.true.,"ERROR: charge_state_mode was not recognized")) goto 200
+          if (error(FLERR,.true.,"ERROR: charge_state_mode was not recognized")) goto 200
         end select
 
         if (fdr%charge_state == 0.0_double) then
@@ -1160,18 +1160,18 @@
           goto 200
         case ("lmcc")
           fdr%compensation_method = LMCC
-          if (error(x_type(x_atomic_operators(ext)) == PAW,"ERROR: lmcc is not currently supported with paw")) goto 200
+          if (error(FLERR,x_type(x_atomic_operators(ext)) == PAW,"ERROR: lmcc is not currently supported with paw")) goto 200
           call arg("lmcc_site",fdr%lmcc_site,found)
-          if (error(.not.found,"ERROR: lmcc_site tag was not found")) goto 200
+          if (error(FLERR,.not.found,"ERROR: lmcc_site tag was not found")) goto 200
           s = fdr%lmcc_site
           call centralize_position_i(fdr%lmcc_site)
           if (any(fdr%lmcc_site /= s)) call warn("WARNING: the counter charge was translated into the central parallelpiped")
-          if (error(.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
+          if (error(FLERR,.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
           call arg("lmcc_width",fdr%lmcc_width,found)
           if (.not.found) fdr%lmcc_width = 1.50_double
-          if (error(fdr%lmcc_width < 0.50_double,"ERROR: lmcc_width is too small")) goto 200
+          if (error(FLERR,fdr%lmcc_width < 0.50_double,"ERROR: lmcc_width is too small")) goto 200
         case default
-          if (error(.true.,"ERROR: compensation tag was not recognized")) goto 200
+          if (error(FLERR,.true.,"ERROR: compensation tag was not recognized")) goto 200
         end select
 
         call my(x_layout(ext),lay)
@@ -1234,7 +1234,7 @@
         cc_local = -sum(ccd)                                      ! CHECK THAT THE COUNTER CHARGE IS WITHIN THE SUPERCELL
         call allreduce(MOD_SCOPE,MPI_SUM,cc_local,cc_global)
         cc_global = cc_global*x_cell_volume(lat)/real(n,double)
-        if (error(cc_global .out. nbhd(fdr%charge_state,tol_cc),"ERROR: counter charge extends outside the supercell")) goto 100
+        if (error(FLERR,cc_global .out. nbhd(fdr%charge_state,tol_cc),"ERROR: counter charge extends outside the supercell")) goto 100
 
         rsum_local = sum(ccp)                                     ! ERROR FUNCTION POTENTIAL WITH AVERAGE VALUE = 0 (ccp0)
         call allreduce(MOD_SCOPE,MPI_SUM,rsum_local,rsum_global)  !  AND ASSOCIATED ENERGY CONTRIBUTION: -0.5*q*ccp0
@@ -1289,10 +1289,10 @@
           call my(tagio(trim(bulk_restart_path),TAGIO_READ,mkey,len(mkey)),bulk_restf)   ! BULK ELECTRON DENSITY: -density*fdr%ccp
           if (i_access(bulk_restf)) ios = x_tagfd(bulk_restf)
           if (i_comm(bulk_restf)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios == 0,"ERROR: bulk restart file was not found")) goto 100
+          if (error(FLERR,ios == 0,"ERROR: bulk restart file was not found")) goto 100
           if (i_access(bulk_restf)) tios = findfirsttag(bulk_restf,"FIELDS")
           if (i_comm(bulk_restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 100
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 100
           if (i_access(bulk_restf)) call openblock(bulk_restf)
           tag = "GRID_DENSITY"
           call read_restart(gr1,tag,bulk_restf) ; if (error()) goto 100
@@ -1357,7 +1357,7 @@
 
 200    call glean(thy(ext))
 
-       if (error("Exit fields_td_mod::form_compensation_i")) continue
+       if (error(FLERR,"Exit fields_td_mod::form_compensation_i")) continue
 
       end subroutine
 
@@ -1473,7 +1473,7 @@
 
 200    call glean(thy(ext))
 
-        if (error("Exit fields_td_mod::update_compensation_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::update_compensation_i")) continue
 
       end subroutine
 
@@ -1541,7 +1541,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit fields_td_mod::hartree_pressure_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::hartree_pressure_i")) continue
 
       end subroutine
 
@@ -1565,7 +1565,7 @@
 100     if (associated( c1 )) deallocate( c1 )
         if (associated( c2 )) deallocate( c2 )
 
-        if (error("Exit fields_td_mod::atomic_grid_pressure_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::atomic_grid_pressure_i")) continue
 
       end subroutine
 
@@ -1614,7 +1614,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit fields_td_mod::hartree_stress_tensor_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::hartree_stress_tensor_i")) continue
 
       end subroutine
 
@@ -1651,7 +1651,7 @@
         if (associated( c2 )) deallocate( c2 )
         if (allocated( s_local )) deallocate( s_local )
 
-        if (error("Exit fields_td_mod::atomic_grid_stress_tensor_i")) continue
+        if (error(FLERR,"Exit fields_td_mod::atomic_grid_stress_tensor_i")) continue
 
       end subroutine
 

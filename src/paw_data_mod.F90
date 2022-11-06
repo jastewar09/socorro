@@ -401,7 +401,7 @@
         do
           if (token == "ATOMTYPE") then
             call get_next_word_i(wc,pd%o%name)
-            if (error(len_trim(pd%o%name) > 6,"ERROR: Atom name has more than six characters")) goto 100
+            if (error(FLERR,len_trim(pd%o%name) > 6,"ERROR: Atom name has more than six characters")) goto 100
           elseif (token == "MASS") then
             call get_real_i(wc,pd%o%mass) 
           elseif (token == "ATOMXCTYPE") then
@@ -662,7 +662,7 @@
         if (.not.found) pd%o%r_opt = 4.0_double
 
 
-        if (error(grid_size_cg < grid_size_sg,"ERROR: grid_size_cg < grid_size_sg")) goto 100
+        if (error(FLERR,grid_size_cg < grid_size_sg,"ERROR: grid_size_cg < grid_size_sg")) goto 100
         allocate( pd%o%r_cg(grid_size_cg), drdu_cg(grid_size_cg) )
         select case (grid_type)
         case (LINEAR)
@@ -733,7 +733,7 @@
 
         call glean(thy(f))
 
-        if (error("Exit paw_data_mod::constructor_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::constructor_pd")) continue
 
       end function 
 
@@ -949,11 +949,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%l_value,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%l_value,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%l_value,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%l_value,1),"ERROR: i is above the upper bound")) goto 100
         l = pd%o%l_value(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_l_value")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_l_value")) continue
       end function
 
       function pd_occupation(pd,i) result(o)
@@ -964,11 +964,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%occupation,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%occupation,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%occupation,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%occupation,1),"ERROR: i is above the upper bound")) goto 100
         o = pd%o%occupation(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_occupation")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_occupation")) continue
       end function
 
       function pd_nl_base(pd,i) result(n)
@@ -979,11 +979,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%nl_base,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%nl_base,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%nl_base,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%nl_base,1),"ERROR: i is above the upper bound")) goto 100
         n = pd%o%nl_base(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_nl_base")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_nl_base")) continue
       end function
 
       function pd_nlm_size(pd) result(n)
@@ -1005,11 +1005,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%lut_nlm,2),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%lut_nlm,2),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%lut_nlm,2),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%lut_nlm,2),"ERROR: i is above the upper bound")) goto 100
         nlm = pd%o%lut_nlm(:,i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_lut_nlm")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_lut_nlm")) continue
       end function 
 
       function pd_basis_size(pd) result(n)
@@ -1112,14 +1112,14 @@
         logical :: switch
         integer :: l
         real(double), dimension(:), allocatable :: f
-        if (error((ip < 1) .or. (ip > size(pd%o%tp,2)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(pd%o%tp,2)),"ERROR: ip is out of range")) goto 100
         allocate( f(size(pd%o%r_sg)) )
         l = pd%o%l_value(ip)
         switch = .true.
         f = four_pi*pd%o%tp(:,ip)*pd%o%r_sg**l
         pfv = radial_f_value_i(f,pd%o%r_sg,g,l,switch)
 100     if (allocated( f )) deallocate( f )
-        if (error("Exit paw_data_mod::pd_projector_f_value")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_projector_f_value")) continue
       end function
 
       function pd_projector_f_values(pd,g,ip) result(pfv)
@@ -1135,7 +1135,7 @@
         logical :: switch
         integer :: ig, l
         real(double), dimension(:), allocatable :: f
-        if (error((ip < 1) .or. (ip > size(pd%o%tp,2)),"ERROR: ip is out of range")) goto 100
+        if (error(FLERR,(ip < 1) .or. (ip > size(pd%o%tp,2)),"ERROR: ip is out of range")) goto 100
         allocate( f(size(pd%o%r_sg)) )
         l = pd%o%l_value(ip)
         switch = .true.
@@ -1144,7 +1144,7 @@
           pfv(ig) = radial_f_value_i(f,pd%o%r_sg,g(ig),l,switch)
         end do
 100     if (allocated( f )) deallocate( f )
-        if (error("Exit paw_data_mod::pd_projector_f_value")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_projector_f_value")) continue
       end function
 
       function pd_radius(pd) result(r)
@@ -1193,11 +1193,11 @@
 
 !cod$
         call my(pd)
-        if (error(.not.associated( pd%o%w_max ),"ERROR: w_max is not associated")) goto 100
-        if (error((i < 1) .or. (i > size(pd%o%w_max)),"ERROR: i is out of bounds")) goto 100
+        if (error(FLERR,.not.associated( pd%o%w_max ),"ERROR: w_max is not associated")) goto 100
+        if (error(FLERR,(i < 1) .or. (i > size(pd%o%w_max)),"ERROR: i is out of bounds")) goto 100
         e = pd%o%w_max(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_error")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_error")) continue
       end function
 
       function projector_r_value_pd(pd,r,ipb,g_icut,g_ocut) result(prv)
@@ -1216,8 +1216,8 @@
 
         call my(pd)
 
-        if (error(r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
-        if (error((ipb < 1) .or. (ipb > size(pd%o%l_value)),"ERROR: ipb is out of range")) goto 100
+        if (error(FLERR,r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
+        if (error(FLERR,(ipb < 1) .or. (ipb > size(pd%o%l_value)),"ERROR: ipb is out of range")) goto 100
 
         if (.not.associated( pd%o%tpfo )) then
           pd%o%g_icut = g_icut
@@ -1247,7 +1247,7 @@
 
 100     call glean(thy(pd))
 
-        if (error("Exit paw_data_mod::projector_r_value_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::projector_r_value_pd")) continue
 
       end function
 
@@ -1265,9 +1265,9 @@
 
         call my(pd)
 
-        if (error(r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
-        if (error((ipb < 1) .or. (ipb > size(pd%o%l_value)),"ERROR: ipb is out of range")) goto 100
-        if (error(.not.associated( pd%o%tpfo ),"ERROR: real-space projectors are not yet optimized")) goto 100
+        if (error(FLERR,r > pd%o%r_opt,"ERROR: r > r_opt")) goto 100
+        if (error(FLERR,(ipb < 1) .or. (ipb > size(pd%o%l_value)),"ERROR: ipb is out of range")) goto 100
+        if (error(FLERR,.not.associated( pd%o%tpfo ),"ERROR: real-space projectors are not yet optimized")) goto 100
 
         l = pd%o%l_value(ipb)
         select case(l)
@@ -1280,7 +1280,7 @@
 
 100     call glean(thy(pd))
 
-        if (error("Exit paw_data_mod::projector_r_gradients_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::projector_r_gradients_pd")) continue
 
       end function
 
@@ -1327,11 +1327,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%kinetic,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%kinetic,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%kinetic,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%kinetic,1),"ERROR: i is above the upper bound")) goto 100
         k = pd%o%kinetic(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_kinetic")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_kinetic")) continue
       end function
 
       function pd_v_ion(pd,i) result(v)
@@ -1342,11 +1342,11 @@
 
 !cod$
         call my(pd)  
-        if (error(i < lbound(pd%o%v_ion,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%v_ion,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%v_ion,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%v_ion,1),"ERROR: i is above the upper bound")) goto 100
         v = pd%o%v_ion(i)
 100     call glean(thy(pd)) 
-        if (error("Exit paw_data_mod::pd_v_ion")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_v_ion")) continue
       end function 
 
       function pd_oij(pd) result(r)
@@ -1374,7 +1374,7 @@
         l = 0
         f = radial_f_value_i(pd%o%vlocal,pd%o%r_sg,g,l)
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::local_f_value_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::local_f_value_pd")) continue
       end function
 
       function local_f_values_pd(pd,g) result(f)
@@ -1393,7 +1393,7 @@
           f(ig) = radial_f_value_i(pd%o%vlocal,pd%o%r_sg,g(ig),l)
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::local_f_values_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::local_f_values_pd")) continue
       end function
 
       function pd_hatden_size(pd) result(n)
@@ -1423,7 +1423,7 @@
           f(i) = radial_f_value_i(pd%o%hatden(:,i),pd%o%r_sg,g,l)
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::hatden_f_value_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::hatden_f_value_pd")) continue
       end function
 
       function hatden_f_values_pd(pd,g) result(f)
@@ -1444,7 +1444,7 @@
           end do
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::hatden_f_values_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::hatden_f_values_pd")) continue
       end function
 
       function pd_hat_self_energy(pd,i) result(r)
@@ -1455,11 +1455,11 @@
 
 !cod$
         call my(pd)
-        if (error(i < lbound(pd%o%hat_selfenergy,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%hat_selfenergy,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%hat_selfenergy,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%hat_selfenergy,1),"ERROR: i is above the upper bound")) goto 100
         r = pd%o%hat_selfenergy(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_hat_self_energy")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_hat_self_energy")) continue
       end function
 
       function pd_denmat_size(pd) result(n)
@@ -1489,7 +1489,7 @@
           f(i) = radial_f_value_i(pd%o%denmat(:,i),pd%o%r_sg,g,l)
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::denmat_f_value_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::denmat_f_value_pd")) continue
       end function
 
       function denmat_f_values_pd(pd,g) result(f)
@@ -1510,7 +1510,7 @@
           end do
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::denmat_f_values_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::denmat_f_values_pd")) continue
       end function
 
       subroutine denvhat_decode(pd,i,nili,njlj,l)
@@ -1526,14 +1526,14 @@
         integer, parameter :: dd_p3 = 248
         integer :: n
         call my(pd)
-        if (error(i < lbound(pd%o%lut_denvhat,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%lut_denvhat,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%lut_denvhat,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%lut_denvhat,1),"ERROR: i is above the upper bound")) goto 100
         n = pd%o%lut_denvhat(i)
         nili = ishft(iand(dd_p8,n),-8)
         njlj = ishft(iand(dd_p3,n),-3)
         l = iand(7,n)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::denvhat_decode")) continue
+        if (error(FLERR,"Exit paw_data_mod::denvhat_decode")) continue
       end subroutine
 
       function gaunt_complex(l,m,l1,m1,l2,m2) result(gc)
@@ -1624,11 +1624,11 @@
 
 !cod$
         call my(pd) 
-        if (error(i < lbound(pd%o%cijkl,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%cijkl,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%cijkl,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%cijkl,1),"ERROR: i is above the upper bound")) goto 100
         r = pd%o%cijkl(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_cijkl")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_cijkl")) continue
       end function
 
       subroutine cijkl_decode(pd,i,nili,njlj,nklk,nlll,mi,mj,mk)
@@ -1648,8 +1648,8 @@
         integer, parameter :: cd_p3 = 56
         integer :: n
         call my(pd)
-        if (error(i < lbound(pd%o%lut_cijkl,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%lut_cijkl,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%lut_cijkl,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%lut_cijkl,1),"ERROR: i is above the upper bound")) goto 100
         n = pd%o%lut_cijkl(i)
         nili = ishft(iand(cd_p24,n),-24)
         njlj = ishft(iand(cd_p19,n),-19)
@@ -1659,7 +1659,7 @@
         mj = ishft(iand(cd_p3,n),-3) - 3
         mk = iand(7,n) - 3
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::cijkl_decode")) continue
+        if (error(FLERR,"Exit paw_data_mod::cijkl_decode")) continue
       end subroutine
 
       function pd_qvlm_size(pd) result(n)
@@ -1681,11 +1681,11 @@
 
 !cod$  
         call my(pd)
-        if (error(i < lbound(pd%o%aqlm,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%aqlm,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%aqlm,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%aqlm,1),"ERROR: i is above the upper bound")) goto 100
         r = pd%o%aqlm(i)
 100     call glean(thy(pd))  
-        if (error("Exit paw_data_mod::pd_aqlm")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_aqlm")) continue
       end function
 
       function pd_avlm(pd,i) result(r)
@@ -1696,11 +1696,11 @@
 
 !cod$
         call my(pd) 
-        if (error(i < lbound(pd%o%avlm,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%avlm,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%avlm,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%avlm,1),"ERROR: i is above the upper bound")) goto 100
         r = pd%o%avlm(i)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::pd_avlm")) continue
+        if (error(FLERR,"Exit paw_data_mod::pd_avlm")) continue
       end function
 
       subroutine orbital_decode(pd,i,nili,njlj,mi,mj,l)
@@ -1718,8 +1718,8 @@
         integer, parameter :: od_p3 = 56
         integer :: n
         call my(pd)
-        if (error(i < lbound(pd%o%lut_orbital,1),"ERROR: i is below the lower bound")) goto 100
-        if (error(i > ubound(pd%o%lut_orbital,1),"ERROR: i is above the upper bound")) goto 100
+        if (error(FLERR,i < lbound(pd%o%lut_orbital,1),"ERROR: i is below the lower bound")) goto 100
+        if (error(FLERR,i > ubound(pd%o%lut_orbital,1),"ERROR: i is above the upper bound")) goto 100
         n = pd%o%lut_orbital(i)
         nili = ishft(iand(od_p14,n),-14)
         njlj = ishft(iand(od_p9,n),-9)
@@ -1727,7 +1727,7 @@
         mj = ishft(iand(od_p3,n),-3) - 3
         l  = iand(7,n)
 100     call glean(thy(pd))
-        if (error("Exit paw_data_mod::orbital_decode")) continue
+        if (error(FLERR,"Exit paw_data_mod::orbital_decode")) continue
       end subroutine
 
       function pd_qeffion(pd) result(r)
@@ -1807,7 +1807,7 @@
         l = 0
         f = radial_f_value_i(pd%o%coretail_density_cg,pd%o%r_cg,g,l)
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::coretail_f_value_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::coretail_f_value_pd")) continue
       end function
 
       function coretail_f_values_pd(pd,g) result(f)
@@ -1826,7 +1826,7 @@
           f(ig) = radial_f_value_i(pd%o%coretail_density_cg,pd%o%r_cg,g(ig),l)
         end do
         call glean(thy(pd))
-        if (error("Exit paw_data_mod::coretail_f_values_pd")) continue
+        if (error(FLERR,"Exit paw_data_mod::coretail_f_values_pd")) continue
       end function
 
       function pd_coretail_hatenergy(pd) result(r)
@@ -1898,11 +1898,11 @@
             call get_integers_i(wc,ind)
             j = denvhat_encode_i(ind(1),ind(2),ind(3))
             k = linear_search_i(lut,j,exact)
-            if (error(.not.exact,"ERROR: match was not found")) goto 100
+            if (error(FLERR,.not.exact,"ERROR: match was not found")) goto 100
             call get_real_i(wc,a(k))
           end do
         end if
-100     if (error("Exit paw_data_mod::get_den_vhat_i")) continue
+100     if (error(FLERR,"Exit paw_data_mod::get_den_vhat_i")) continue
 
       end subroutine 
 
@@ -2304,7 +2304,7 @@
         wc%text = " "
         wc%length = 0
         call my(f,wc%f)
-        if (error("Exit paw_data_mod::open_word_i")) continue
+        if (error(FLERR,"Exit paw_data_mod::open_word_i")) continue
       end subroutine
 
       subroutine close_word_i(wc)
@@ -2543,7 +2543,7 @@
         else
           rfv = sum(f*spherical_bessel(g*r,l))
         end if
-        if (error("Exit paw_data_mod::radial_f_value_i")) continue
+        if (error(FLERR,"Exit paw_data_mod::radial_f_value_i")) continue
       end function
 
       function radial_r_value_i(f,g,r,l) result(rrv)
@@ -2553,7 +2553,7 @@
         real(double) :: rrv
 
         rrv = sum(f*spherical_bessel(g*r,l))
-        if (error("Exit paw_data_mod::radial_r_value_i")) continue
+        if (error(FLERR,"Exit paw_data_mod::radial_r_value_i")) continue
       end function
 
       subroutine optimize_nlp_i(pdr)
@@ -2686,7 +2686,7 @@
         if (allocated( wt )) deallocate( wt )
         if (allocated( wg )) deallocate( wg )
 
-        if (error("Exit paw_data_mod::optimize_nlp_i")) continue
+        if (error(FLERR,"Exit paw_data_mod::optimize_nlp_i")) continue
 
       end subroutine
 

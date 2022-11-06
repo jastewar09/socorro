@@ -68,7 +68,7 @@
 
 !cod$
       interface error
-        module procedure error_test_msg, error_test_msg_n, error_msg
+        module procedure error_test_msg, error_test_msg_n, error_msg, error_
       end interface
       interface notify
         module procedure notify_msg_integer, notify_msg_real, notify_msg_complex
@@ -243,10 +243,12 @@
 
       end subroutine
 
-      function error_test_msg(test,msg) result(ces)
+      function error_test_msg(file,line,test,msg) result(ces)
 !doc$ function error(test,msg) result(ces)
         logical, intent(in) :: test
         character(*), intent(in) :: msg
+        character(*) :: file
+        integer :: line
         logical :: ces
 !       requires: MPI be initialized. test has the same value on all processes.
 !       modifies: Process error state. Configuration error state.
@@ -286,10 +288,12 @@
 
       end function
 
-      function error_test_msg_n(test,msg,n) result(ces)
+      function error_test_msg_n(file,line,test,msg,n) result(ces)
 !doc$ function error(test,msg,n) result(ces)
         logical, intent(in) :: test
         character(*), intent(in) :: msg
+        character(*) :: file
+        integer :: line
         integer, intent(in) :: n
         logical :: ces
 !       requires: MPI be initialized.
@@ -331,24 +335,35 @@
 
       end function
 
-      function error_msg(msg) result(ces)
+      function error_msg(file,line,msg) result(ces)
 !doc$ function error(msg) result(ces)
-        character(*), intent(in), optional :: msg
+        character(*), intent(in) :: msg
+        character(*) :: file
+        integer :: line
         logical :: ces
 !       effects: If the configuration error state = .true., msg is written to the error file.
 !                ces is set equal to the configuration error state.
 
 !cod$
-        if (present(msg)) then
-          if (c_error_state) then
-            select case (file_status)
-            case (EF_ON)
-              write(error_unit,'(a)') msg
-              call flush_i()
-            end select
-          end if
+        if (c_error_state) then
+           select case (file_status)
+           case (EF_ON)
+             write(error_unit,'(a)') msg
+             call flush_i()
+           end select
         end if
 
+        ces = c_error_state
+
+      end function
+
+      function error_() result(ces)
+!doc$ function error(msg) result(ces)
+        logical :: ces
+!       effects: If the configuration error state = .true., msg is written to the error file.
+!                ces is set equal to the configuration error state.
+
+!cod$
         ces = c_error_state
 
       end function

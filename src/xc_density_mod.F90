@@ -150,7 +150,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_density_mod::constructor_xcd")) continue
+        if (error(FLERR,"Exit xc_density_mod::constructor_xcd")) continue
 
       end function 
 
@@ -168,7 +168,7 @@
         case (DDFS_LIBXC)
           call update(xcd%xcd_libxc,lay,sg)
         end select
-        if (error("Exit xc_density_mod::update_xcd")) continue
+        if (error(FLERR,"Exit xc_density_mod::update_xcd")) continue
       end subroutine
 
       subroutine my_xcd(xcd)
@@ -384,7 +384,7 @@
         end select 
         call glean(thy(n_total))
         call glean(thy(n_valence))
-        if (error("Exit xc_density_mod::xc_energy_xcd")) continue
+        if (error(FLERR,"Exit xc_density_mod::xc_energy_xcd")) continue
       end function 
 
       function xc_potential_xcd(xcd,n_total,n_valence) result(vxc_g)
@@ -409,7 +409,7 @@
         call bequeath(thy(vxc_g))
         call glean(thy(n_valence))
         call glean(thy(n_total))
-100     if (error("Exit xc_density_mod::cd_potential_xcd")) continue
+100     if (error(FLERR,"Exit xc_density_mod::cd_potential_xcd")) continue
       end function
 
       function xc_energy_and_potential_xcd(xcd,n_total,n_valence,fxc) result(vxc_g)
@@ -435,7 +435,7 @@
         call glean(thy(n_valence))
         call glean(thy(n_total))
         call bequeath(thy(vxc_g))
-100     if (error("Exit xc_density_mod::xc_energy_and_potential_xcd")) continue
+100     if (error(FLERR,"Exit xc_density_mod::xc_energy_and_potential_xcd")) continue
       end function
 
       subroutine xc_grid_pressure_xcd(xcd,n,p)
@@ -452,11 +452,11 @@
         case (DDFS_NATIVE)
           call xc_grid_pressure(xcd%xcd_native,n,p)
         case (DDFS_LIBXC)
-          if (error(.true.,"ERROR: grid_pressure routine is not currently available")) continue
+          if (error(FLERR,.true.,"ERROR: grid_pressure routine is not currently available")) continue
 !          call xc_grid_pressure(xcd%xcd_libxc,n,p)
         end select 
         call glean(thy(n))
-        if (error("Exit xc_density_mod::xc_grid_pressure_xcd")) continue
+        if (error(FLERR,"Exit xc_density_mod::xc_grid_pressure_xcd")) continue
       end subroutine
 
       subroutine xc_grid_stress_tensor_xcd(xcd,n_g,s)
@@ -473,11 +473,11 @@
         case (DDFS_NATIVE)
           call xc_grid_stress_tensor(xcd%xcd_native,n_g,s)
         case (DDFS_LIBXC)
-          if (error(.true.,"ERROR: grid_stress_tensor routine is not currently available")) continue
+          if (error(FLERR,.true.,"ERROR: grid_stress_tensor routine is not currently available")) continue
 !          call xc_grid_stress_tensor(xcd%xcd_libxc,n_g,s)
         end select 
         call glean(thy(n_g))
-        if (error("Exit xc_density_mod::xc_grid_stress_tensor_xcd")) continue
+        if (error(FLERR,"Exit xc_density_mod::xc_grid_stress_tensor_xcd")) continue
       end subroutine
 
       end module

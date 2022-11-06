@@ -207,7 +207,7 @@
         call start_timer("config_td: constructor")
 
         call sync_configuration_errors()
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           cfg%ref = 0
           allocate( cfg%o )
           cfg%o%ref = 0
@@ -228,7 +228,7 @@
           call glean(thy(restf))
         end if
 
-999     if (error("Exit config_td_mod::constructor_cfg")) continue
+999     if (error(FLERR,"Exit config_td_mod::constructor_cfg")) continue
 
         if (.not.error()) call stop_timer("config_td: constructor")
 
@@ -255,7 +255,7 @@
           ext_change = ( x_ghost(cfg%o%external) /= x_ghost(ext) )
           if (ext_change) then
              layout_change = ( x_ghost(x_layout(ext)) /= x_ghost(x_layout(cfg%o%external)) )
-             if (error(layout_change,"ERROR: layout changes are not currently allowed")) goto 100
+             if (error(FLERR,layout_change,"ERROR: layout changes are not currently allowed")) goto 100
           end if
         else
           ext_change = .false.
@@ -282,7 +282,7 @@
            call take_sc_step_i(cfg%o)
 
         case default
-           if (error(.true.,"ERROR: unrecognized propagation_type")) goto 100
+           if (error(FLERR,.true.,"ERROR: unrecognized propagation_type")) goto 100
         end select
 
         !** The update of cfg_sc is delayed until x_config_sc() is called
@@ -300,7 +300,7 @@
         call glean(thy(cfg))
         if (present(ext)) call glean(thy(ext))
 
-        if (error("Exit config_td_mod::update_cfg")) continue
+        if (error(FLERR,"Exit config_td_mod::update_cfg")) continue
 
         if (.not.error()) call stop_timer("config_td: update")
 
@@ -451,7 +451,7 @@
         call my(cfg%o%cfg_sc,cfg_sc)
 100     call glean(thy(cfg))
         call bequeath(thy(cfg_sc))
-        if (error("Exit config_td_mod::cfg_config_sc")) continue
+        if (error(FLERR,"Exit config_td_mod::cfg_config_sc")) continue
       end function
 
       function cfg_adiabatic_states(cfg) result(el)
@@ -491,7 +491,7 @@
         lc = 0
         done = .false.
         do while (.not. done)
-          if (error(user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
           lc = lc + 1
           call update(cfg%o%adiabatic_el,ext,x_potential(cfg%o%fields)) ; if (error()) goto 100
           rn = x_residual_norm(cfg%o%adiabatic_el)
@@ -523,7 +523,7 @@
         call my(cfg%o%adiabatic_el,el)
 100     call glean(thy(cfg))
         call bequeath(thy(el))
-        if (error("Exit config_td_mod::cfg_adiabatic_states")) continue
+        if (error(FLERR,"Exit config_td_mod::cfg_adiabatic_states")) continue
       end function
 
       function cfg_forces(cfg) result(f)
@@ -542,7 +542,7 @@
         end if
         f = cfg%o%forces
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::cfg_forces")) continue
+        if (error(FLERR,"Exit config_td_mod::cfg_forces")) continue
       end function
 
       function cfg_pressure(cfg) result(p)
@@ -560,7 +560,7 @@
         end if
         p = cfg%o%pressure
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::cfg_pressure")) continue
+        if (error(FLERR,"Exit config_td_mod::cfg_pressure")) continue
       end function
 
       function cfg_stress_tensor(cfg) result(s)
@@ -578,7 +578,7 @@
         end if
         s = cfg%o%stress_tensor
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::cfg_stress_tensor")) continue
+        if (error(FLERR,"Exit config_td_mod::cfg_stress_tensor")) continue
       end function
 
 
@@ -623,7 +623,7 @@
 
         if (i_access(diaryfile())) call flushbuf(diaryfile())
 
-        if (error("Exit config_td_mod::diary_cfg")) continue
+        if (error(FLERR,"Exit config_td_mod::diary_cfg")) continue
       end subroutine
 
       subroutine diary_atom_step(cfg,step)
@@ -640,7 +640,7 @@
         call diary_forces(cfg) ; if (error()) goto 100
         call diary_energy(cfg,all=.false.) ; if (error()) goto 100
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::diary_atom_step")) continue
+        if (error(FLERR,"Exit config_td_mod::diary_atom_step")) continue
       end subroutine
 
       subroutine diary_energy_td(cfg,all)
@@ -726,7 +726,7 @@
           end do
         end if
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::diary_forces")) continue
+        if (error(FLERR,"Exit config_td_mod::diary_forces")) continue
       end subroutine
 
       subroutine diary_pressure_td(cfg)
@@ -743,7 +743,7 @@
           write(x_unit(diaryfile()),'(/,t4,"Pressure: ",f14.4,3x,"kbar")') cfg%o%pressure*147105.164_double
         end if
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::diary_pressure")) continue
+        if (error(FLERR,"Exit config_td_mod::diary_pressure")) continue
       end subroutine
 
       subroutine diary_stress_tensor_td(cfg)
@@ -763,7 +763,7 @@
           write(x_unit(diaryfile()),'(t8,3f12.4)')           cfg%o%stress_tensor(3,:)*147105.164_double
         end if
 100     call glean(thy(cfg))
-        if (error("Exit config_td_mod::diary_stress_tensor")) continue
+        if (error(FLERR,"Exit config_td_mod::diary_stress_tensor")) continue
       end subroutine
 
       subroutine decompose_cfg(cfg)
@@ -795,7 +795,7 @@
         case ("off")
           goto 700
         case default
-          if (error(.true.,"ERROR: decomposition tag is not recognized")) goto 700
+          if (error(FLERR,.true.,"ERROR: decomposition tag is not recognized")) goto 700
         end select
 
         call start_timer("config_td: decompose")
@@ -806,7 +806,7 @@
         case ("l","lm","xyz")
           continue
         case default
-          if (error(.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
+          if (error(FLERR,.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
         end select
 
         call my(x_lattice(x_crystal(cfg%o%external)),lat)
@@ -820,10 +820,10 @@
         if (exist_file) then
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open dsites file")) goto 200
+          if (error(FLERR,ios /= 0,"ERROR: unable to open dsites file")) goto 200
           if (i_access(f)) read(x_unit(f),*,iostat=ios) nu
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read the number of sites")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read the number of sites")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,nu)
         end if
         na = x_n_atoms(ats)
@@ -833,7 +833,7 @@
         do is = 1,nu
           if (i_access(f)) read(x_unit(f),*,iostat=ios) pos_lat, radius
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read dsites data")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read dsites data")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,pos_lat)
           site_data(1:3,is) = lat2r(lat,pos_lat)
           if (i_comm(f)) call broadcast(FILE_SCOPE,radius)
@@ -859,7 +859,7 @@
         call my(file(trim(dcomp_path)),f)
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open dcomp file")) goto 400
+        if (error(FLERR,ios /= 0,"ERROR: unable to open dcomp file")) goto 400
 
         if (i_access(f)) then
           select case (trim(mode))
@@ -904,7 +904,7 @@
 
 700     call glean(thy(cfg))
 
-        if (error("Exit config_td_mod::decompose_cfg")) continue
+        if (error(FLERR,"Exit config_td_mod::decompose_cfg")) continue
 
       end subroutine
 
@@ -926,7 +926,7 @@
 100     call glean(thy(cfg))
         call glean(thy(nrestf))
 
-        if (error("Exit config_td_mod::write_restart_cfg")) continue
+        if (error(FLERR,"Exit config_td_mod::write_restart_cfg")) continue
 
       end subroutine
 
@@ -960,7 +960,7 @@
 
         call my(grid(x_layout(cfgr%external), CONFIG),cfgr%guess_pot); if (error()) goto 200
 
-200     if (error("Exit config_td_mod::standard_portal_i")) continue
+200     if (error(FLERR,"Exit config_td_mod::standard_portal_i")) continue
 
       end subroutine
 
@@ -1001,7 +1001,7 @@
 
 300     call glean(thy(restf))
 
-        if (error("Exit config_td_mod::restart_portal_i")) continue
+        if (error(FLERR,"Exit config_td_mod::restart_portal_i")) continue
 
       end subroutine
 
@@ -1021,7 +1021,7 @@
         case ("off",".false.")
           cfgr%compute_forces = .false.
         case default
-          if (error(.true.,"ERROR: forces tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: forces tag is not recognized")) goto 100
         end select
 
         call arglc("null_residual_force",tag,found)
@@ -1032,7 +1032,7 @@
         case ("off")
           cfgr%null_residual_force = .false.
         case default
-          if (error(.true.,"ERROR: null_residual_force tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: null_residual_force tag is not recognized")) goto 100
         end select
 
         call arglc("pressure",tag,found)
@@ -1043,7 +1043,7 @@
         case ("off",".false.")
           cfgr%compute_pressure = .false.
         case default
-          if (error(.true.,"ERROR: pressure tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: pressure tag is not recognized")) goto 100
         end select
 
         call arglc("stress_tensor",tag,found)
@@ -1054,7 +1054,7 @@
         case ("off",".false.")
           cfgr%compute_stress_tensor = .false.
         case default
-          if (error(.true.,"ERROR: stress tensor tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: stress tensor tag is not recognized")) goto 100
         end select
 
         call arglc("tddft_propagation_type",tag,found)
@@ -1065,7 +1065,7 @@
         case ("self-consistent","selfconsistent","sc")
           cfgr%propagation_type = SELFCONSISTENT
         case default
-          if (error(.true.,"ERROR: propagation_type tag is not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: propagation_type tag is not recognized")) goto 100
         end select
 
         call arg("tddft_propagation_tol",tol,found)
@@ -1076,7 +1076,7 @@
         if (.not.found) max_steps = 10
         cfgr%max_sc_steps = max_steps
 
-100     if (error("Exit config_sc_mod::read_instructions_i")) continue
+100     if (error(FLERR,"Exit config_sc_mod::read_instructions_i")) continue
 
       end subroutine
 
@@ -1148,7 +1148,7 @@
         end do
         cfgr%have_forces = .true.
 100     if (allocated( ft )) deallocate( ft )
-        if (error("Exit config_td_mod::forces_i")) continue
+        if (error(FLERR,"Exit config_td_mod::forces_i")) continue
         if (.not.error()) call stop_timer("config_td: forces")
       end subroutine
 
@@ -1163,7 +1163,7 @@
         p = p + pt
         cfgr%pressure = p
         cfgr%have_pressure = .true.
-100     if (error("Exit config_td_mod::pressure_i")) continue
+100     if (error(FLERR,"Exit config_td_mod::pressure_i")) continue
         if (.not.error()) call stop_timer("config_td: pressure")
       end subroutine
 
@@ -1184,7 +1184,7 @@
         cfgr%have_stress_tensor = .true.
 100     if (allocated( s )) deallocate( s )
         if (allocated( st )) deallocate( st )
-        if (error("Exit config_td_mod::stress_tensor_i")) continue
+        if (error(FLERR,"Exit config_td_mod::stress_tensor_i")) continue
         if (.not.error()) call stop_timer("config_td: stress tensor")
       end subroutine
 
@@ -1396,7 +1396,7 @@
 !500     call glean(thy(gen_pot_end))
 400     call glean(thy(gen_pot_start))
 200     call glean(thy(elec_start))
-100     if (error("config_td_mod::take_sc_step_i - Exiting")) continue
+100     if (error(FLERR,"config_td_mod::take_sc_step_i - Exiting")) continue
 
       end subroutine take_sc_step_i
 

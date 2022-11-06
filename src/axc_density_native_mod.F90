@@ -139,7 +139,7 @@
 
 100     call glean(thy(xct))
 
-        if (error("Exit axc_density_native_mod::constructor_axcd")) continue
+        if (error(FLERR,"Exit axc_density_native_mod::constructor_axcd")) continue
 
       end function 
 
@@ -304,7 +304,7 @@
 
         call glean(thy(axcd))
 
-100     if (error("Exit axc_density_native_mod::axcd_energy_density_native")) continue
+100     if (error(FLERR,"Exit axc_density_native_mod::axcd_energy_density_native")) continue
 
       end subroutine
 
@@ -332,7 +332,7 @@
 
         call glean(thy(axcd))
 
-100     if (error("Exit axc_density_native_mod::axcd_derivatives_native")) continue
+100     if (error(FLERR,"Exit axc_density_native_mod::axcd_derivatives_native")) continue
 
       end subroutine
 
@@ -392,7 +392,7 @@
 
         call glean(thy(axcd))
 
-        if (error("Exit axc_density_native_mod::xcd_numerical_i")) continue
+        if (error(FLERR,"Exit axc_density_native_mod::xcd_numerical_i")) continue
 
       end subroutine
 

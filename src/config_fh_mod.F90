@@ -145,32 +145,32 @@
         case ("wavefunctions")
           cfg%o%cvg_mode = WAVEFUNCTIONS
         case default
-          if (error(.true.,"ERROR: config_convergence is not recognized")) goto 200
+          if (error(FLERR,.true.,"ERROR: config_convergence is not recognized")) goto 200
         end select
         call arg("config_steps",cfg%o%max_steps,found)
         if (.not.found) cfg%o%max_steps = 40
-        if (error(cfg%o%max_steps < 0,"ERROR: config_steps < 0")) goto 200
+        if (error(FLERR,cfg%o%max_steps < 0,"ERROR: config_steps < 0")) goto 200
 
         ! read the restart mode
         call arglc("restart",mode,found)
-        if (error(.not.found,"ERROR: restart tag was not found")) goto 200
+        if (error(FLERR,.not.found,"ERROR: restart tag was not found")) goto 200
 
         ! open the restart file and check for the correct type (mkey)
         call my(tagio(trim(restart_path),TAGIO_READ,mkey,len(mkey)),restf)
         if (i_access(restf)) iosl = x_tagfd(restf)
         if (i_comm(restf)) call broadcast(FILE_SCOPE,iosl)
-        if (error(iosl == 0,"ERROR: restart file was not found")) goto 200
+        if (error(FLERR,iosl == 0,"ERROR: restart file was not found")) goto 200
 
         ! check the version of the restart file
         if (i_access(restf)) tios = findfirsttag(restf,"VERSION")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: VERSION tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: VERSION tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double ; ndata = 1
           call readf(version,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
         end if
         if (i_comm(restf)) call broadcast(FILE_SCOPE,version)
-        if (error(version /= es_version,"ERROR: incorrect version of the restart file")) goto 100
+        if (error(FLERR,version /= es_version,"ERROR: incorrect version of the restart file")) goto 100
 
         ! read the number of sgroups
         if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_SGROUPS")
@@ -186,7 +186,7 @@
             r_nsg = s4
           end if
           if (i_comm(restf)) call broadcast(FILE_SCOPE,r_nsg)
-          if (error(r_nsg /= mpi_nsgroups(),"ERROR: different numbers of sgroups")) goto 100
+          if (error(FLERR,r_nsg /= mpi_nsgroups(),"ERROR: different numbers of sgroups")) goto 100
         end if
 
         ! construct the external, fields, and electrons
@@ -200,7 +200,7 @@
           call my(fields_fh(cfg%o%external,restf),cfg%o%fields) ; if (error()) goto 100
           call my(electrons_fh(cfg%o%external,x_potential(cfg%o%fields),restf),cfg%o%electrons)
         case default
-          if (error(.true.,"ERROR: restart mode was not recognized")) continue
+          if (error(FLERR,.true.,"ERROR: restart mode was not recognized")) continue
         end select
 
 100     call glean(thy(restf))
@@ -213,7 +213,7 @@
         call iterator_i(cfg%o)
         call sync_configuration_errors()
 
-200     if (error("Exit config_fh_mod::constructor_cfg")) continue
+200     if (error(FLERR,"Exit config_fh_mod::constructor_cfg")) continue
 
         if (.not.error()) call stop_timer("config_fh: constructor")
 
@@ -346,7 +346,7 @@
         call my(cfg)
         call diary(cfg%o%electrons)
         call glean(thy(cfg))
-        if (error("Exit config_fh_mod::diary_cfg")) continue
+        if (error(FLERR,"Exit config_fh_mod::diary_cfg")) continue
       end subroutine
 
       subroutine decompose_cfg(cfg)
@@ -378,7 +378,7 @@
         case ("off")
           goto 700
         case default
-          if (error(.true.,"ERROR: decomposition tag is not recognized")) goto 700
+          if (error(FLERR,.true.,"ERROR: decomposition tag is not recognized")) goto 700
         end select
 
         call start_timer("config_fh: decompose")
@@ -389,7 +389,7 @@
         case ("l","lm","xyz")
           continue
         case default
-          if (error(.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
+          if (error(FLERR,.true.,"ERROR: dcomp_mode tag is not recognized")) goto 600
         end select
 
         call my(x_lattice(x_crystal(cfg%o%external)),lat)
@@ -403,10 +403,10 @@
         if (exist_file) then
           if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to open dsites file")) goto 200
+          if (error(FLERR,ios /= 0,"ERROR: unable to open dsites file")) goto 200
           if (i_access(f)) read(x_unit(f),*,iostat=ios) nu
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read the number of sites")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read the number of sites")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,nu)
         end if
         na = x_n_atoms(ats)
@@ -416,7 +416,7 @@
         do is = 1,nu
           if (i_access(f)) read(x_unit(f),*,iostat=ios) pos_lat, radius
           if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-          if (error(ios /= 0,"ERROR: unable to read dsites data")) goto 100
+          if (error(FLERR,ios /= 0,"ERROR: unable to read dsites data")) goto 100
           if (i_comm(f)) call broadcast(FILE_SCOPE,pos_lat)
           site_data(1:3,is) = lat2r(lat,pos_lat)
           if (i_comm(f)) call broadcast(FILE_SCOPE,radius)
@@ -442,7 +442,7 @@
         call my(file(trim(dcomp_path)),f)
         if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open dcomp file")) goto 400
+        if (error(FLERR,ios /= 0,"ERROR: unable to open dcomp file")) goto 400
 
         if (i_access(f)) then
           select case (trim(mode))
@@ -487,7 +487,7 @@
 
 700     call glean(thy(cfg))
 
-        if (error("Exit config_fh_mod::decompose_cfg")) continue
+        if (error(FLERR,"Exit config_fh_mod::decompose_cfg")) continue
 
       end subroutine
 
@@ -517,14 +517,14 @@
 
         lc = 0
         do
-          if (error(user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
           lc = lc + 1
           call check_convergence_i(cfgr,lc,done)
           if (done) exit
           call update(cfgr%electrons) ; if (error()) goto 100
         end do
 
-100     if (error("Exit config_fh_mod::iterator_i")) continue
+100     if (error(FLERR,"Exit config_fh_mod::iterator_i")) continue
 
       end subroutine
 

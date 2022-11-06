@@ -147,7 +147,7 @@
         call glean(thy(xc))
         call bequeath(thy(xd))
 
-        if (error("Exit exchange_dyad_mod::exchange_dyad_xc")) continue
+        if (error(FLERR,"Exit exchange_dyad_mod::exchange_dyad_xc")) continue
 
       end function
 

@@ -392,9 +392,9 @@
           myp = mpi_myproc(KGROUP)
 
           ! Check constraints on np vs. nb
-          if (error(np < nb,"ERROR: np < nb")) goto 100
-          if (error(np > nb*(nb + 1)/2,"ERROR: np > nb(nb+1)/2")) goto 100
-          if (error(mod(np,nb) /= 0,"ERROR: np is not an integer multiple of nb")) goto 100
+          if (error(FLERR,np < nb,"ERROR: np < nb")) goto 100
+          if (error(FLERR,np > nb*(nb + 1)/2,"ERROR: np > nb(nb+1)/2")) goto 100
+          if (error(FLERR,mod(np,nb) /= 0,"ERROR: np is not an integer multiple of nb")) goto 100
 
           m = np/nb
 
@@ -618,9 +618,9 @@
           myp = mpi_myproc(KGROUP)
 
           ! Check constraints on np.
-          if (error(np < nb,"ERROR: np < nb")) goto 100
-          if (error(np > nb*nb,"ERROR: np > nb*nb")) goto 100
-          if (error(mod(np,nb) /= 0,"ERROR: np is not an integer multiple of nb")) goto 100
+          if (error(FLERR,np < nb,"ERROR: np < nb")) goto 100
+          if (error(FLERR,np > nb*nb,"ERROR: np > nb*nb")) goto 100
+          if (error(FLERR,mod(np,nb) /= 0,"ERROR: np is not an integer multiple of nb")) goto 100
 
           ! multiplier
           m = np/nb
@@ -769,7 +769,7 @@
 
         case default
 
-          if (error(.true.,"ERROR: exx_comm_method was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: exx_comm_method was not recognized")) goto 100
 
         end select
 
@@ -917,7 +917,7 @@
 
         case default
 
-          if (error(.true.,"ERROR: remap_type was not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: remap_type was not recognized")) goto 100
 
         end select
 
@@ -1009,7 +1009,7 @@
 
         call glean(thy(lay))
 
-        if (error("Exit multibasis_mod::constructor_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::constructor_mb")) continue
 
       end function
 
@@ -1024,13 +1024,13 @@
         call my(lay)
 
         if (x_ghost(lay) /= x_ghost(mb%o%lay)) then
-          if (error(.true.,"ERROR: layout changes are not currently supported")) continue
+          if (error(FLERR,.true.,"ERROR: layout changes are not currently supported")) continue
         end if
 
         call glean(thy(mb))
         call glean(thy(lay))
 
-        if (error("Exit multibasis_mod::update_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::update_mb")) continue
 
       end subroutine
 
@@ -1287,7 +1287,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::band_remap_2d_to_1d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::band_remap_2d_to_1d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: band_remap")
 
@@ -1327,7 +1327,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::band_remap_1d_to_2d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::band_remap_1d_to_2d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: band_remap")
 
@@ -1367,7 +1367,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::spair_remap_2d_to_1d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::spair_remap_2d_to_1d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: spair_remap")
 
@@ -1407,7 +1407,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::spair_remap_1d_to_2d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::spair_remap_1d_to_2d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: spair_remap")
 
@@ -1447,7 +1447,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::lpair_remap_2d_to_1d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::lpair_remap_2d_to_1d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: lpair_remap")
 
@@ -1487,7 +1487,7 @@
 
 100     call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::lpair_remap_1d_to_2d_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::lpair_remap_1d_to_2d_mb")) continue
 
         if (.not.error()) call stop_timer("multibasis: lpair_remap")
 
@@ -1571,7 +1571,7 @@
 
         call glean(thy(mb))
 
-        if (error("Exit multibasis_mod::form_vmap_mb")) continue
+        if (error(FLERR,"Exit multibasis_mod::form_vmap_mb")) continue
 
       end subroutine
 

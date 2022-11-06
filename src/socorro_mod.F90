@@ -121,14 +121,14 @@
          case ( "td" , "time-dependent" )
             call ehrenfest_dynamics()
          case ( "none" )
-            if ( error(.true.,"A config_type was not provided") ) continue
+            if ( error(FLERR,.true.,"A config_type was not provided") ) continue
          case default
-            if ( error(.true.,"The config_type was not recognized") ) continue
+            if ( error(FLERR,.true.,"The config_type was not recognized") ) continue
          end select
 
          ! Destroy the runtime environment
 
-900      if ( error("Exiting socorro") ) continue
+900      if ( error(FLERR,"Exiting socorro") ) continue
          call system_stop()
 
       end subroutine

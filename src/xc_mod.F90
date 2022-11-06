@@ -172,7 +172,7 @@
         call glean(thy(lay))
         call glean(thy(sg))
 
-        if (error("Exit xc_mod::constructor_xc")) continue
+        if (error(FLERR,"Exit xc_mod::constructor_xc")) continue
 
       end function 
 
@@ -193,7 +193,7 @@
           call update(xc%xc_density,lay,sg)
           call update(xc%xc_orbital,lay,sg)
         end select
-        if (error("Exit xc_mod::update_xc")) continue
+        if (error(FLERR,"Exit xc_mod::update_xc")) continue
       end subroutine
 
       subroutine my_xc(xc)
@@ -408,9 +408,9 @@
 !cod$
         select case(xc%dependence)
         case (FD_DENSITY)
-          if (error(.true.,"ERROR: accessor is only valid with hybrid functionals")) continue
+          if (error(FLERR,.true.,"ERROR: accessor is only valid with hybrid functionals")) continue
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: accessor is only valid with hybrid functionals")) continue
+          if (error(FLERR,.true.,"ERROR: accessor is only valid with hybrid functionals")) continue
         case (FD_HYBRID)
           hm = x_hybrid_mixing(x_xc_type(xc))
         end select
@@ -427,11 +427,11 @@
         case (FD_DENSITY)
           ug = uses_gradient(xc%xc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: query is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: query is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
           ug = uses_gradient(xc%xc_density)
         end select
-        if (error("Exit xc_mod::q_uses_gradient")) continue
+        if (error(FLERR,"Exit xc_mod::q_uses_gradient")) continue
       end function
 
       function q_uses_laplacian(xc) result(ul)
@@ -445,11 +445,11 @@
         case (FD_DENSITY)
           ul = uses_laplacian(xc%xc_density)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: query is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: query is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
           ul = uses_laplacian(xc%xc_density)
         end select
-        if (error("Exit xc_mod::q_uses_laplacian")) continue
+        if (error(FLERR,"Exit xc_mod::q_uses_laplacian")) continue
       end function
 
       function xcd_energy_xc(xc,n_total,n_valence) result(fxc)
@@ -469,13 +469,13 @@
         case (FD_DENSITY)
           fxc = xc_energy(xc%xc_density,n_total,n_valence)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
           fxc = xc_energy(xc%xc_density,n_total,n_valence)
         end select
         call glean(thy(n_total))
         call glean(thy(n_valence))
-        if (error("Exit xc_mod::xcd_energy_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xcd_energy_xc")) continue
       end function 
 
       function xcd_potential_xc(xc,n_total,n_valence) result(vxc_g)
@@ -495,14 +495,14 @@
         case (FD_DENSITY)
           call my(xc_potential(xc%xc_density,n_total,n_valence),vxc_g) ; if (error()) goto 100
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) goto 100
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) goto 100
         case (FD_HYBRID)
           call my(xc_potential(xc%xc_density,n_total,n_valence),vxc_g) ; if (error()) goto 100
         end select
         call bequeath(thy(vxc_g))
 100     call glean(thy(n_total))
         call glean(thy(n_valence))
-        if (error("Exit xc_mod::xcd_potential_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xcd_potential_xc")) continue
       end function
 
       function xcd_energy_and_potential_xc(xc,n_total,n_valence,fxc) result(vxc_g)
@@ -523,14 +523,14 @@
         case (FD_DENSITY)
           call my(xc_energy_and_potential(xc%xc_density,n_total,n_valence,fxc),vxc_g) ; if (error()) goto 100
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) goto 100
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) goto 100
         case (FD_HYBRID)
           call my(xc_energy_and_potential(xc%xc_density,n_total,n_valence,fxc),vxc_g) ; if (error()) goto 100
         end select
         call bequeath(thy(vxc_g))
 100     call glean(thy(n_total))
         call glean(thy(n_valence))
-        if (error("Exit xc_mod::xcd_energy_and_potential_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xcd_energy_and_potential_xc")) continue
       end function
 
       subroutine xcd_grid_pressure_xc(xc,n_g,p)
@@ -546,12 +546,12 @@
         case (FD_DENSITY)
           call xc_grid_pressure(xc%xc_density,n_g,p)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: routine is not valid with hybrid functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is not valid with hybrid functionals")) continue
         end select
         call glean(thy(n_g))
-        if (error("Exit xc_mod::xcd_grid_pressure_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xcd_grid_pressure_xc")) continue
       end subroutine
 
       subroutine xcd_grid_stress_tensor_xc(xc,n_g,s)
@@ -568,12 +568,12 @@
         case (FD_DENSITY)
           call xc_grid_stress_tensor(xc%xc_density,n_g,s)
         case (FD_ORBITAL)
-          if (error(.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with density-dependent functionals")) continue
         case (FD_HYBRID)
-          if (error(.true.,"ERROR: routine is not valid with hybrid functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is not valid with hybrid functionals")) continue
         end select
         call glean(thy(n_g))
-        if (error("Exit xc_mod::xcd_grid_stress_tensor_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xcd_grid_stress_tensor_xc")) continue
       end subroutine
 
       function xco_energy_xc(xc,el) result (e)
@@ -587,14 +587,14 @@
         call my(el)
         select case(xc%dependence)
         case (FD_DENSITY)
-          if (error(.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
         case (FD_ORBITAL)
           call exx_energy(xc%xc_orbital,el,e)
         case (FD_HYBRID)
           call exx_energy(xc%xc_orbital,el,e)
         end select
         call glean(thy(el))
-        if (error("Exit xc_mod::xco_energy_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xco_energy_xc")) continue
       end function
 
       subroutine xco_derivative_xc(xc,el,ik1,mvo)
@@ -610,7 +610,7 @@
         call my(mvo)
         select case(xc%dependence)
         case (FD_DENSITY)
-          if (error(.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
         case (FD_ORBITAL)
           call exx_derivative(xc%xc_orbital,el,ik1,mvo)
         case (FD_HYBRID)
@@ -618,7 +618,7 @@
         end select
         call glean(thy(el))
         call glean(thy(mvo))
-        if (error("Exit xc_mod::xco_derivative_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xco_derivative_xc")) continue
       end subroutine
 
       subroutine xco_energy_and_derivative_xc(xc,el,ik1,e,mvo)
@@ -635,7 +635,7 @@
         call my(mvo)
         select case(xc%dependence)
         case (FD_DENSITY)
-          if (error(.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
+          if (error(FLERR,.true.,"ERROR: routine is only valid with orbital-dependent functionals")) continue
         case (FD_ORBITAL)
           call exx_energy_and_derivative(xc%xc_orbital,el,ik1,e,mvo)
         case (FD_HYBRID)
@@ -643,7 +643,7 @@
         end select
         call glean(thy(el))
         call glean(thy(mvo))
-        if (error("Exit xc_mod::xco_energy_and_derivative_xc")) continue
+        if (error(FLERR,"Exit xc_mod::xco_energy_and_derivative_xc")) continue
       end subroutine
 
       end module

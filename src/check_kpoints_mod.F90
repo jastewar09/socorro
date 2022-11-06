@@ -73,7 +73,7 @@
          call glean(thy(dg))
          call glean(thy(kp))
 
-900      if ( error("Exiting check_kpoints") ) continue
+900      if ( error(FLERR,"Exiting check_kpoints") ) continue
          if ( .not.error() ) call stop_timer("check_kpoints: total time")
 
       end subroutine

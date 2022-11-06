@@ -234,7 +234,7 @@
         call close_files_i(files,params)
         call close_state_i(state,params)
 
-100     if (error("Exit ehrenfest_mod::ehrenfest_dynamics")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::ehrenfest_dynamics")) continue
 
         if (debug) call warn ("ehrenfest_mod::ehrenfest_dynamics() closed state, exiting")
 
@@ -265,20 +265,20 @@
         if (.not.fnd) params%runtime=1.0_double  ! Default is 1fs
         ! Convert from femtoseconds to ARU time units
         params%runtime = params%runtime*FS_2_ARU
-        if (error(params%runtime<0,"ERROR: run_time < 0")) goto 100
+        if (error(FLERR,params%runtime<0,"ERROR: run_time < 0")) goto 100
         
         ! Size of each time step - N.B. the step size is read in assuming units of fs and
         !    then converted to atomic rydberg time units (4.84E-17s)
         call arg("tddft_step_size",params%dt,fnd)
         if (.not.fnd) params%dt = default_dt
-        if (error(params%dt<0,"ERROR! step_size < 0")) goto 100
+        if (error(FLERR,params%dt<0,"ERROR! step_size < 0")) goto 100
         params%dt = params%dt*FS_2_ARU
 
         !** Set the interval over which the atoms will be moved. Must be an integral multiple
         !     of the electronic time step.
         call arg("tddft_md_dt",params%ions_dt,fnd)
         if (.not.fnd) params%ions_dt = default_dt*FS_2_ARU
-        if (error(params%ions_dt<0,"ERROR! step_size < 0")) goto 100
+        if (error(FLERR,params%ions_dt<0,"ERROR! step_size < 0")) goto 100
         params%ions_dt = params%ions_dt*FS_2_ARU
 
         if (params%ions_dt < params%dt) then
@@ -437,7 +437,7 @@
         if (.not.fnd) interval = -1
         params%partial_charge_interval = interval
 
-100     if (error("Exit ehrenfest_mod::init_params_i")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::init_params_i")) continue
 
       end subroutine init_params_i
 
@@ -499,19 +499,19 @@
            call my(tagio(trim(params%restart_filename),TAGIO_READ,mkey,len(mkey)),restf) ; if (error()) goto 100
            if (i_access(restf)) ios = x_tagfd(restf)
            if (i_comm(restf)) call broadcast(MOD_SCOPE,ios)
-           if (error(ios == 0,"ERROR: restart file was not found")) goto 100
+           if (error(FLERR,ios == 0,"ERROR: restart file was not found")) goto 100
 
 
            if (i_access(restf)) tios = findfirsttag(restf,"EHRENFEST")
            if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-           if (error(tios /= TAG_START_BLOCK,"ERROR: EHRENFEST block was not found")) goto 100
+           if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: EHRENFEST block was not found")) goto 100
            
            if (i_access(restf)) call openblock(restf)
 
            !** Read in the state data
            if (i_access(restf)) tios = findfirsttag(restf,"STATE")
            if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-           if (error(tios == TAG_NOT_FOUND,"ERROR: STATE tag was not found in restart file")) goto 100
+           if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: STATE tag was not found in restart file")) goto 100
 
            ! Read the state
            if (i_access(restf)) then
@@ -577,7 +577,7 @@
 !        call update(state%cfg_td,params%ke_cutoff,params%den_cutoff,params%den_beta) 
         if (error()) goto 100
 
-100     if (error("Exit ehrenfest_mod::init_state_i")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::init_state_i")) continue
 
 
       end subroutine init_state_i
@@ -613,7 +613,7 @@
            !** Write the current, dipole moment and normalization to tddft_out
            call my(file('tddft_out'), files%tddft_out)
            file_exists = open_file_i(files%tddft_out,append=.false.)
-           if (error("Error opening the tddft_out file")) goto 100
+           if (error(FLERR,"Error opening the tddft_out file")) goto 100
 
            if (i_access(files%tddft_out)) then
               write(x_unit(files%tddft_out),"(a6,a16,a13,5a20,a26)") &
@@ -624,7 +624,7 @@
            if (debug) call warn("init_ehrenfest_i:: write out the vector potential, etc... ")
            call my(file('fields_out'), files%fields_out)
            file_exists = open_file_i(files%fields_out,append=.false.)
-           if (error("Error opening the fields_out file")) goto 100
+           if (error(FLERR,"Error opening the fields_out file")) goto 100
 
            if (i_access(files%fields_out)) then
               write(x_unit(files%fields_out),"(a6,a16,a11,5a16)") "% Step","time(fs)", &
@@ -634,7 +634,7 @@
            !** Write the energy terms to 'energy_out'
            call my(file('energy_out'), files%energy_out)
            file_exists = open_file_i(files%energy_out,append=.false.)
-           if (error("Error opening the energy_out file")) goto 100
+           if (error(FLERR,"Error opening the energy_out file")) goto 100
 
            if (i_access(files%energy_out)) then
               write(x_unit(files%energy_out),"(a8,a14,a13,a18,a22)") &
@@ -647,7 +647,7 @@
            if (0 < params%proj_interval) then
               call my(file('projections_out'), files%proj_out)
               file_exists = open_file_i(files%proj_out,append=.false.)
-              if (error("Error opening the projections_out file")) goto 100
+              if (error(FLERR,"Error opening the projections_out file")) goto 100
 
               if (i_access(files%proj_out)) then
                  write(x_unit(files%proj_out),"(a6,a16,a16)") "% Step","time(fs)", "Num Electrons"
@@ -655,7 +655,7 @@
 
               call my(file('projections_curr_out'), files%proj_curr_out)
               file_exists = open_file_i(files%proj_curr_out,append=.false.)
-              if (error("Error opening the projections_curr_out file")) goto 100
+              if (error(FLERR,"Error opening the projections_curr_out file")) goto 100
 
               if (i_access(files%proj_curr_out)) then
                  write(x_unit(files%proj_curr_out),"(a6,a16,a16)") "% Step","time(fs)", "Num Electrons"
@@ -666,7 +666,7 @@
            if (0 < params%partial_charge_interval) then
               call my(file('partial_charge_out'), files%partial_charge_out)
               file_exists = open_file_i(files%partial_charge_out,append=.false.)
-              if (error("Error opening the partial_charge_out file")) goto 100
+              if (error(FLERR,"Error opening the partial_charge_out file")) goto 100
 
               if (i_access(files%partial_charge_out)) then
                  write(x_unit(files%partial_charge_out),"(a6,a16,2a16)") "% Step","time(fs)", "Charge", "Current (dQ/dt)"
@@ -677,7 +677,7 @@
            if (0 < params%eigval_interval) then
               call my(file('eigval_out'), files%eigval_out)
               file_exists = open_file_i(files%eigval_out,append=.false.)
-              if (error("Error opening the eigval_out file")) goto 100
+              if (error(FLERR,"Error opening the eigval_out file")) goto 100
 
               if (i_access(files%eigval_out)) then
                  write(x_unit(files%eigval_out),"(a6,a16,a16)") "% Step","time(fs)", "Eigenvalues"
@@ -689,7 +689,7 @@
            if (0 < params%orth_interval) then
               call my(file('orth_out'), files%orth_out)
               file_exists = open_file_i(files%orth_out,append=.false.)
-              if (error("Error opening the orth_out file")) goto 100
+              if (error(FLERR,"Error opening the orth_out file")) goto 100
 
               if (i_access(files%orth_out)) then
                  write(x_unit(files%orth_out),"(a6,a16,a16)") "% Step","time(fs)", "Non-orthogonal overlap"
@@ -703,47 +703,47 @@
           !** Open tddft_out in append mode
            call my(file('tddft_out'), files%tddft_out)
            file_exists = open_file_i(files%tddft_out,append=.true.)
-           if (error("Error opening the tddft_out file in append mode")) goto 100
+           if (error(FLERR,"Error opening the tddft_out file in append mode")) goto 100
            
            !** open fields_out in append mode
            call my(file('fields_out'), files%fields_out)
            file_exists = open_file_i(files%fields_out,append=.true.)
-           if (error("Error opening the fields_out file in append mode")) goto 100
+           if (error(FLERR,"Error opening the fields_out file in append mode")) goto 100
 
            !** open energy_out in append mode
            call my(file('energy_out'), files%energy_out)
            file_exists = open_file_i(files%energy_out,append=.true.)
-           if (error("Error opening the energy_out file in append mode")) goto 100
+           if (error(FLERR,"Error opening the energy_out file in append mode")) goto 100
 
            !** open proj_out in append mode
            if (0 < params%proj_interval) then
               call my(file('projections_out'), files%proj_out)
               file_exists = open_file_i(files%proj_out,append=.true.)
-              if (error("Error opening the proj_out file in append mode")) goto 100
+              if (error(FLERR,"Error opening the proj_out file in append mode")) goto 100
               call my(file('projections_curr_out'), files%proj_curr_out)
               file_exists = open_file_i(files%proj_curr_out,append=.true.)
-              if (error("Error opening the proj_curr_out file in append mode")) goto 100
+              if (error(FLERR,"Error opening the proj_curr_out file in append mode")) goto 100
            end if
 
            !** open partial_charge_out in append mode
            if (0 < params%partial_charge_interval) then
               call my(file('partial_charge_out'), files%partial_charge_out)
               file_exists = open_file_i(files%partial_charge_out,append=.true.)
-              if (error("Error opening the partial_charge_out file in append mode")) goto 100
+              if (error(FLERR,"Error opening the partial_charge_out file in append mode")) goto 100
            end if
 
            !** open eigval_out in append mode
            if (0 < params%eigval_interval) then
               call my(file('eigval_out'), files%eigval_out)
               file_exists = open_file_i(files%eigval_out,append=.true.)
-              if (error("Error opening the eigval_out file in append mode")) goto 100
+              if (error(FLERR,"Error opening the eigval_out file in append mode")) goto 100
            end if
 
            !** open orth_out in append mode
            if (0 < params%orth_interval) then
               call my(file('orth_out'), files%orth_out)
               file_exists = open_file_i(files%orth_out,append=.true.)
-              if (error("Error opening the orth_out file in append mode")) goto 100
+              if (error(FLERR,"Error opening the orth_out file in append mode")) goto 100
            end if
 
         end select
@@ -751,7 +751,7 @@
         !*********************************************************************************************
 
 
-100     if (error("Exit ehrenfest_mod::init_files_i")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::init_files_i")) continue
 
       end subroutine 
 
@@ -796,7 +796,7 @@
         if (0 < params%eigval_interval) call glean(thy(files%eigval_out))  ; if (error()) goto 100
         if (0 < params%orth_interval) call glean(thy(files%orth_out))    ; if (error()) goto 100
 
-100     if (error("Exit ehrenfest_mod::close_files_i")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::close_files_i")) continue
 
         if (debug) call warn("ehrenfest::close_files_i - exiting")
 
@@ -813,7 +813,7 @@
         call glean(thy(state%iondyn))
         call glean(thy(state%ext))
 
-100     if (error("Exit ehrenfest_mod::close_state_i")) continue
+100     if (error(FLERR,"Exit ehrenfest_mod::close_state_i")) continue
 
       end subroutine
 
@@ -840,7 +840,7 @@
         if (x_method(state%iondyn) /= NONE) then
            if (mod(state%istep,params%move_atoms_interval) == 0) then
               if (move_atoms(state%iondyn, state%cfg_td)) then
-                 if (error("Move atoms failed")) goto 100
+                 if (error(FLERR,"Move atoms failed")) goto 100
 !                 if (mpi_first(MOD_SCOPE)) write(*,*) '**md_step ', x_istep(state%iondyn)
                  na = x_n_atoms(at); if (error()) goto 100
 
@@ -855,7 +855,7 @@
 
               end if
            end if
-           if (error("Move atoms failed")) goto 100
+           if (error(FLERR,"Move atoms failed")) goto 100
         end if
 
 
@@ -1041,7 +1041,7 @@
            end if
         end if
 
-100     if (error("Exit tddft_mod::dump_output_i")) continue
+100     if (error(FLERR,"Exit tddft_mod::dump_output_i")) continue
 
       end subroutine dump_output_i
       
@@ -1182,7 +1182,7 @@ dipole_mom = 0.0
         call glean(thy(files%energy_out))
 
 
-        if (error('Exiting tddft::dump_tddft_fields_out_i')) continue
+        if (error(FLERR,'Exiting tddft::dump_tddft_fields_out_i')) continue
 !write(*,*) 'exiting dump_tddft_fields_out_i...'
 
       end subroutine dump_tddft_fields_out_i
@@ -1229,9 +1229,9 @@ dipole_mom = 0.0
 
         end if
            
-        call write_restart(state%cfg_td,nrestf) ; if (error("Error writing cfg_td restart")) goto 100
-        call write_restart(state%iondyn,nrestf) ; if (error("Error writing iondyn restart")) goto 100
-        call write_restart(state%ext,nrestf) ; if (error("Error writing ext restart")) goto 100
+        call write_restart(state%cfg_td,nrestf) ; if (error(FLERR,"Error writing cfg_td restart")) goto 100
+        call write_restart(state%iondyn,nrestf) ; if (error(FLERR,"Error writing iondyn restart")) goto 100
+        call write_restart(state%ext,nrestf) ; if (error(FLERR,"Error writing ext restart")) goto 100
         
         if (i_access(nrestf)) call endblock(nrestf) 
 
@@ -1594,7 +1594,7 @@ dipole_mom = 0.0
                 file=x_name(occ_file),iostat=ios)
         
         if (i_comm(occ_file)) call broadcast(MOD_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open occupation file")) goto 200
+        if (error(FLERR,ios /= 0,"ERROR: unable to open occupation file")) goto 200
         
         new_occs = 0.0_double
 
@@ -1612,7 +1612,7 @@ dipole_mom = 0.0
 
 100     call glean(thy(occ_file))
 
-200     if (error('tddft_mod::read_occupations_i')) continue
+200     if (error(FLERR,'tddft_mod::read_occupations_i')) continue
 
       end subroutine
 
@@ -1724,7 +1724,7 @@ dipole_mom = 0.0
 300     call glean(thy(files%proj_out))
 200     call glean(thy(files%proj_curr_out))
 
-100     if (error("Exit tddft_mod::write_proj_out_i")) continue
+100     if (error(FLERR,"Exit tddft_mod::write_proj_out_i")) continue
         
       end subroutine write_proj_out_i
 
@@ -1796,7 +1796,7 @@ dipole_mom = 0.0
 
 200     call glean(thy(files%orth_out))
 
-100     if (error("Exit tddft_mod::write_orth_i")) continue
+100     if (error(FLERR,"Exit tddft_mod::write_orth_i")) continue
         
       end subroutine write_orth_i
 
@@ -1875,7 +1875,7 @@ dipole_mom = 0.0
 
 100     deallocate(evals,all_evals)
 
-        if (error("Exit tddft_mod::write_eigvals_i")) continue
+        if (error(FLERR,"Exit tddft_mod::write_eigvals_i")) continue
         
         if (debug) call warn('write_eigvals_i:: exiting')
 
@@ -1937,7 +1937,7 @@ dipole_mom = 0.0
         call glean(thy(g))
 200     call glean(thy(files%partial_charge_out))
 
-100     if (error("Exit tddft_mod::write_proj_out_i")) continue
+100     if (error(FLERR,"Exit tddft_mod::write_proj_out_i")) continue
         
       end subroutine 
 
@@ -1974,11 +1974,11 @@ dipole_mom = 0.0
         if (i_comm(f)) call broadcast(MOD_SCOPE,ios)
         if (i_comm(f)) call broadcast(MOD_SCOPE,file_exists)
 
-        if (error(ios /= 0,"ERROR: error opening file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: error opening file")) goto 100
 
 100     call glean(thy(f))
         
-        if (error("tddft_mod::open_file_i exiting")) continue
+        if (error(FLERR,"tddft_mod::open_file_i exiting")) continue
 
       end function
 
@@ -2020,7 +2020,7 @@ dipole_mom = 0.0
 !        call glean(thy(gy))
 !        call glean(thy(gz))
 !       
-!        if (error('tddft_mod::test_current exiting')) continue
+!        if (error(FLERR,'tddft_mod::test_current exiting')) continue
 !      
 !      end subroutine
 
@@ -2108,7 +2108,7 @@ dipole_mom = 0.0
 !write(*,*) 'write_wfn_slice_i ib = ', ib
 
 !              call put(mvec,ib,g)
-!              if (error('error after call put(mvec,ib,g)')) goto 100
+!              if (error(FLERR,'error after call put(mvec,ib,g)')) goto 100
 !              call get_wfn_filename_i(filename,ib)
 
 !write(*,*) 'write_wfn_slice_i filename = ', filename
@@ -2117,7 +2117,7 @@ dipole_mom = 0.0
 
 !              call write_to_file(g,filename,AMIRA,CSP_KIND)
 
-!              if (error('error after write_to_file')) goto 100
+!              if (error(FLERR,'error after write_to_file')) goto 100
               
 !           end do
 

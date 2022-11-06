@@ -225,17 +225,17 @@
         bo%ref = 0
         na = x_n_atoms(cfg)
         allocate( bo%o, STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate(bo%o%ave, STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate(bo%o%current, STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate(bo%o%current%pos_cart(3,na), STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate(bo%o%current%velocities(3,na), STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate(bo%o%current%masses(na), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
 
         bo%o%g = x_ghost()
         bo%o%ref = 0
@@ -263,7 +263,7 @@
         case ("nvt_hoover","hoover")
            bo%o%md_method = NVT_HOOVER
         case default
-           if (error(.true.,"ERROR: unrecognized md_method")) goto 100
+           if (error(FLERR,.true.,"ERROR: unrecognized md_method")) goto 100
         end select
               
         if (bo%o%md_method .ne. NONE) then
@@ -271,11 +271,11 @@
            ! read md parameters 
            call arg("md_steps",bo%o%max_md_steps,found)
            if (.not.found) bo%o%max_md_steps = 0
-           if (error(bo%o%max_md_steps<0,"ERROR: max_md_steps < 0")) goto 100
+           if (error(FLERR,bo%o%max_md_steps<0,"ERROR: max_md_steps < 0")) goto 100
 
            call arg("md_skip_steps",bo%o%n_skip_steps,found)
            if (.not.found) bo%o%n_skip_steps=0
-           if (error(bo%o%n_skip_steps<0,"ERROR: n_skip_steps < 0")) goto 100
+           if (error(FLERR,bo%o%n_skip_steps<0,"ERROR: n_skip_steps < 0")) goto 100
 
            if (present(time_step)) then
               bo%o%time_step = time_step
@@ -284,7 +284,7 @@
               if (.not.found) bo%o%time_step = 100.
            end if
            
-           if (error(bo%o%time_step<0,"ERROR: time_step < 0")) goto 100
+           if (error(FLERR,bo%o%time_step<0,"ERROR: time_step < 0")) goto 100
 
            call arglc("md_gen_velocities",tag,found)
            if (.not.found) tag = "yes"
@@ -294,24 +294,24 @@
            case ("no")
               bo%o%generate_velocities = 0
            case default
-              if (error(.true.,"ERROR: md_gen_velocities")) goto 100
+              if (error(FLERR,.true.,"ERROR: md_gen_velocities")) goto 100
            end select
 
            call arg("md_init_temp",bo%o%init_temp,found)
            if (.not.found) bo%o%init_temp = 0.0_double
-           if (error(bo%o%init_temp<0,"ERROR: init_temp < 0")) goto 100
+           if (error(FLERR,bo%o%init_temp<0,"ERROR: init_temp < 0")) goto 100
            
            call arg("md_desired_temp",bo%o%desired_temp,found)
            if (.not.found) bo%o%desired_temp = bo%o%init_temp
-           if (error(bo%o%desired_temp<0,"ERROR: desired_temp < 0")) goto 100
+           if (error(FLERR,bo%o%desired_temp<0,"ERROR: desired_temp < 0")) goto 100
 
            call arg("md_temp_freq",bo%o%temp_mod_freq,found)
            if (.not.found) bo%o%temp_mod_freq=5
-           if (error(bo%o%temp_mod_freq<1,"ERROR: temp_mod_freq < 1")) goto 100
+           if (error(FLERR,bo%o%temp_mod_freq<1,"ERROR: temp_mod_freq < 1")) goto 100
 
            call arg("md_hoover_mass",bo%o%current%hoover_mass,found)
            if (.not.found) bo%o%current%hoover_mass=1000.
-           if (error(bo%o%current%hoover_mass <= 0.0_double,"ERROR: hoover_mass < 0")) goto 100
+           if (error(FLERR,bo%o%current%hoover_mass <= 0.0_double,"ERROR: hoover_mass < 0")) goto 100
 
            call arglc("pressure",tag,found)
            if (.not.found) tag = "off"
@@ -321,7 +321,7 @@
            case ("off",".false.")
              bo%o%ave%ave_pressure = .false.
            case default
-             if (error(.true.,"ERROR: pressure tag was not recognized")) goto 100
+             if (error(FLERR,.true.,"ERROR: pressure tag was not recognized")) goto 100
            end select
            call arglc("stress_tensor",tag,found)
            if (.not.found) tag = "off"
@@ -331,7 +331,7 @@
            case ("off",".false.")
              bo%o%ave%ave_stress_tensor = .false.
            case default
-             if (error(.true.,"ERROR: pressure tag was not recognized")) goto 100
+             if (error(FLERR,.true.,"ERROR: pressure tag was not recognized")) goto 100
            end select
 
            call my(file(trim(md_trajectory_path)),bo%o%md_file)
@@ -347,8 +347,8 @@
              tags(i) = x_type(cfg,i)
              tag = "atom_mass_"//tags(i)
              call arg(trim(tag),mass_temp,found)
-             if (error(.not.found,"ERROR: atom_mass was not found")) goto 100
-             if (error(mass_temp <= 0.0_double,"ERROR: atom_mass <= 0")) goto 100
+             if (error(FLERR,.not.found,"ERROR: atom_mass was not found")) goto 100
+             if (error(FLERR,mass_temp <= 0.0_double,"ERROR: atom_mass <= 0")) goto 100
              bo%o%current%masses(i) = AMU_2_ELECTRON_MASS*mass_temp
            end do
 
@@ -382,20 +382,20 @@
               if (i_access(bo%o%init_vel_file)) &
                    &inquire(file=x_name(bo%o%init_vel_file),exist=exist_file)
               if (i_comm(bo%o%init_vel_file)) call broadcast(FILE_SCOPE,exist_file)
-              if (error(.not.exist_file,"ERROR: velocity file does not exist")) goto 100
+              if (error(FLERR,.not.exist_file,"ERROR: velocity file does not exist")) goto 100
 
               if (i_access(bo%o%init_vel_file)) &
                    &open(unit=x_unit(bo%o%init_vel_file), &
                    &file=x_name(bo%o%init_vel_file), iostat=ios)
               if (i_comm(bo%o%init_vel_file)) call broadcast(FILE_SCOPE,ios)
-              if (error(ios /= 0,"ERROR: unable to open velocity file")) goto 100
+              if (error(FLERR,ios /= 0,"ERROR: unable to open velocity file")) goto 100
 
               do i = 1,x_n_atoms(cfg)
                  if (i_access(bo%o%init_vel_file)) &
                       &read(x_unit(bo%o%init_vel_file),*,iostat=ios) &
                       &  bo%o%current%velocities(:,i)
                  if (i_comm(bo%o%init_vel_file)) call broadcast(FILE_SCOPE,ios)
-                 if (error(ios /= 0,"ERROR: read error in velocity file")) goto 100
+                 if (error(FLERR,ios /= 0,"ERROR: read error in velocity file")) goto 100
                  if (i_comm(bo%o%init_vel_file)) call broadcast(FILE_SCOPE,bo%o%current%velocities(:,i))
               end do
            else
@@ -430,7 +430,7 @@
 
         call glean(thy(cfg))
 
-        if (error("Exit born_oppenheimer_mod::constructor_bo")) continue
+        if (error(FLERR,"Exit born_oppenheimer_mod::constructor_bo")) continue
 
       end function
       
@@ -623,7 +623,7 @@
            CASE (NVT_HOOVER)
               changed = hoover_md(cfg,bo)
            CASE default
-              if (error(.true.,"ERROR: md_method not defined")) call diary(bo)
+              if (error(FLERR,.true.,"ERROR: md_method not defined")) call diary(bo)
               changed = .false.
            END SELECT branch
 
@@ -657,7 +657,7 @@
         time_step = bo%o%time_step
 
         allocate( frcs(3,natoms), accel(3,natoms), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
 
         call x_cart_positions(cfg,bo%o%current%pos_cart)
 
@@ -694,7 +694,7 @@
 100     call glean(thy(bo))
         call glean(thy(cfg))
 
-        if (error("Exit born_oppenheimer_mod::bo_velocity_verlet")) continue
+        if (error(FLERR,"Exit born_oppenheimer_mod::bo_velocity_verlet")) continue
 
       end function
 
@@ -723,7 +723,7 @@
         allocate( frcs(3,bo%o%current%natoms), &
              & accel(3,bo%o%current%natoms), STAT=status )
         
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
 
         call x_cart_positions(cfg,bo%o%current%pos_cart)
 
@@ -777,7 +777,7 @@
 100     call glean(thy(bo))
         call glean(thy(cfg))
 
-        if (error("Exit born_oppenheimer_mod::bo_rescale")) continue
+        if (error(FLERR,"Exit born_oppenheimer_mod::bo_rescale")) continue
 
       end function
 
@@ -805,11 +805,11 @@
         time_step = bo%o%time_step
         
         allocate( frcs(3,bo%o%current%natoms), STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure - forces")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure - forces")) goto 100
         allocate( accel(3,bo%o%current%natoms), STAT=status)
-        if (error(status /= 0,"ERROR: allocate failure - accel")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure - accel")) goto 100
         allocate( test_numbers(bo%o%current%natoms), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure - test")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure - test")) goto 100
 
         call x_cart_positions(cfg,bo%o%current%pos_cart)
 
@@ -876,7 +876,7 @@
 100     call glean(thy(bo))
         call glean(thy(cfg))
 
-        if (error("Exit born_oppenheimer_mod::bo_anderson")) continue
+        if (error(FLERR,"Exit born_oppenheimer_mod::bo_anderson")) continue
 
       end function
 
@@ -917,11 +917,11 @@
         time_step = bo%o%time_step
         
         allocate( frcs(3,natoms), accel(3,natoms), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate( b(3,natoms), c(3,natoms), h(3,natoms), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         allocate( v1(3,natoms), v2(3,natoms), vel_prime(3,natoms), STAT=status )
-        if (error(status /= 0,"ERROR: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"ERROR: allocate failure")) goto 100
         
         call x_cart_positions(cfg,bo%o%current%pos_cart)
 
@@ -1010,7 +1010,7 @@
               if (test_val < SOLVE_TOL) solved = .true.
 
               n_solve_tries = n_solve_tries + 1
-              if (error(n_solve_tries > MAX_SOLVE_TRIES,"ERROR: solve failed")) goto 100
+              if (error(FLERR,n_solve_tries > MAX_SOLVE_TRIES,"ERROR: solve failed")) goto 100
 
            end do
            
@@ -1030,7 +1030,7 @@
         call glean(thy(bo))
         call glean(thy(cfg))
 
-        if (error("Exit born_oppenheimer_mod::hoover_md")) continue
+        if (error(FLERR,"Exit born_oppenheimer_mod::hoover_md")) continue
 
       end function
 
@@ -1128,10 +1128,10 @@
         nd = size(vel,1)
         na = size(vel,2)
 
-        if (error(size(vel,2) /= size(masses),"ERROR: size incompatability")) goto 100
+        if (error(FLERR,size(vel,2) /= size(masses),"ERROR: size incompatability")) goto 100
 
         do i = 1,na
-           if (error(masses(i) <= 0.,"ERROR: mass <= 0")) goto 100
+           if (error(FLERR,masses(i) <= 0.,"ERROR: mass <= 0")) goto 100
         end do
            
 ! here vel is really momentum
@@ -1160,7 +1160,7 @@
            end do
         end if
 
-100     if (error("Exit born_oppenheimer_mod::init_velocities")) continue
+100     if (error(FLERR,"Exit born_oppenheimer_mod::init_velocities")) continue
 
       end subroutine
       
@@ -1256,7 +1256,7 @@
         case (NVT_ANDERSON,NVT_HOOVER)
            temp = sum_ke/(1.50_double*bor%current%natoms*K_BOLTZMAN)
         case default
-           if (error(.true.,"ERROR: unknown md_method")) temp = 0.0_double
+           if (error(FLERR,.true.,"ERROR: unknown md_method")) temp = 0.0_double
         end select
 
       end function

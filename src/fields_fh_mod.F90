@@ -138,7 +138,7 @@
         ! open the FIELDS block
         if (i_access(restf)) tios = findfirsttag(restf,"FIELDS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 300
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: FIELDS block was not found")) goto 300
         if (i_access(restf)) call openblock(restf)
 
         ! read the atomic potential
@@ -154,13 +154,13 @@
         ! open the COMPENSATION block
         if (i_access(restf)) tios = findfirsttag(restf,"COMPENSATION")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios /= TAG_START_BLOCK,"ERROR: COMPENSATION block was not found")) goto 200
+        if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: COMPENSATION block was not found")) goto 200
         if (i_access(restf)) call openblock(restf)
 
         ! read the charge state
         if (i_access(restf)) tios = findfirsttag(restf,"CHARGE_STATE")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-        if (error(tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
+        if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: CHARGE_STATE tag was not found")) goto 100
         if (i_access(restf)) then
           dsize = sizeof_double ; ndata = 1
           call readf(fd%o%charge_state,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -178,7 +178,7 @@
           ! read the compensation method
           if (i_access(restf)) tios = findfirsttag(restf,"COMPENSATION_METHOD")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: COMPENSATION_METHOD tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: COMPENSATION_METHOD tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 1
             call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -197,7 +197,7 @@
             ! read the lmcc site
             if (i_access(restf)) tios = findfirsttag(restf,"LMCC_SITE")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: LMCC_SITE tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: LMCC_SITE tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_double ; ndata = 3
               call readf(fd%o%lmcc_site,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -207,7 +207,7 @@
             ! read the lmcc width
             if (i_access(restf)) tios = findfirsttag(restf,"LMCC_WIDTH")
             if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-            if (error(tios == TAG_NOT_FOUND,"ERROR: LMCC_WIDTH tag was not found")) goto 100
+            if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: LMCC_WIDTH tag was not found")) goto 100
             if (i_access(restf)) then
               dsize = sizeof_double ; ndata = 1
               call readf(fd%o%lmcc_width,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -230,7 +230,7 @@
 300     call glean(thy(ext))
         call glean(thy(restf))
 
-        if (error("Exit fields_fh_mod::constructor_fd")) continue
+        if (error(FLERR,"Exit fields_fh_mod::constructor_fd")) continue
 
         if (.not.error()) call stop_timer("fields_fh: constructor")
 

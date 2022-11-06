@@ -289,7 +289,7 @@
         character(line_len) :: tag
         type(grid_obj) :: lpg
 
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           hc%ref = 0
           allocate( hc%o )
           hc%o%ref = 0
@@ -323,7 +323,7 @@
         case ("real")
           hc%o%projector_type = REAL_SPACE
         case default
-          if (error(.true.,"ERROR: projector_type not recognized")) goto 100
+          if (error(FLERR,.true.,"ERROR: projector_type not recognized")) goto 100
         end select
 
         hc%o%cutoff = cutoff
@@ -332,8 +332,8 @@
         case (FOURIER_SPACE)
           call arg("pdots_blocksize",hc%o%pbs,found)
           if (.not.found) hc%o%pbs = nb
-          if (error(hc%o%pbs < 1,"ERROR: hc%o%pbs < 1")) goto 100
-          if (error(hc%o%pbs > nb,"ERROR: hc%o%pbs > nb")) goto 100
+          if (error(FLERR,hc%o%pbs < 1,"ERROR: hc%o%pbs < 1")) goto 100
+          if (error(FLERR,hc%o%pbs > nb,"ERROR: hc%o%pbs > nb")) goto 100
         case (REAL_SPACE)
           hc%o%pbs = 0
         end select
@@ -347,7 +347,7 @@
 100     call glean(thy(ext))
         call glean(thy(gpot))
 
-999     if (error("Exit operators_mod::constructor_hc")) continue
+999     if (error(FLERR,"Exit operators_mod::constructor_hc")) continue
 
       end function
 
@@ -365,7 +365,7 @@
         logical :: cutoff_change, crystal_change, layout_change, ao_change, gpot_change, any_change
         type(grid_obj) :: lpg
 
-        if (error("  Error on entry")) goto 999
+        if (error(FLERR,"  Error on entry")) goto 999
 
         call my(hc)
         call my(ext)
@@ -373,7 +373,7 @@
 
         if (present(cutoff)) then
           cutoff_change = (cutoff /= hc%o%cutoff)
-          if (error(cutoff_change,"ERROR: cutoff changes are not currently allowed")) goto 100
+          if (error(FLERR,cutoff_change,"ERROR: cutoff changes are not currently allowed")) goto 100
         end if
 
         crystal_change = (x_ghost(x_crystal(ext)) /= x_ghost(hc%o%crystal))
@@ -412,7 +412,7 @@
         call glean(thy(ext))
         call glean(thy(gpot))
 
-999     if (error("Exit operators_mod::update_hc")) continue
+999     if (error(FLERR,"Exit operators_mod::update_hc")) continue
 
       end subroutine
 
@@ -628,7 +628,7 @@
 !       errors: Passes errors.
 
 !cod$
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           hk%ref = 0
           allocate( hk%o )
           hk%o%ref = 0
@@ -669,7 +669,7 @@
         call glean(thy(mb))
         if (present(dk)) call glean(thy(dk))
 
-999     if (error("Exit operators_mod::constructor_hk")) continue
+999     if (error(FLERR,"Exit operators_mod::constructor_hk")) continue
 
       end function
 
@@ -686,7 +686,7 @@
 !cod$
         logical :: hc_change, mb_change, crystal_change, layout_change, lattice_change, dk_change
 
-        if (error("  Error on entry")) goto 999
+        if (error(FLERR,"  Error on entry")) goto 999
 
         call my(hk)
         if (present(hc)) call my(hc)
@@ -705,7 +705,7 @@
             crystal_change = (x_ghost(x_crystal(hc)) /= x_ghost(x_crystal(hk%o%hc)))
             layout_change = (x_ghost(x_layout(hc)) /= x_ghost(x_layout(hk%o%hc)))
             if (crystal_change) lattice_change = (x_ghost(x_lattice(x_crystal(hc))) /= x_ghost(x_lattice(x_crystal(hk%o%hc))))
-            if (error(hc%o%projector_type /= hk%o%hc%o%projector_type,"ERROR: projector type has changed")) goto 100
+            if (error(FLERR,hc%o%projector_type /= hk%o%hc%o%projector_type,"ERROR: projector type has changed")) goto 100
           end if
         end if
         if (present(mb)) mb_change = (x_ghost(mb) /= x_ghost(hk%o%mb))
@@ -752,7 +752,7 @@
         if (present(mb)) call glean(thy(mb))
         if (present(dk)) call glean(thy(dk))
 
-999     if (error("Exit operators_mod::update_hk")) continue
+999     if (error(FLERR,"Exit operators_mod::update_hk")) continue
 
       end subroutine
 
@@ -924,7 +924,7 @@
 
         worm_v => wormhole(v)
 
-        if (error(x_ghost(hk%o%mb) /= x_ghost(worm_v%mb),"ERROR: multibases are different")) goto 100
+        if (error(FLERR,x_ghost(hk%o%mb) /= x_ghost(worm_v%mb),"ERROR: multibases are different")) goto 100
 
         ng = size(worm_v%mat,1)
         nb = size(worm_v%mat,2)
@@ -936,7 +936,7 @@
         call glean(thy(v))
         call glean(thy(hk))
 
-        if (error("Exit operators_mod::kinetic_energy_hk")) continue
+        if (error(FLERR,"Exit operators_mod::kinetic_energy_hk")) continue
 
       end function
 
@@ -950,7 +950,7 @@
 !       errors: Passes errors.
 
 !cod$
-        if (error("  Error on entry")) then
+        if (error(FLERR,"  Error on entry")) then
           h%ref = 0
           allocate( h%o )
           h%o%ref = 0
@@ -976,7 +976,7 @@
 
 100     call glean(thy(hk))
 
-999     if (error("Exit operators_mod::constructor_h")) continue
+999     if (error(FLERR,"Exit operators_mod::constructor_h")) continue
 
       end function
 
@@ -1124,7 +1124,7 @@
         call glean(thy(hv))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::apply_hamiltonian_h")) continue
+        if (error(FLERR,"Exit operators_mod::apply_hamiltonian_h")) continue
 
         if (.not.error()) call stop_timer("operators: apply_hamiltonian")
 
@@ -1143,8 +1143,8 @@
         call my(ov)
         call my(h)
 
-        if (error(x_ghost(h%o%hk%o%mb) /= x_ghost(x_multibasis(v)),"ERROR: inconsistent multibases 1")) goto 100
-        if (error(x_ghost(x_multibasis(v)) /= x_ghost(x_multibasis(ov)),"ERROR: inconsistent multibases 2")) goto 100
+        if (error(FLERR,x_ghost(h%o%hk%o%mb) /= x_ghost(x_multibasis(v)),"ERROR: inconsistent multibases 1")) goto 100
+        if (error(FLERR,x_ghost(x_multibasis(v)) /= x_ghost(x_multibasis(ov)),"ERROR: inconsistent multibases 2")) goto 100
 
         ov = v
         if (x_n_projectors(h%o%hk%o%hc%o%ao) /= 0) then
@@ -1160,7 +1160,7 @@
         call glean(thy(ov))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::apply_overlap_h")) continue
+        if (error(FLERR,"Exit operators_mod::apply_overlap_h")) continue
 
       end subroutine
  
@@ -1203,7 +1203,7 @@
         call glean(thy(v))
         call glean(thy(gen_den))
 
-        if (error("Exit operators_mod::add_density_h")) continue
+        if (error(FLERR,"Exit operators_mod::add_density_h")) continue
 
       end subroutine
 
@@ -1246,7 +1246,7 @@
         call glean(thy(h))
         call glean(thy(mv))
 
-        if (error("Exit operators_mod::orthonormalize_h")) continue
+        if (error(FLERR,"Exit operators_mod::orthonormalize_h")) continue
 
       end subroutine
 
@@ -1270,8 +1270,8 @@
         worm_v => wormhole(v)
         worm_r => wormhole(r)
 
-        if (error(x_ghost(worm_v%mb) /= x_ghost(h%o%hk%o%mb),"ERROR: multibases are different 1")) goto 100
-        if (error(x_ghost(worm_v%mb) /= x_ghost(worm_r%mb),"ERROR: multibases are different 2")) goto 100
+        if (error(FLERR,x_ghost(worm_v%mb) /= x_ghost(h%o%hk%o%mb),"ERROR: multibases are different 1")) goto 100
+        if (error(FLERR,x_ghost(worm_v%mb) /= x_ghost(worm_r%mb),"ERROR: multibases are different 2")) goto 100
 
         ng = size(worm_v%mat,1)
         nb = size(worm_v%mat,2)
@@ -1286,7 +1286,7 @@
         call glean(thy(v))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::precondition_h")) continue
+        if (error(FLERR,"Exit operators_mod::precondition_h")) continue
 
       end subroutine
 
@@ -1352,7 +1352,7 @@
         call glean(thy(v))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::forces_h")) continue
+        if (error(FLERR,"Exit operators_mod::forces_h")) continue
 
       end subroutine
 
@@ -1385,7 +1385,7 @@
 100     call glean(thy(v))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::pressure_h")) continue
+        if (error(FLERR,"Exit operators_mod::pressure_h")) continue
 
       end subroutine
 
@@ -1423,7 +1423,7 @@
         call glean(thy(v))
         call glean(thy(h))
 
-        if (error("Exit operators_mod::stress_tensor_h")) continue
+        if (error(FLERR,"Exit operators_mod::stress_tensor_h")) continue
 
       end subroutine
 
@@ -1512,7 +1512,7 @@
           call get_point_data_i(hcr) ; if (error()) goto 100
         end if
 
-100     if (error("Exit operators_mod::form_rs_projectors_i")) continue
+100     if (error(FLERR,"Exit operators_mod::form_rs_projectors_i")) continue
 
       end subroutine
 
@@ -1590,7 +1590,7 @@
             lnr(i) = lnr(i-1)
             lpr(:,1:lnr(i),i) = lpr(:,1:lnr(i-1),i-1)
           else
-            if (error(radius >= maximum_sphere_radius(lat),"ERROR: radius is too large")) goto 100
+            if (error(FLERR,radius >= maximum_sphere_radius(lat),"ERROR: radius is too large")) goto 100
             lnr(i) = 0
             do i1 = -1,+1
               do i2 = -1,+1
@@ -1672,7 +1672,7 @@
         call glean(thy(ats))
         call glean(thy(lat))
 
-        if (error("Exit operators_mod::get_site_data_i")) continue
+        if (error(FLERR,"Exit operators_mod::get_site_data_i")) continue
 
       end subroutine
 
@@ -1867,7 +1867,7 @@
         if (allocated( rsp_loc )) deallocate( rsp_loc )
         if (allocated( grsp_loc )) deallocate( grsp_loc )
 
-        if (error("Exit operators_mod::get_point_data_i")) continue
+        if (error(FLERR,"Exit operators_mod::get_point_data_i")) continue
 
       end subroutine
 
@@ -1979,7 +1979,7 @@
 100     call glean(thy(v))
         call glean(thy(hk))
 
-        if (error("Exit operators_mod::kinetic_energy_pressure_i")) continue
+        if (error(FLERR,"Exit operators_mod::kinetic_energy_pressure_i")) continue
 
       end subroutine
 
@@ -2038,7 +2038,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::kinetic_energy_stress_tensor_i")) continue
+        if (error(FLERR,"Exit operators_mod::kinetic_energy_stress_tensor_i")) continue
 
       end subroutine
 
@@ -2061,7 +2061,7 @@
           deallocate( hkr%gkz )
         end if
 
-100     if (error("Exit operators_mod::form_kinetic_energy_i")) continue
+100     if (error(FLERR,"Exit operators_mod::form_kinetic_energy_i")) continue
 
       end subroutine
 
@@ -2092,7 +2092,7 @@
 
 100     nullify( worm_mb )
 
-        if (error("Exit operators_mod::form_gk_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_gk_i")) continue
 
       end subroutine
 
@@ -2166,7 +2166,7 @@
 
         nullify( worm_mb )
 
-        if (error("Exit operators_mod::form_fs_type_projectors_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_fs_type_projectors_i")) continue
 
       end subroutine
 
@@ -2206,7 +2206,7 @@
 
         end if
 
-100     if (error("Exit operators_mod::form_rs_replica_phases_i")) continue
+100     if (error(FLERR,"Exit operators_mod::form_rs_replica_phases_i")) continue
 
       end subroutine
 
@@ -2252,7 +2252,7 @@
 100     call glean(thy(v))
         call glean(thy(hv))
 
-        if (error("Exit operators_mod::apply_potentials_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_potentials_i")) continue
 
       end subroutine
 
@@ -2316,7 +2316,7 @@
         call glean(thy(v))
         call glean(thy(hv))
 
-        if (error("Exit operators_mod::apply_local_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_local_i")) continue
 
       end subroutine
 
@@ -2376,7 +2376,7 @@
         call glean(thy(v))
         call glean(thy(hv))
 
-        if (error("Exit operators_mod::apply_fs_projectors_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_fs_projectors_i")) continue
 
       end subroutine
 
@@ -2457,7 +2457,7 @@
         call glean(thy(v))
         call glean(thy(hv))
 
-        if (error("Exit operators_mod::apply_local_and_rs_projectors_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_local_and_rs_projectors_i")) continue
 
       end subroutine
 
@@ -2500,7 +2500,7 @@
         call glean(thy(v))
         call glean(thy(ov))
 
-        if (error("Exit operators_mod::apply_fs_overlap_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_fs_overlap_i")) continue
 
       end subroutine
 
@@ -2582,7 +2582,7 @@
         call glean(thy(v))
         call glean(thy(ov))
 
-        if (error("Exit operators_mod::apply_rs_overlap_i")) continue
+        if (error(FLERR,"Exit operators_mod::apply_rs_overlap_i")) continue
 
       end subroutine
 
@@ -2805,7 +2805,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::projector_pressure_fs_i")) continue
+        if (error(FLERR,"Exit operators_mod::projector_pressure_fs_i")) continue
 
       end subroutine
 
@@ -2993,7 +2993,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::projector_stress_tensor_fs_i")) continue
+        if (error(FLERR,"Exit operators_mod::projector_stress_tensor_fs_i")) continue
 
       end subroutine
 
@@ -3039,7 +3039,7 @@
 100     if (allocated( phase )) deallocate( phase )
         nullify( worm_mb )
 
-        if (error("Exit operators_mod::expand_fs_projectors_i")) continue
+        if (error(FLERR,"Exit operators_mod::expand_fs_projectors_i")) continue
 
       end subroutine
 
@@ -3075,7 +3075,7 @@
         if (associated( y )) deallocate( y )
         if (associated( z )) deallocate( z )
 
-        if (error("Exit operators_mod::form_rs_global_phases_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_rs_global_phases_i")) continue
 
       end subroutine
 
@@ -3096,7 +3096,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_pdots_i")) continue
 
       end subroutine
 
@@ -3147,7 +3147,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_fs_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_fs_pdots_i")) continue
 
       end subroutine
 
@@ -3227,7 +3227,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_rs_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_rs_pdots_i")) continue
 
       end subroutine
 
@@ -3249,7 +3249,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_grad_pdots_i")) continue
 
       end subroutine
 
@@ -3311,7 +3311,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_fs_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_fs_grad_pdots_i")) continue
 
       end subroutine
 
@@ -3392,7 +3392,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_rs_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_rs_grad_pdots_i")) continue
 
       end subroutine
 
@@ -3414,7 +3414,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_pdots_and_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_pdots_and_grad_pdots_i")) continue
 
       end subroutine
 
@@ -3477,7 +3477,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_fs_pdots_and_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_fs_pdots_and_grad_pdots_i")) continue
 
       end subroutine
 
@@ -3575,7 +3575,7 @@
 
         call glean(thy(v))
 
-        if (error("Exit operators_mod::form_rs_pdots_and_grad_pdots_i")) continue
+        if (error(FLERR,"Exit operators_mod::form_rs_pdots_and_grad_pdots_i")) continue
 
       end subroutine
 

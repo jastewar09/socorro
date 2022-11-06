@@ -149,7 +149,7 @@
         if (present(restf)) then
           if (i_access(restf)) tios = findfirsttag(restf,"ATOMS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios /= TAG_START_BLOCK,"ERROR: ATOMS block was not found")) goto 200
+          if (error(FLERR,tios /= TAG_START_BLOCK,"ERROR: ATOMS block was not found")) goto 200
           if (i_access(restf)) call openblock(restf)
         end if
 
@@ -158,7 +158,7 @@
           ! read the number of atoms
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_ATOMS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: NUMBER_OF_ATOMS tag was not found")) goto 100
           if (i_access(restf)) then
             dsize = sizeof_long ; ndata = 1
             call readf(s4,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -169,7 +169,7 @@
           ! read the atom information
           if (i_access(restf)) tios = findfirsttag(restf,"ATOM_INFORMATION")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
-          if (error(tios == TAG_NOT_FOUND,"ERROR: ATOM_INFORMATION tag was not found")) goto 100
+          if (error(FLERR,tios == TAG_NOT_FOUND,"ERROR: ATOM_INFORMATION tag was not found")) goto 100
           allocate( at%o%atom_list(at%o%natoms) )
           if (i_access(restf)) then
             do ia = 1,at%o%natoms
@@ -203,7 +203,7 @@
 
 200     if (present(restf)) call glean(thy(restf))
 
-        if (error("Exit: constructor_at")) continue
+        if (error(FLERR,"Exit: constructor_at")) continue
 
       end function
 
@@ -321,10 +321,10 @@
 
 !cod$
         call my(at)
-        if (error((ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
         atg = at%o%atom_list(ia)%tag
 100     call glean(thy(at))
-        if (error("Exit atoms_mod::at_type_i")) continue
+        if (error(FLERR,"Exit atoms_mod::at_type_i")) continue
       end function
 
       function at_n_atoms(at) result(na)
@@ -365,10 +365,10 @@
 !cod$
         call my(at)
         pos = real((/0,0,0/),double)
-        if (error((ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
         pos = at%o%atom_list(ia)%position
 100     call glean(thy(at))
-        if (error("Exit atoms_mod::at_position_i")) continue
+        if (error(FLERR,"Exit atoms_mod::at_position_i")) continue
       end function
 
       subroutine add_at(at,tag,pos,velocity)
@@ -417,11 +417,11 @@
         call my(at)
         call own_i(at)
         at%o%g = x_ghost()
-        if (error((ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
         at%o%atom_list(ia:at%o%natoms-1) = at%o%atom_list(ia+1:at%o%natoms)
         at%o%natoms = at%o%natoms - 1
 100     call glean(thy(at))
-        if (error("Exit atoms_mod::remove_at")) continue
+        if (error(FLERR,"Exit atoms_mod::remove_at")) continue
       end subroutine
 
       subroutine move_at(at,pos)
@@ -438,13 +438,13 @@
         call my(at)
         call own_i(at)
         at%o%g = x_ghost()
-        if (error((size(pos,1) /= 3) .or. (size(pos,2) /= at%o%natoms),"ERROR: incorrect dimensions for pos")) goto 100
+        if (error(FLERR,(size(pos,1) /= 3) .or. (size(pos,2) /= at%o%natoms),"ERROR: incorrect dimensions for pos")) goto 100
         do ia = 1,at%o%natoms
           at%o%atom_list(ia)%position = pos(:,ia)
           call centralize_position_i(at%o%atom_list(ia)%position)
         end do
 100     call glean(thy(at))
-        if (error("Exit atoms_mod::move_at")) continue
+        if (error(FLERR,"Exit atoms_mod::move_at")) continue
       end subroutine
 
       subroutine move_at_i(at,ia,pos)
@@ -461,10 +461,10 @@
         call my(at)
         call own_i(at)
         at%o%g = x_ghost()
-        if (error((ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
+        if (error(FLERR,(ia < 1) .or. (ia > at%o%natoms),"ERROR: ia is out of range")) goto 100
         at%o%atom_list(ia)%position = pos
 100     call glean(thy(at))
-        if (error("Exit atoms_mod::move_at_i")) continue
+        if (error(FLERR,"Exit atoms_mod::move_at_i")) continue
       end subroutine
 
       subroutine save_at(at,prefix)
@@ -481,7 +481,7 @@
         call my(file(prefix//"atoms"),f)
         if (i_access(f)) open(x_unit(f),file=x_name(f),status='unknown',iostat=ios)
         if (i_comm(f)) call broadcast(FILE_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: unable to open file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: unable to open file")) goto 100
         if (i_access(f)) then
           write(x_unit(f),*) at%o%natoms
           do ia = 1,at%o%natoms
@@ -491,7 +491,7 @@
         if (i_access(f)) close(x_unit(f))
 100     call glean(thy(f))
         call glean(thy(at))
-999     if (error("Exit atoms_mod::save_at")) continue
+999     if (error(FLERR,"Exit atoms_mod::save_at")) continue
       end subroutine
 
       subroutine diary_at(at,lat)
@@ -562,7 +562,7 @@
 100     call glean(thy(at))
         call glean(thy(nrestf))
 
-        if (error("Exit atoms_mod::write_restart_at")) continue
+        if (error(FLERR,"Exit atoms_mod::write_restart_at")) continue
 
       end subroutine
 

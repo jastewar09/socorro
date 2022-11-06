@@ -553,10 +553,10 @@ end interface
         nd = size(vel,1)
         na = size(vel,2)
 
-        if (error(size(vel,2) /= size(masses),"init_velocities: size incompatability")) goto 100
+        if (error(FLERR,size(vel,2) /= size(masses),"init_velocities: size incompatability")) goto 100
 
         do i = 1,na
-           if (error(masses(i) <= 0.,"init_velocity: mass <= 0")) goto 100
+           if (error(FLERR,masses(i) <= 0.,"init_velocity: mass <= 0")) goto 100
         end do
            
 ! here vel is really momentum
@@ -582,7 +582,7 @@ end interface
            end do
         end if
 
-100     if (error("Exit ion_dynamics_mod:init_velocities")) continue
+100     if (error(FLERR,"Exit ion_dynamics_mod:init_velocities")) continue
 
       end subroutine init_velocities
       
@@ -658,7 +658,7 @@ end interface
         case (NVT_ANDERSON,NVT_HOOVER)
            temp = sum_ke/(1.5_double*iondynr%current%natoms*K_BOLTZMAN)
         case default
-           if (error(.true.,"compute_temperature: unknown md_method")) temp = 0.0_double
+           if (error(FLERR,.true.,"compute_temperature: unknown md_method")) temp = 0.0_double
         end select
 
       end function compute_temperature_i
@@ -741,7 +741,7 @@ end interface
 100     call glean(thy(iondyn))
         call glean(thy(nrestf))
 
-        if (error("Exit ion_dynamics_mod:: write_restart_ion_dynamics")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod:: write_restart_ion_dynamics")) continue
 
       end subroutine
 
@@ -1002,17 +1002,17 @@ end interface
         iondyn%ref = 0
         na = x_n_atoms(cfg)
         allocate( iondyn%o, STAT=status)
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
         allocate(iondyn%o%ave, STAT=status)
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
         allocate(iondyn%o%current, STAT=status)
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
         allocate(iondyn%o%current%pos_cart(3,na), STAT=status)
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
         allocate(iondyn%o%current%velocities(3,na), STAT=status)
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
         allocate(iondyn%o%current%masses(na), STAT=status )
-        if (error(status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"cons_tddft_ion_dynamics: allocate failure")) goto 100
 
         iondyn%o%g = x_ghost()
         iondyn%o%ref = 0
@@ -1021,7 +1021,7 @@ end interface
 
         if (debug) call warn('cons_tddft_ion_dynamics::calling read_params_i')
 
-        if (error(time_step < 0,"cons_tddft_ion_dynamics: time_step < 0")) goto 100
+        if (error(FLERR,time_step < 0,"cons_tddft_ion_dynamics: time_step < 0")) goto 100
         
         iondyn%o%time_step = time_step
         
@@ -1072,20 +1072,20 @@ end interface
               if (i_access(iondyn%o%init_vel_file)) &
                    &inquire(file=x_name(iondyn%o%init_vel_file),exist=exist_file)
               if (i_comm(iondyn%o%init_vel_file)) call broadcast(MOD_SCOPE,exist_file)
-              if (error(.not.exist_file,"ERROR: velocity file does not exist")) goto 100
+              if (error(FLERR,.not.exist_file,"ERROR: velocity file does not exist")) goto 100
 
               if (i_access(iondyn%o%init_vel_file)) &
                    &open(unit=x_unit(iondyn%o%init_vel_file), &
                    &file=x_name(iondyn%o%init_vel_file), iostat=ios)
               if (i_comm(iondyn%o%init_vel_file)) call broadcast(MOD_SCOPE,ios)
-              if (error(ios /= 0,"ERROR: unable to open velocity file")) goto 100
+              if (error(FLERR,ios /= 0,"ERROR: unable to open velocity file")) goto 100
 
               do i = 1,x_n_atoms(cfg)
                  if (i_access(iondyn%o%init_vel_file)) &
                       &read(x_unit(iondyn%o%init_vel_file),*,iostat=ios) &
                       &  iondyn%o%current%velocities(:,i)
                  if (i_comm(iondyn%o%init_vel_file)) call broadcast(MOD_SCOPE,ios)
-                 if (error(ios /= 0,"ERROR: read error in velocity file")) goto 100
+                 if (error(FLERR,ios /= 0,"ERROR: read error in velocity file")) goto 100
                  if (i_comm(iondyn%o%init_vel_file)) call broadcast(MOD_SCOPE,iondyn%o%current%velocities(:,i))
               end do
            else
@@ -1114,7 +1114,7 @@ end interface
 
 100     call glean(thy(cfg))
 
-        if (error("Exit ion_dynamics_mod::cons_tddft_ion_dynamics")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod::cons_tddft_ion_dynamics")) continue
 
         if (debug) call warn('cons_tddft_ion_dynamics::exiting')
 
@@ -1158,24 +1158,24 @@ end interface
         case ("nvt_hoover","hoover")
            iondynr%md_method = NVT_HOOVER
         case default
-           if (error(.true.,"cons_tddft_ion_dynamics: unrecognized md_method")) goto 100
+           if (error(FLERR,.true.,"cons_tddft_ion_dynamics: unrecognized md_method")) goto 100
         end select
               
         ! read md parameters 
         call arg("tddft_md_steps",iondynr%max_md_steps,fnd)
         if (.not.fnd) iondynr%max_md_steps = 0
-        if (error(iondynr%max_md_steps<0,"cons_tddft_ion_dynamics: max_md_steps < 0")) goto 100
+        if (error(FLERR,iondynr%max_md_steps<0,"cons_tddft_ion_dynamics: max_md_steps < 0")) goto 100
 
         call arg("tddft_md_skip_steps",iondynr%n_skip_steps,fnd)
         if (.not.fnd) iondynr%n_skip_steps=0
-        if (error(iondynr%n_skip_steps<0,"cons_tddft_ion_dynamics: n_skip_steps < 0")) goto 100
+        if (error(FLERR,iondynr%n_skip_steps<0,"cons_tddft_ion_dynamics: n_skip_steps < 0")) goto 100
 
         
 !        call arg("tddft_md_dt",iondynr%time_step,fnd)
 !        if (.not.fnd) iondynr%time_step = 100.
 !        iondynr%time_step = iondynr%time_step*FS_2_ARU
            
-!        if (error(iondynr%time_step<0,"cons_tddft_ion_dynamics: time_step < 0")) goto 100
+!        if (error(FLERR,iondynr%time_step<0,"cons_tddft_ion_dynamics: time_step < 0")) goto 100
 
         call arg("tddft_md_gen_velocities",tag,fnd)
         if (.not.fnd) tag = "yes"
@@ -1186,24 +1186,24 @@ end interface
         case ("no","false","off")
            iondynr%generate_velocities = 0
         case default
-           if (error(.true.,"unrecognized response: tddft_md_gen_velocities")) goto 100
+           if (error(FLERR,.true.,"unrecognized response: tddft_md_gen_velocities")) goto 100
         end select
         
         call arg("tddft_md_init_temp",iondynr%init_temp,fnd)
         if (.not.fnd) iondynr%init_temp = 0.0_double
-        if (error(iondynr%init_temp<0,"cons_tddft_ion_dynamics: init_temp < 0")) goto 100
+        if (error(FLERR,iondynr%init_temp<0,"cons_tddft_ion_dynamics: init_temp < 0")) goto 100
         
         call arg("tddft_md_desired_temp",iondynr%desired_temp,fnd)
         if (.not.fnd) iondynr%desired_temp = iondynr%init_temp
-        if (error(iondynr%desired_temp<0,"cons_tddft_ion_dynamics: desired_temp < 0")) goto 100
+        if (error(FLERR,iondynr%desired_temp<0,"cons_tddft_ion_dynamics: desired_temp < 0")) goto 100
         
         call arg("tddft_md_temp_freq",iondynr%temp_mod_freq,fnd)
         if (.not.fnd) iondynr%temp_mod_freq=5
-        if (error(iondynr%temp_mod_freq<1,"cons_tddft_ion_dynamics temp_mod_freq < 1")) goto 100
+        if (error(FLERR,iondynr%temp_mod_freq<1,"cons_tddft_ion_dynamics temp_mod_freq < 1")) goto 100
         
         call arg("tddft_md_hoover_mass",iondynr%current%hoover_mass,fnd)
         if (.not.fnd) iondynr%current%hoover_mass=1000.
-        if (error(iondynr%current%hoover_mass <= 0.0_double,"cons_tddft_ion_dynamics hoover_mass < 0")) goto 100
+        if (error(FLERR,iondynr%current%hoover_mass <= 0.0_double,"cons_tddft_ion_dynamics hoover_mass < 0")) goto 100
  
         call arg("nucpos_file_type",tag,fnd)
         if (.not.fnd) tag = 'pdb'
@@ -1254,7 +1254,7 @@ end interface
         case ("off",".false.","false")
            iondynr%ave%ave_pressure = .false.
         case default
-           if (error(.true.,"ERROR: pressure tag was not recognized")) goto 100
+           if (error(FLERR,.true.,"ERROR: pressure tag was not recognized")) goto 100
         end select
         call arg("stress_tensor",tag,fnd)
         if (.not.fnd) tag = "OFF"
@@ -1265,7 +1265,7 @@ end interface
         case ("off",".false.","false")
            iondynr%ave%ave_stress_tensor = .false.
         case default
-           if (error(.true.,"ERROR: pressure tag was not recognized")) goto 100
+           if (error(FLERR,.true.,"ERROR: pressure tag was not recognized")) goto 100
         end select
           
         iondynr%current%natoms = x_n_atoms(cfg)
@@ -1273,10 +1273,10 @@ end interface
         do i = 1,iondynr%current%natoms
            tag = "atom_mass_"//x_type(cfg,i)
            call arg(tag(1:len_trim(tag)),mass_temp,fnd)
-           if (error(.not.fnd,"ERROR: mass not found")) goto 100
+           if (error(FLERR,.not.fnd,"ERROR: mass not found")) goto 100
 !           iondynr%current%masses(i) = AMU_2_ELECTRON_MASS*mass_temp
            iondynr%current%masses(i) = AMU_2_ARU*mass_temp
-           if (error(iondynr%current%masses(i) <= 0.0_double,"ERROR: mass <= 0")) goto 100
+           if (error(FLERR,iondynr%current%masses(i) <= 0.0_double,"ERROR: mass <= 0")) goto 100
            if ( i_access(diaryfile()) ) then
 !              write(x_unit(diaryfile()),"('mass for atom',i6,' =',2g14.5)") &
 !                   & i,iondynr%current%masses(i),iondynr%current%masses(i)/AMU_2_ELECTRON_MASS
@@ -1286,7 +1286,7 @@ end interface
         end do
         
 100     call glean(thy(cfg))
-        if (error("ERROR:ion_dynamics_mod:read_params_i exiting")) continue
+        if (error(FLERR,"ERROR:ion_dynamics_mod:read_params_i exiting")) continue
         
       end subroutine read_params_i
 
@@ -1314,14 +1314,14 @@ end interface
         CASE (NVT_HOOVER)
            changed = hoover_tddft(cfg,iondyn); if (error()) goto 100
         CASE default
-           if (error(.true.,"tddft_md_method not defined")) call diary(iondyn)
+           if (error(FLERR,.true.,"tddft_md_method not defined")) call diary(iondyn)
            changed = .false.
         END SELECT branch
            
 100     call glean(thy(cfg))
         call glean(thy(iondyn))
 
-        if (error("Exit ion_dynamics_mod::move_atoms")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod::move_atoms")) continue
 
       end function 
 
@@ -1359,7 +1359,7 @@ end interface
         time_step = iondyn%o%time_step
 
         allocate( frcs(3,natoms), accel(3,natoms), STAT=status )
-        if (error(status /= 0,"v_verlet: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"v_verlet: allocate failure")) goto 100
 
         call x_cart_positions(cfg,iondyn%o%current%pos_cart)
  
@@ -1403,7 +1403,7 @@ end interface
 100     call glean(thy(iondyn))
         call glean(thy(cfg))
 
-        if (error("Exit ion_dynamics_mod:v_verlet_tddft")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod:v_verlet_tddft")) continue
 
         if (debug) call warn('ion_dynamics::v_verlet_tddft - exiting...')
 
@@ -1438,7 +1438,7 @@ end interface
         allocate( frcs(3,iondyn%o%current%natoms), &
              & accel(3,iondyn%o%current%natoms), STAT=status )
         
-        if (error(status /= 0,"relax_md: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"relax_md: allocate failure")) goto 100
 
         call x_cart_positions(cfg,iondyn%o%current%pos_cart)
 
@@ -1483,7 +1483,7 @@ end interface
 100     call glean(thy(iondyn))
         call glean(thy(cfg))
 
-        if (error("Exit ion_dynamics_mod:rescale_tddft")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod:rescale_tddft")) continue
 
       end function 
 
@@ -1514,11 +1514,11 @@ end interface
         time_step = iondyn%o%time_step
         
         allocate( frcs(3,iondyn%o%current%natoms), STAT=status)
-        if (error(status /= 0,"relax_md: allocate failure - forces")) goto 100
+        if (error(FLERR,status /= 0,"relax_md: allocate failure - forces")) goto 100
         allocate( accel(3,iondyn%o%current%natoms), STAT=status)
-        if (error(status /= 0,"relax_md: allocate failure - accel")) goto 100
+        if (error(FLERR,status /= 0,"relax_md: allocate failure - accel")) goto 100
         allocate( test_numbers(iondyn%o%current%natoms), STAT=status )
-        if (error(status /= 0,"relax_md: allocate failure - test")) goto 100
+        if (error(FLERR,status /= 0,"relax_md: allocate failure - test")) goto 100
 
         call x_cart_positions(cfg,iondyn%o%current%pos_cart)
 
@@ -1569,7 +1569,7 @@ end interface
 100     call glean(thy(iondyn))
         call glean(thy(cfg))
 
-        if (error("Exit ion_dynamics_mod:anderson_tddft")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod:anderson_tddft")) continue
 
       end function 
 
@@ -1612,11 +1612,11 @@ end interface
         time_step = iondyn%o%time_step
         
         allocate( frcs(3,natoms), accel(3,natoms), STAT=status )
-        if (error(status /= 0,"hoover_md: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"hoover_md: allocate failure")) goto 100
         allocate( b(3,natoms), c(3,natoms), h(3,natoms), STAT=status )
-        if (error(status /= 0,"hoover_md: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"hoover_md: allocate failure")) goto 100
         allocate( v1(3,natoms), v2(3,natoms), vel_prime(3,natoms), STAT=status )
-        if (error(status /= 0,"hoover_md: allocate failure")) goto 100
+        if (error(FLERR,status /= 0,"hoover_md: allocate failure")) goto 100
         
         call x_cart_positions(cfg,iondyn%o%current%pos_cart)
 
@@ -1701,7 +1701,7 @@ end interface
            if (test_val < SOLVE_TOL) solved = .true.
            
            n_solve_tries = n_solve_tries + 1
-           if (error(n_solve_tries > MAX_SOLVE_TRIES,"hoover_md: solve failed")) goto 100
+           if (error(FLERR,n_solve_tries > MAX_SOLVE_TRIES,"hoover_md: solve failed")) goto 100
            
         end do
         
@@ -1719,7 +1719,7 @@ end interface
         call glean(thy(iondyn))
         call glean(thy(cfg))
 
-        if (error("Exit ion_dynamics_mod: hoover_tddft")) continue
+        if (error(FLERR,"Exit ion_dynamics_mod: hoover_tddft")) continue
 
       end function
 
@@ -1760,7 +1760,7 @@ end interface
                    iostat=ios)
         end if
         if (i_comm(f)) call broadcast(MOD_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: error opening file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: error opening file")) goto 100
 
         if (debug) call warn('ion_dynamics::write_pdb_file_i - writing the file')
 
@@ -1783,7 +1783,7 @@ end interface
 
 100     call glean(thy(cfg))
         call glean(thy(f))
-        if (error("ion_dynamics::write_pdb_file_i")) continue
+        if (error(FLERR,"ion_dynamics::write_pdb_file_i")) continue
 
         if (debug) call warn('ion_dynamics::write_pdb_file_i - exiting')
 
@@ -1818,7 +1818,7 @@ end interface
                    iostat=ios)
         end if
         if (i_comm(f)) call broadcast(MOD_SCOPE,ios)
-        if (error(ios /= 0,"ERROR: error opening file")) goto 100
+        if (error(FLERR,ios /= 0,"ERROR: error opening file")) goto 100
 
         !** Write the atom postions to a file in xyz format
         if (i_access(f)) then
@@ -1837,7 +1837,7 @@ end interface
 
 100     call glean(thy(cfg))
         call glean(thy(f))
-        if (error("ion_dynamics::write_xyz_file_i")) continue
+        if (error(FLERR,"ion_dynamics::write_xyz_file_i")) continue
 
       end subroutine
 
@@ -1864,7 +1864,7 @@ end interface
         else if (filetype == XYZ) then
            filename = "nucpos_        .xyz"
         else
-           if (error(.true.,"Error - unrecognized filetype")) goto 100
+           if (error(FLERR,.true.,"Error - unrecognized filetype")) goto 100
         end if
 
         pos = 8
@@ -1880,7 +1880,7 @@ end interface
            end if
         end do
 
-100     if (error("ion_dynamics::get_nucpos_filename_i - Exiting")) continue
+100     if (error(FLERR,"ion_dynamics::get_nucpos_filename_i - Exiting")) continue
 
         if (debug) write(*,*) 'ion_dynamics::get_nucpos_filename_i - exiting'
 
