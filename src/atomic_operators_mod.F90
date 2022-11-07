@@ -950,9 +950,9 @@
 !cod$
         select case (ao%type)
         case (NCP)
-          if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,t4,"Using the Norm-Conserving Pseudopotential method")')
+          if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,t4,"Using the Norm-Conserving Pseudopotential (NCP) method")')
         case (PAW)
-          if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,t4,"Using the Projector-Augmented Wave method")')
+          if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,t4,"Using the Projector-Augmented Wave (PAW) method")')
         end select
         call glean(ao)
       end subroutine
