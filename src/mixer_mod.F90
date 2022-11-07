@@ -228,7 +228,7 @@
         case ("on")
           mx%o%report = .true.
         case default
-          if (error(FLERR,.true.,"WARNING: mix_report not recognized")) continue
+          if (error(FLERR,.true.,"mix_report not recognized")) continue
         end select
 
         ! determine the size of field arrays

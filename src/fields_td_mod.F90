@@ -1165,7 +1165,7 @@
           if (error(FLERR,.not.found,"ERROR: lmcc_site tag was not found")) goto 200
           s = fdr%lmcc_site
           call centralize_position_i(fdr%lmcc_site)
-          if (any(fdr%lmcc_site /= s)) call warn("WARNING: the counter charge was translated into the central parallelpiped")
+          if (any(fdr%lmcc_site /= s)) call warn(FLERR,"the counter charge was translated into the central parallelpiped")
           if (error(FLERR,.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
           call arg("lmcc_width",fdr%lmcc_width,found)
           if (.not.found) fdr%lmcc_width = 1.50_double

@@ -826,9 +826,9 @@
           if (related_23) exit
         end do
 
-        if ( related_12 .and. (q1 /= q2) ) call warn("WARNING: q1 should equal q2")
-        if ( related_13 .and. (q1 /= q3) ) call warn("WARNING: q1 should equal q3")
-        if ( related_23 .and. (q2 /= q3) ) call warn("WARNING: q2 should equal q3")
+        if ( related_12 .and. (q1 /= q2) ) call warn(FLERR,"q1 should equal q2")
+        if ( related_13 .and. (q1 /= q3) ) call warn(FLERR,"q1 should equal q3")
+        if ( related_23 .and. (q2 /= q3) ) call warn(FLERR,"q2 should equal q3")
 
 100     call glean(thy(pg))
 
@@ -1016,7 +1016,7 @@
           mag(2) = norm(lat2r(lat,real((/0,1,0/),double)))
           mag(3) = norm(lat2r(lat,real((/0,0,1/),double)))
           sg%o%tol_aperm = tol_in/minval(mag)
-          if (sg%o%tol_aperm > 1.0e-4_double) call warn("WARNING: the space-group tolerance is very loose")
+          if (sg%o%tol_aperm > 1.0e-4_double) call warn(FLERR,"the space-group tolerance is very loose")
         else
           sg%o%tol_aperm = 1.0e-8_double
         end if

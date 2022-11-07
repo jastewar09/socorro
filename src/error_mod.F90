@@ -378,15 +378,17 @@
 
       end function
 
-      subroutine warn(msg)
+      subroutine warn(file,line,msg)
 !doc$ subroutine warn(msg)
          character(*), intent(in) :: msg
+         character(*) :: file
+         integer :: line
 !        effects: Writes msg to the error file.
 
 !cod$
          select case (file_status)
          case (EF_ON)
-            write(error_unit,'(a)') trim(msg)
+            write(error_unit,'("WARNING: ",a," (",a,":",i0,")")') msg,basename(file),line
             call flush_i()
          end select
 

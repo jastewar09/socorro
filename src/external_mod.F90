@@ -722,7 +722,7 @@
               if ((nn > in) .and. (mod(in,8) == 0)) write(x_unit(diaryfile()),'(/,t13)',advance="no")
             end do
             if (atom_overlap(ia)) then
-              write(x_unit(diaryfile()),'(2x,"Warning: atom overlap")')
+              write(x_unit(diaryfile()),'(2x,"atom overlap")')
             else
               write(x_unit(diaryfile()),*)
             end if

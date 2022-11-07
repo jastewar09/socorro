@@ -151,7 +151,7 @@
         case ("on")
           es%o%report = .true.
         case default
-          if (error(FLERR,.true.,"WARNING: solver_report not recognized")) continue
+          if (error(FLERR,.true.,"solver_report not recognized")) continue
         end select
 
         ! determine the rf_mode

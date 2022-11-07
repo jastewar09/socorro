@@ -115,7 +115,7 @@
           if (ex) then
             open(unit=INTERRUPT_UNIT,file=trim(stop_name),status='old',iostat=ios)
             if (ios /= 0) then
-              call warn("WARNING: The interrupt file could not be opened")
+              call warn(FLERR,"The interrupt file could not be opened")
               goto 100
             end if
             close(unit=INTERRUPT_UNIT,status='delete')

@@ -928,7 +928,7 @@
             if (associated( pd%o%nlpo )) deallocate( pd%o%nlpo )
             if (associated( pd%o%g )) deallocate( pd%o%g )
             if (associated( pd%o%w_max )) deallocate( pd%o%w_max )
-            call warn("WARNING: real-space projectors are being re-optimized")
+            call warn(FLERR,"real-space projectors are being re-optimized")
             call optimize_nlp_i(pd%o) ; if (error()) goto 100
           end if
         end if

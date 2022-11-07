@@ -672,7 +672,7 @@
           call diary(cfg,bo%o%n_md_steps)
           if (bo%o%n_md_steps .ge. bo%o%max_md_steps) exit
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             exit
           end if
           bo%o%current%pos_cart = bo%o%current%pos_cart + &
@@ -739,7 +739,7 @@
            call diary(cfg,bo%o%n_md_steps)
            if (bo%o%n_md_steps .ge. bo%o%max_md_steps) exit
            if (user_stop()) then
-             call warn("WARNING: USER INITIATED STOP")
+             call warn(FLERR,"USER INITIATED STOP")
              exit
            end if
 
@@ -824,7 +824,7 @@
            call diary(cfg,bo%o%n_md_steps)
            if (bo%o%n_md_steps .ge. bo%o%max_md_steps) exit
            if (user_stop()) then
-             call warn("WARNING: USER INITIATED STOP")
+             call warn(FLERR,"USER INITIATED STOP")
              exit
            end if
 
@@ -933,7 +933,7 @@
            call diary(cfg,bo%o%n_md_steps)
            if (bo%o%n_md_steps .ge. bo%o%max_md_steps) exit
            if (user_stop()) then
-             call warn("WARNING: USER INITIATED STOP")
+             call warn(FLERR,"USER INITIATED STOP")
              exit
            end if
 

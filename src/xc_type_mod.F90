@@ -286,7 +286,7 @@
               end if
               if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%dependence)
             else
-              call warn("WARNING: Legacy restart file - taking functional dependence to be density")
+              call warn(FLERR,"Legacy restart file - taking functional dependence to be density")
               xct%o%dependence = FD_DENSITY
             end if
           else
@@ -320,7 +320,7 @@
                 end if
                 if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%ddf_source)
               else
-                call warn("WARNING: Legacy restart file - taking density-dependent functional source to be native")
+                call warn(FLERR,"Legacy restart file - taking density-dependent functional source to be native")
                 xct%o%ddf_source = DDFS_NATIVE
               end if
             else
@@ -406,7 +406,7 @@
                 xct%o%correlation = C_NG
               end if
             else
-              call warn("WARNING: Looking for legacy functional/correlation tags")
+              call warn(FLERR,"Looking for legacy functional/correlation tags")
               call arglc("functional",tag,found)
               if (found) then
                 xct%o%exchange = exchange_i(tag) ; if (error()) goto 100
@@ -535,32 +535,32 @@
             select case (trim(tag))
             case ("analytical","a")
               if (xct%o%derivative_method == XCD_NUMERICAL) then
-                call warn("WARNING: analytical derivatives are not available - using numerical derivatives")
+                call warn(FLERR,"analytical derivatives are not available - using numerical derivatives")
               end if
             case ("numerical","n")
               if (xct%o%derivative_method == XCD_ANALYTICAL) then
-                call warn("WARNING: numerical derivatives are being used when analytical derivatives are available")
+                call warn(FLERR,"numerical derivatives are being used when analytical derivatives are available")
                 xct%o%derivative_method = XCD_NUMERICAL
               end if
             case default
-               call warn("WARNING: xctype_derivative_method was not recognized - using default method")
+               call warn(FLERR,"xctype_derivative_method was not recognized - using default method")
             end select
           else
-            call warn("WARNING: Looking for legacy derivatives tag")
+            call warn(FLERR,"Looking for legacy derivatives tag")
             call arglc("derivatives",tag,found)
             if (found) then
               select case (trim(tag))
               case ("analytical","a")
                 if (xct%o%derivative_method == XCD_NUMERICAL) then
-                  call warn("WARNING: analytical derivatives are not available - using numerical derivatives")
+                  call warn(FLERR,"analytical derivatives are not available - using numerical derivatives")
                 end if
               case ("numerical","n")
                 if (xct%o%derivative_method == XCD_ANALYTICAL) then
-                  call warn("WARNING: numerical derivatives are being used when analytical derivatives are available")
+                  call warn(FLERR,"numerical derivatives are being used when analytical derivatives are available")
                   xct%o%derivative_method = XCD_NUMERICAL
                 end if
               case default
-                call warn("WARNING: derivative_method was not recognized - using default method")
+                call warn(FLERR,"derivative_method was not recognized - using default method")
               end select
             else
               if (present(restf)) then
@@ -575,10 +575,10 @@
                   end if
                   if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%derivative_method)
                 else
-                  call warn("WARNING: Legacy restart file - using the default derivative_method")
+                  call warn(FLERR,"Legacy restart file - using the default derivative_method")
                 end if
               else
-                call warn("WARNING: derivative_method was not found - using default method")
+                call warn(FLERR,"derivative_method was not found - using default method")
               end if
             end if
           end if
@@ -588,15 +588,15 @@
             select case (trim(tag))
             case ("analytical","a")
               if (xct%o%derivative_method == XCD_NUMERICAL) then
-                call warn("WARNING: analytical derivatives are not available - using numerical derivatives")
+                call warn(FLERR,"analytical derivatives are not available - using numerical derivatives")
               end if
             case ("numerical","n")
               if (xct%o%derivative_method == XCD_ANALYTICAL) then
-                call warn("WARNING: numerical derivatives are being used when analytical derivatives are available")
+                call warn(FLERR,"numerical derivatives are being used when analytical derivatives are available")
                 xct%o%derivative_method = XCD_NUMERICAL
               end if
             case default
-               call warn("WARNING: xctype_derivative_method was not recognized - using default method")
+               call warn(FLERR,"xctype_derivative_method was not recognized - using default method")
             end select
           else
             if (present(restf)) then
@@ -611,7 +611,7 @@
               end if
               if (i_comm(restf)) call broadcast(FILE_SCOPE,xct%o%derivative_method)
             else
-              call warn("WARNING: derivative_method was not found - using default method")
+              call warn(FLERR,"derivative_method was not found - using default method")
             end if
           end if
         end select
@@ -935,14 +935,14 @@
             if (xct%o%coulomb_kernel == CK_SCREENED) then
                call arg("xctype_omega_orb", xct%o%omega_orb, found_omega_orb)
                if (found_omega_orb) then
-                  call warn("Warning: overriding default orbital screening length")
+                  call warn(FLERR,"overriding default orbital screening length")
                   if (xct%o%omega_orb < 0.0_double) then
                      if (error(FLERR,.true.,"ERROR: omega_orb, screening length < 0. Not valid")) goto 100
                   end if
                end if
                call arg("xctype_omega_den", xct%o%omega_den, found_omega_den)
                if (found_omega_den) then
-                  call warn("Warning: overriding default density screening length")
+                  call warn(FLERR,"overriding default density screening length")
                   if (xct%o%omega_den < 0.0_double) then
                      if (error(FLERR,.true.,"ERROR: omega_den, screening length < 0. Not valid")) goto 100
                   end if
@@ -1629,9 +1629,9 @@
             case ("pw")
               c = C_PW
             case ("lyp")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           case (E_PW91)
             c = C_PW
@@ -1639,12 +1639,12 @@
             case ("pw")
               continue
             case ("pz")
-              call warn("WARNING: non-standard correlation being used")
+              call warn(FLERR,"non-standard correlation being used")
               c = C_PZ
             case ("lyp")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           case (E_PBE)
             c = C_PW
@@ -1652,12 +1652,12 @@
             case ("pw")
               continue
             case ("pz")
-              call warn("WARNING: non-standard correlation being used")
+              call warn(FLERR,"non-standard correlation being used")
               c = C_PZ
             case ("lyp")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           case (E_BLYP)
             c = C_LYP
@@ -1665,9 +1665,9 @@
             case ("lyp")
               continue
             case ("pz","pw")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           case (E_AM05)
             c = C_PW
@@ -1675,12 +1675,12 @@
             case ("pw")
               continue
             case ("pz")
-              call warn("WARNING: non-standard correlation being used")
+              call warn(FLERR,"non-standard correlation being used")
               c = C_PZ
             case ("lyp")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           case (E_LSDA)
             c = C_PW
@@ -1688,9 +1688,9 @@
             case ("pw")
               continue
             case ("pz","lyp")
-              call warn("WARNING: improper correlation - using default")
+              call warn(FLERR,"improper correlation - using default")
             case default
-              call warn("WARNING: unknown correlation - using default")
+              call warn(FLERR,"unknown correlation - using default")
             end select
           end select
         else
@@ -1740,10 +1740,10 @@
         select case(xc_family)
         case (XC_FAMILY_UNKNOWN)
           valid = .false.
-          call warn("WARNING: xc - XC_FAMILY UNKNOWN")
+          call warn(FLERR,"xc - XC_FAMILY UNKNOWN")
         case (XC_FAMILY_NONE)
           valid = .false.
-          call warn("WARNING: xc - XC_FAMILY_NONE")
+          call warn(FLERR,"xc - XC_FAMILY_NONE")
         end select
 
         call xc_f90_func_end(xc_func)
@@ -1778,10 +1778,10 @@
         select case(x_family)
         case (XC_FAMILY_UNKNOWN)
           valid = .false.
-          call warn("WARNING: x - XC_FAMILY UNKNOWN")
+          call warn(FLERR,"x - XC_FAMILY UNKNOWN")
         case (XC_FAMILY_NONE)
           valid = .false.
-          call warn("WARNING: x - XC_FAMILY NONE")
+          call warn(FLERR,"x - XC_FAMILY NONE")
         end select
 
         call xc_f90_func_end(xc_func)
@@ -1816,10 +1816,10 @@
         select case(c_family)
         case (XC_FAMILY_UNKNOWN)
           valid = .false.
-          call warn("WARNING: c - XC_FAMILY UNKNOWN")
+          call warn(FLERR,"c - XC_FAMILY UNKNOWN")
         case (XC_FAMILY_NONE)
           valid = .false.
-          call warn("WARNING: c - XC_FAMILY NONE")
+          call warn(FLERR,"c - XC_FAMILY NONE")
         end select
 
         call xc_f90_func_end(xc_func)

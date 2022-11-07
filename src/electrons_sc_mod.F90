@@ -599,7 +599,7 @@
           goto 200
         end if
         if (mod(nk,mpi_nkgroups()) /= 0) then
-          call warn("WARNING: non-equal division of k-points among kgroups")
+          call warn(FLERR,"non-equal division of k-points among kgroups")
         end if
         allocate( el%o%kgroup_index(nk) )
         do ik = 1,nk
@@ -1509,7 +1509,7 @@
         case("vtk","visualizationtoolkit","v")
            file_format = VTK
         case default
-           call warn("Unrecognized entry for write_file_format, setting to MATLAB")
+           call warn(FLERR,"Unrecognized entry for write_file_format, setting to MATLAB")
            file_format = MATLAB
         end select
           
@@ -1877,7 +1877,7 @@
         call xcomm_allreduce(XSGROUP,MPI_MAX,b2_sg,b2) ; if (error()) goto 100
         nb = b2 - b1 + 1
         if (nb < 0) then
-          call warn("WARNING: aborting decomposition because nb < 0")
+          call warn(FLERR,"aborting decomposition because nb < 0")
           goto 100
         end if
 
@@ -2584,7 +2584,7 @@
         integer :: ib, ik
         real(double) :: x
 
-        call warn(" ")
+        call warn(FLERR," ")
         call notify("it",it)
         call notify("emin",emin)
         call notify("emax",emax)
@@ -2593,7 +2593,7 @@
         call notify("q",q)
         q = 0.0_double
         do ik = 1,size(elr%eigs,1)
-          call warn(" ")
+          call warn(FLERR," ")
           call notify("    ik",ik)
           do ib = 1,size(elr%eigs,2)
             x = (elr%eigs(ik,ib) - fl)

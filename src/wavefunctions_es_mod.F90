@@ -688,7 +688,7 @@
       subroutine own_i(wf)
         type(wavefunctions_es_obj) :: wf, wft
         if (wf%ref < wf%o%ref) then
-          call warn("WARNING: wavefunctions mutation called: massive copy going on")
+          call warn(FLERR,"wavefunctions mutation called: massive copy going on")
           allocate( wft%o )
           wft%o%ref = 0
           wft%o%g = wf%o%g

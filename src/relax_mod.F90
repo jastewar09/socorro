@@ -768,7 +768,7 @@
           call diary(cfg,rx%o%step)
           if (.not.continue_relax_i(cfg,rx)) exit
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             exit
           end if
           call x_cart_positions(cfg,pos_cart)
@@ -824,7 +824,7 @@
         do
           if (.not.continue_relax_i(cfg,rx)) exit
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             exit
           end if
           call linmin_i(cfg,rx,xi) ; if (error()) goto 100
@@ -938,7 +938,7 @@
 
           ! check for user-initiated stop
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             exit
           end if
 
@@ -1172,7 +1172,7 @@
         do
           pos_cart = pos_cart_start + alpha_c*direction
           call update_config(cfg,pos_cart) ; if (error()) goto 100
-          call warn('out of update config')
+          call warn(FLERR,'out of update config')
           rx%o%step = rx%o%step + 1
           call diary(cfg,rx%o%step)
           grad_c = atom_dot_product(x_forces(cfg),direction)

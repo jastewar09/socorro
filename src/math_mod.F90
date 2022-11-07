@@ -686,7 +686,7 @@
           err = err + abs(os(i))
           if (err > eta) exit
         end do
-        if (i == nos) call warn("eta may be too small")
+        if (i == nos) call warn(FLERR,"eta may be too small")
  100    f = i
       end function
 

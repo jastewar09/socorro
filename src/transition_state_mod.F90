@@ -366,7 +366,7 @@
 
           call barrier(MOD_SCOPE)
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             goto 100
           end if
 
@@ -444,7 +444,7 @@
 
           call barrier(MOD_SCOPE)
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             goto 100
           end if
 
@@ -1030,7 +1030,7 @@
           end if
           call barrier(MOD_SCOPE)
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             goto 100
           end if
           do ic = 1,size(nebr%pos_cart,3)
@@ -1080,7 +1080,7 @@
           end if
           call barrier(MOD_SCOPE)
           if (user_stop()) then
-            call warn("WARNING: USER INITIATED STOP")
+            call warn(FLERR,"USER INITIATED STOP")
             goto 100
           end if
           do ic = 1,size(nebr%pos_cart,3)
@@ -1604,7 +1604,7 @@
    
              call barrier(MOD_SCOPE)
              if (user_stop()) then
-               call warn("WARNING: USER INITIATED STOP")
+               call warn(FLERR,"USER INITIATED STOP")
                goto 100
              end if
    

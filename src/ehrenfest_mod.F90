@@ -174,37 +174,37 @@
 
         debug = .false.
 
-        if (debug) call warn("ehrenfest_dynamics starting")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics starting")
 
         
         !** Initialize the ehrenfest params 
-        if (debug) call warn("ehrenfest_dynamics: calling init_params_i")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics: calling init_params_i")
         call init_params_i( params )      ; if (error()) goto 100
 
         !** Initialize the ehrenfest state variables
-        if (debug) call warn("ehrenfest_dynamics: calling init_state_i")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics: calling init_state_i")
         call init_state_i( state, params) ; if (error()) goto 100
 
         !** Initialize the ehrenfest output files
-        if (debug) call warn("ehrenfest_dynamics: calling init_files_i")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics: calling init_files_i")
         call init_files_i( files, params ); if (error()) goto 100
 
         !** print out initial values of various quantities to output files
-        if (debug) call warn("ehrenfest_dynamics: dump output ")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics: dump output ")
         call dump_output_i(state,params,files,disable_restart=.true.)  ; if (error()) goto 100
 
         
         !*********************************************************************
         !** Main TDDFT loop. *************************************************
-        if (debug) call warn("ehrenfest_dynamics: before do while(time < runtime)")
+        if (debug) call warn(FLERR,"ehrenfest_dynamics: before do while(time < runtime)")
         do while ( state%time < params%runtime )
 
            !** Update the external potential (move atoms and update any free fields)
-           if (debug) call warn("ehrenfest_dynamics:main_loop: before update_ext_i ")
+           if (debug) call warn(FLERR,"ehrenfest_dynamics:main_loop: before update_ext_i ")
            call update_ext_i(state, params)
 
            !** This update will result in a single electronic time step.
-           if (debug) call warn("ehrenfest_dynamics:main_loop: before propagate ")
+           if (debug) call warn(FLERR,"ehrenfest_dynamics:main_loop: before propagate ")
 !           call update(state%cfg_td,state%ext,state%time,params%dt,params%selfconsistent,state%num_sc_steps)
            call update(state%cfg_td, state%ext)
            if (error()) goto 100
@@ -219,10 +219,10 @@
            !** Call a routine to dump various info out to file and or console
            call dump_output_i(state,params,files)  ; if (error()) goto 100
 
-           if (debug) call warn("ehrenfest_dynamics::main loop - calling user_stop()")
+           if (debug) call warn(FLERR,"ehrenfest_dynamics::main loop - calling user_stop()")
               
            if (user_stop()) then
-              call warn("WARNING: USER INITIATED STOP")
+              call warn(FLERR,"USER INITIATED STOP")
               exit
            end if
 
@@ -236,7 +236,7 @@
 
 100     if (error(FLERR,"Exit ehrenfest_mod::ehrenfest_dynamics")) continue
 
-        if (debug) call warn ("ehrenfest_mod::ehrenfest_dynamics() closed state, exiting")
+        if (debug) call warn(FLERR,"ehrenfest_mod::ehrenfest_dynamics() closed state, exiting")
 
       end subroutine
 
@@ -466,7 +466,7 @@
 
         debug = .false.
         
-        if (debug) call warn("init_state_i:: starting ")
+        if (debug) call warn(FLERR,"init_state_i:: starting ")
 
 
         !*********************************************************************************************
@@ -568,7 +568,7 @@
         !*********************************************************************************************
         !*********************************************************************************************
 
-        if (debug) call warn("init_state_i:: call update(cfg_td...) ")
+        if (debug) call warn(FLERR,"init_state_i:: call update(cfg_td...) ")
 
         !** update the config object with the cutoffs. Note that if a cutoff
         !      is negative, nothing will be changed in the underlying hamiltonian
@@ -600,7 +600,7 @@
 
         debug = .false.
         
-        if (debug) call warn("init_files_i:: starting ")
+        if (debug) call warn(FLERR,"init_files_i:: starting ")
 
         !*********************************************************************************************
         !** Check to see if this is a restart
@@ -621,7 +621,7 @@
            end if
            
            !** Write some field quantities to 'fields_out'
-           if (debug) call warn("init_ehrenfest_i:: write out the vector potential, etc... ")
+           if (debug) call warn(FLERR,"init_ehrenfest_i:: write out the vector potential, etc... ")
            call my(file('fields_out'), files%fields_out)
            file_exists = open_file_i(files%fields_out,append=.false.)
            if (error(FLERR,"Error opening the fields_out file")) goto 100
@@ -765,7 +765,7 @@
 
         debug = .false.
 
-        if (debug) call warn("ehrenfest::close_files_i - starting")
+        if (debug) call warn(FLERR,"ehrenfest::close_files_i - starting")
         if (i_access(files%tddft_out)) close(x_unit(files%tddft_out))
 
         if (i_access(files%fields_out)) close(x_unit(files%fields_out))
@@ -785,7 +785,7 @@
            if (i_access(files%orth_out)) close(x_unit(files%orth_out))
         end if
 
-        if (debug) call warn("ehrenfest::close_files_i - gleaning")
+        if (debug) call warn(FLERR,"ehrenfest::close_files_i - gleaning")
 
         call glean(thy(files%tddft_out))   ; if (error()) goto 100
         call glean(thy(files%fields_out))  ; if (error()) goto 100
@@ -798,7 +798,7 @@
 
 100     if (error(FLERR,"Exit ehrenfest_mod::close_files_i")) continue
 
-        if (debug) call warn("ehrenfest::close_files_i - exiting")
+        if (debug) call warn(FLERR,"ehrenfest::close_files_i - exiting")
 
       end subroutine close_files_i
 
@@ -894,21 +894,21 @@
         if (present(disable_restart)) restart_enabled = .not.disable_restart
 
         !** Dump data to tddft_out and fields_out
-        if (debug) call warn("dump_output_i:: dump_tddft_fields_out_i ")
+        if (debug) call warn(FLERR,"dump_output_i:: dump_tddft_fields_out_i ")
         if (0 < params%file_dump_interval) then
            if (mod(state%istep,params%file_dump_interval) == 0) then
               call dump_tddft_fields_out_i(state,params,files) ; if (error()) goto 100
            end if
         end if
 
-        if (debug) call warn("dump_output_i:: printing progress out to screen ")
+        if (debug) call warn(FLERR,"dump_output_i:: printing progress out to screen ")
         
         !** print out progress to console
         if (0 < params%screen_dump_interval) then
            if (mod(state%istep,params%screen_dump_interval) == 0) then
-              if (debug) call warn("dump_output_i:: calling get_norm")
+              if (debug) call warn(FLERR,"dump_output_i:: calling get_norm")
               norm = get_norm(x_electrons(state%cfg_td))
-              if (debug) call warn("dump_output_i:: setting num_hpsis")
+              if (debug) call warn(FLERR,"dump_output_i:: setting num_hpsis")
 
               num_hpsis = num_hamiltonian_ops(x_electrons(state%cfg_td))
 
@@ -918,11 +918,11 @@
                    "  |v|", norm, &
                    " H|v>s:", num_hpsis, "sc steps", state%num_sc_steps
 
-              if (debug) call warn("dump_output_i:: finished write(x_unit)")
+              if (debug) call warn(FLERR,"dump_output_i:: finished write(x_unit)")
            end if
         end if
 
-        if (debug) call warn("dump_output_i:: writing out a restart file (maybe) ")
+        if (debug) call warn(FLERR,"dump_output_i:: writing out a restart file (maybe) ")
         
         !** Write out a restart file if enough time steps have been taken
         if (0 < params%restf_interval .and. restart_enabled) then
@@ -968,7 +968,7 @@
 !           end if
 !        end if
 
-        if (debug) call warn("dump_output_i:: writing out local potential ")
+        if (debug) call warn(FLERR,"dump_output_i:: writing out local potential ")
 
         !** Write out the local potential to file if enough steps have been taken
 !        if (0 < params%pot_interval) then
@@ -1005,7 +1005,7 @@
 !           end if
 !        end if
 
-        if (debug) call warn("dump_output_i:: writing out the projection of the propagated wavefunctions... ")
+        if (debug) call warn(FLERR,"dump_output_i:: writing out the projection of the propagated wavefunctions... ")
 
         !** calculate and write out the projection of the propagated wavefuncs with the original wavefuncs
         if (0 < params%proj_interval) then
@@ -1014,7 +1014,7 @@
            end if
         end if
 
-        if (debug) call warn("dump_output_i:: calculating partial charge ")
+        if (debug) call warn(FLERR,"dump_output_i:: calculating partial charge ")
 
         !** Find the amount of charge on the positive side of the surface defined by surface_origin
         !    and surface_direction tags.  Also calculate the current.
@@ -1024,7 +1024,7 @@
            end if
         end if
 
-        if (debug) call warn("dump_output_i:: dumping eigenvalues ")
+        if (debug) call warn(FLERR,"dump_output_i:: dumping eigenvalues ")
 
         !** Calculate and write out the eigenvalues 
         if (0 < params%eigval_interval) then
@@ -1033,7 +1033,7 @@
            end if
         end if
 
-        if (debug) call warn("dump_output_i:: dumping orthogonalization ")
+        if (debug) call warn(FLERR,"dump_output_i:: dumping orthogonalization ")
         !** Calculate and write out the eigenvalues 
         if (0 < params%orth_interval) then
            if (mod(state%istep,params%orth_interval) == 0) then
@@ -1085,7 +1085,7 @@
         call my(files%fields_out)
         call my(files%energy_out)
 
-        if (debug) call warn("dump_fields_tddft_i:: starting ")
+        if (debug) call warn(FLERR,"dump_fields_tddft_i:: starting ")
 
         !** Calculate various quantities we may be interested in.
 !        current = total_current(x_electrons(state%cfg_td),state%time) ; if (error()) goto 100
@@ -1140,7 +1140,7 @@ A_ext = 0.0_double
 
 
         !** Dump the current, dipole moment and normalization to files%tddft_out
-        if (debug) call warn("dump_fields_tddft_i:: dumping current, dipole moment and norm")
+        if (debug) call warn(FLERR,"dump_fields_tddft_i:: dumping current, dipole moment and norm")
 current = 0.0
 dipole_mom = 0.0
         if (i_access(files%tddft_out)) then
@@ -1148,7 +1148,7 @@ dipole_mom = 0.0
                 state%istep,state%time*ARU_2_FS,current,dipole_mom,norm
         end if
 
-        if (debug) call warn("dump_fields_tddft_i:: dumping vecpot elec field ... ")
+        if (debug) call warn(FLERR,"dump_fields_tddft_i:: dumping vecpot elec field ... ")
         
         !** Dump the Vector Potential, Electric Field and Derivative of the E field to files%fields_out
         if (i_access(files%fields_out)) then
@@ -1287,7 +1287,7 @@ dipole_mom = 0.0
         case(VTK)
            call get_density_vtk_filename_i(filename,i)
         case default
-           call warn("tddft::get_density_filename_i - unrecognized file_type, reverting to AMIRA")
+           call warn(FLERR,"tddft::get_density_filename_i - unrecognized file_type, reverting to AMIRA")
            call get_density_am_filename_i(filename,i)
         end select
 
@@ -1362,7 +1362,7 @@ dipole_mom = 0.0
         case(VTK)
            call get_currden_vtk_filename_i(filename,i)
         case default
-           call warn("tddft::get_current_density_filename_i - unrecognized file_type, reverting to AMIRA")
+           call warn(FLERR,"tddft::get_current_density_filename_i - unrecognized file_type, reverting to AMIRA")
            call get_currden_am_filename_i(filename,i)
         end select
 
@@ -1438,7 +1438,7 @@ dipole_mom = 0.0
         case(VTK)
            call get_potential_vtk_filename_i(filename,i)
         case default
-           call warn("tddft::get_potential_filename_i - unrecognized file_type, reverting to AMIRA")
+           call warn(FLERR,"tddft::get_potential_filename_i - unrecognized file_type, reverting to AMIRA")
            call get_potential_am_filename_i(filename,i)
         end select
 
@@ -1513,7 +1513,7 @@ dipole_mom = 0.0
         case(VTK)
            call get_harpot_vtk_filename_i(filename,i)
         case default
-           call warn("tddft::get_harpot_filename_i - unrecognized file_type, reverting to AMIRA")
+           call warn(FLERR,"tddft::get_harpot_filename_i - unrecognized file_type, reverting to AMIRA")
            call get_harpot_am_filename_i(filename,i)
         end select
 
@@ -1820,7 +1820,7 @@ dipole_mom = 0.0
         
         debug = .false.
         
-        if (debug) call warn('starting write_eigvals_i')
+        if (debug) call warn(FLERR,'starting write_eigvals_i')
 
         !** Find the number of k-points and the number of bands
         nk = x_n_kpoints(x_kpoints(x_electrons(state%cfg_td)))
@@ -1830,7 +1830,7 @@ dipole_mom = 0.0
         allocate(evals(nb),all_evals(nb*nk))
         
 
-        if (debug) call warn('write_eigvals_i:: getting evals..')
+        if (debug) call warn(FLERR,'write_eigvals_i:: getting evals..')
 
         !** Calc the overlap and multiply by the occupation.
         do ik=1,nk
@@ -1847,7 +1847,7 @@ dipole_mom = 0.0
         !** Write the coefficients out to the eigval_out file
         time = state%time*ARU_2_FS
 
-        if (debug) call warn('write_eigvals_i:: call my(files%eigval_out)')
+        if (debug) call warn(FLERR,'write_eigvals_i:: call my(files%eigval_out)')
         call my(files%eigval_out) ; if (error()) goto 200
 
         !** Construct the format statement
@@ -1860,16 +1860,16 @@ dipole_mom = 0.0
            pos = pos + 1
         end do
 
-        if (debug) call warn('write_eigvals_i write(eigval_out,fmt)')
+        if (debug) call warn(FLERR,'write_eigvals_i write(eigval_out,fmt)')
 
         if (i_access(files%eigval_out)) then
            write(x_unit(files%eigval_out),fmt) state%istep,time,all_evals
         end if
 
-        if (debug) call warn('write_eigvals_i:: call flushbuf')
+        if (debug) call warn(FLERR,'write_eigvals_i:: call flushbuf')
         call flushbuf(files%eigval_out) 
 
-        if (debug) call warn('write_eigvals_i:: gleaning')
+        if (debug) call warn(FLERR,'write_eigvals_i:: gleaning')
 
 200     call glean(thy(files%eigval_out))
 
@@ -1877,7 +1877,7 @@ dipole_mom = 0.0
 
         if (error(FLERR,"Exit tddft_mod::write_eigvals_i")) continue
         
-        if (debug) call warn('write_eigvals_i:: exiting')
+        if (debug) call warn(FLERR,'write_eigvals_i:: exiting')
 
       end subroutine write_eigvals_i
 

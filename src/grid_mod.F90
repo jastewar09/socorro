@@ -1338,16 +1338,16 @@
         case(RD_KIND)
            !  Reset to serial if kind was distributed
            final_kind = RS_KIND
-           call warn("Warning: call to grid::write_to_file with kind=RD_KIND ")
-           call warn("            setting    kind=RS_KIND")
+           call warn(FLERR,"call to grid::write_to_file with kind=RD_KIND ")
+           call warn(FLERR,"            setting    kind=RS_KIND")
         case(CDP_KIND)
            final_kind = CSP_KIND
-           call warn("Warning: call to grid::write_to_file with kind=CDP_KIND")
-           call warn("            setting    kind=CSF_KIND")
+           call warn(FLERR,"call to grid::write_to_file with kind=CDP_KIND")
+           call warn(FLERR,"            setting    kind=CSF_KIND")
         case(CDF_KIND)
            final_kind = CSF_KIND
-           call warn("Warning: call to grid::write_to_file with kind=CDF_KIND ")
-           call warn("            setting    kind=CSF_KIND")
+           call warn(FLERR,"call to grid::write_to_file with kind=CDF_KIND ")
+           call warn(FLERR,"            setting    kind=CSF_KIND")
         case default
            if (error(FLERR,.true.,'Error: unrecognized kind')) goto 200
         end select
@@ -1533,11 +1533,11 @@
           icdata = cmplx(irdata,0,double)
           deallocate( irdata )
         elseif ( (itype == CSP_KIND) .and. (otype == CSF_KIND) ) then
-          call warn("serial FFT")
+          call warn(FLERR,"serial FFT")
           call fft_serial(ly,icdata,R_TO_Q)
           itype = CSF_KIND
         elseif ( (itype == CSF_KIND) .and. ( (otype == CSP_KIND) .or. (otype == RS_KIND) ) ) then
-          call warn("serial FFT")
+          call warn(FLERR,"serial FFT")
           call fft_serial(ly,icdata,Q_TO_R)
           itype = CSP_KIND
         elseif ( (itype == CDP_KIND) .and. ( (otype == CSF_KIND) .or. (otype == CDF_KIND) ) ) then
@@ -1610,7 +1610,7 @@
         nullify(x,y,z)
 
 
-        if (debug) call warn("write_grid_to_matlab_i:: starting")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: starting")
 
 
         !** Pull the mesh out of the grid object
@@ -1668,13 +1668,13 @@
         end select
 
 
-        if (debug) call warn("write_grid_to_matlab_i:: calling alloc")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: calling alloc")
 
 !        call alloc(x,x_layout(g2),RS_KIND, S_TYPE) ; if (error()) goto 100
 !        call alloc(y,x_layout(g2),RS_KIND, S_TYPE) ; if (error()) goto 100
 !        call alloc(z,x_layout(g2),RS_KIND, S_TYPE) ; if (error()) goto 100
 
-        if (debug) call warn("write_grid_to_matlab_i:: calling mesh")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: calling mesh")
 
         !** place the Spatial vector components on x, y, and z
         select case (kind)
@@ -1693,7 +1693,7 @@
 
         if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
-        if (debug) call warn("write_grid_to_matlab_i:: writing coords")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: writing coords")
 
 
         !** Open the file
@@ -1801,7 +1801,7 @@
 
         end if
 
-        if (debug) call warn("write_grid_to_matlab_i:: deallocating")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: deallocating")
 
         !** Clean up the mess
         if (i_access(f)) close (x_unit(f))
@@ -1825,7 +1825,7 @@
         call glean(thy(g))
 100     if (error(FLERR,"Exit grid_mod:: write_grid_to_matlab_i: ")) continue
 
-        if (debug) call warn("write_grid_to_matlab_i:: exiting")
+        if (debug) call warn(FLERR,"write_grid_to_matlab_i:: exiting")
 
       end subroutine
 
@@ -1870,7 +1870,7 @@
 
         nullify(x,y,z)
 
-        if (debug) call warn("write_grid_to_vtk_i:: starting")
+        if (debug) call warn(FLERR,"write_grid_to_vtk_i:: starting")
 
 
         !** Pull the mesh out of the grid object
@@ -1928,7 +1928,7 @@
         end select
 
 
-        if (debug) call warn("write_grid_to_vtk_i:: calling mesh")
+        if (debug) call warn(FLERR,"write_grid_to_vtk_i:: calling mesh")
 
         !** place the Spatial vector components on x, y, and z
         select case (kind)
@@ -1947,7 +1947,7 @@
 
         if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
-        if (debug) call warn("write_grid_to_vtk_i:: writing coords")
+        if (debug) call warn(FLERR,"write_grid_to_vtk_i:: writing coords")
 
 
         !** Open the file
@@ -2025,7 +2025,7 @@
            write(x_unit(f),'(a)') 'LOOKUP_TABLE default'
            
 
-           if (debug) call warn("write_grid_to_vtk_i:: writing density")
+           if (debug) call warn(FLERR,"write_grid_to_vtk_i:: writing density")
 
            do ix=1,nx
              do iy=1,ny
@@ -2042,7 +2042,7 @@
 
         end if
 
-        if (debug) call warn("write_grid_to_vtk_i:: deallocating")
+        if (debug) call warn(FLERR,"write_grid_to_vtk_i:: deallocating")
 
         !** Clean up the mess
         if (i_access(f)) close (x_unit(f))
@@ -2066,7 +2066,7 @@
         call glean(thy(g))
 100     if (error(FLERR,"Exit grid_mod:: write_grid_to_vtk_i: ")) continue
 
-        if (debug) call warn("write_grid_to_vtk_i:: exiting")
+        if (debug) call warn(FLERR,"write_grid_to_vtk_i:: exiting")
 
       end subroutine
 
@@ -2112,7 +2112,7 @@
         nullify(ctmp, ctmp2)
         nullify(x,y,z)
 
-        if (debug) call warn("write_grid_to_amreg_i:: starting")
+        if (debug) call warn(FLERR,"write_grid_to_amreg_i:: starting")
 
 
         !** Pull the mesh out of the grid object
@@ -2170,7 +2170,7 @@
         end select
 
 
-        if (debug) call warn("write_grid_to_amreg_i:: calling mesh")
+        if (debug) call warn(FLERR,"write_grid_to_amreg_i:: calling mesh")
 
         !** place the Spatial vector components on x, y, and z
         select case (kind)
@@ -2189,7 +2189,7 @@
 
         if (error(FLERR,(nx/=px) .or. (ny/=py) .or. (nz/=pz),"ERROR: n /= p")) goto 100
 
-        if (debug) call warn("write_grid_to_amreg_i:: writing coords")
+        if (debug) call warn(FLERR,"write_grid_to_amreg_i:: writing coords")
 
 
         !** Open the file
@@ -2241,7 +2241,7 @@
            write(x_unit(f),'(a)')       'Lattice { float ScalarField } = @1'
            write(x_unit(f),'(a)')       '@1'
 
-           if (debug) call warn("write_grid_to_am_i:: writing density")
+           if (debug) call warn(FLERR,"write_grid_to_am_i:: writing density")
 
 
            do iz=1,nz,stepx
@@ -2260,7 +2260,7 @@
 
         end if
 
-        if (debug) call warn("write_grid_to_amreg_i:: deallocating")
+        if (debug) call warn(FLERR,"write_grid_to_amreg_i:: deallocating")
 
         !** Clean up the mess
         if (i_access(f)) close (x_unit(f))
@@ -2284,7 +2284,7 @@
         call glean(thy(g))
 100     if (error(FLERR,"Exit grid_mod:: write_grid_to_amreg_i: ")) continue
 
-        if (debug) call warn("write_grid_to_amreg_i:: exiting")
+        if (debug) call warn(FLERR,"write_grid_to_amreg_i:: exiting")
 
       end subroutine
 

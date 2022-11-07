@@ -292,7 +292,7 @@
           if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_SGROUPS")
           if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
           if (tios == TAG_NOT_FOUND) then
-            call warn("Warning: NUMBER_OF_SGROUPS tag was not found - using the input value")
+            call warn(FLERR,"NUMBER_OF_SGROUPS tag was not found - using the input value")
             if (i_access(restf)) call rewind_tobeginning(restf)
           else
             if (i_access(restf)) then
@@ -391,20 +391,20 @@
 
         ! update cfg
         if (ext_change) then
-           call warn("ext_change")
+           call warn(FLERR,"ext_change")
           call own_i(cfg)
           cfg%o%g = x_ghost()
           cfg%o%external = ext
           if (layout_change) then
              cfg%o%fields = fields_sc(cfg%o%external) ; if (error()) goto 100
-             call warn("layout change fields")
+             call warn(FLERR,"layout change fields")
              cfg%o%electrons = electrons_sc(cfg%o%external,x_potential(cfg%o%fields)) ; if (error()) goto 100
           else
-             call warn("in else branch")
+             call warn(FLERR,"in else branch")
              call update(cfg%o%fields,cfg%o%external,cfg%o%electrons) ; if (error()) goto 100
-             call warn("after electrons update")
+             call warn(FLERR,"after electrons update")
              call update(cfg%o%electrons,cfg%o%external,x_potential(cfg%o%fields)) ; if (error()) goto 100
-             call warn("after fields update")
+             call warn(FLERR,"after fields update")
           end if
 !          call update(cfg%o%fields,cfg%o%external,cfg%o%electrons) ; if (error()) goto 100
 !          call update(cfg%o%electrons,cfg%o%external,x_potential(cfg%o%fields)) ; if (error()) goto 100
@@ -820,7 +820,7 @@
           if (found) then
             site_data(4,is) = radius
           else
-            call warn("dcomp_radius tag was not found - using the value 2.5")
+            call warn(FLERR,"dcomp_radius tag was not found - using the value 2.5")
             site_data(4,is) = 2.5_double
           end if
         end do
@@ -1151,7 +1151,7 @@
             call write_restart(cfg%o%fields,nrestf)
             call write_restart(cfg%o%electrons,nrestf)
           case default
-            call warn("WARNING: write_restart tag is not recognized - writing a full restart file")
+            call warn(FLERR,"write_restart tag is not recognized - writing a full restart file")
             call write_restart(cfg%o%external,nrestf)
             call write_restart(cfg%o%fields,nrestf)
             call write_restart(cfg%o%electrons,nrestf)

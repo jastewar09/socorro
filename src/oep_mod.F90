@@ -216,7 +216,7 @@
           select case (trim(tag))
           case ("zero")
             if (oep%o%normalization == DXCP) then
-              call warn("WARNING: Using ZERO oep_normalization with a density-dependent functional")
+              call warn(FLERR,"Using ZERO oep_normalization with a density-dependent functional")
               oep%o%normalization = ZERO
             end if
           case ("dxcp")

@@ -902,11 +902,11 @@
            if (associated(mv2%o%mat)) then
               call kernel_combine_2mv_rv_i(ng,nb,rv1,mv1%o%mat,rv2,mv2%o%mat)
            else
-              call warn("Warning! mvec::combine_2mv_rv. mv2%o%mat not associated")
+              call warn(FLERR,"Warning! mvec::combine_2mv_rv. mv2%o%mat not associated")
               call kernel_portion_mv_rv_i(ng,nb,rv1,mv1%o%mat)
            end if
         else
-           call warn("Warning! mvec::combine_2mv_rv. mv%o%mat not associated")
+           call warn(FLERR,"Warning! mvec::combine_2mv_rv. mv%o%mat not associated")
         end if
 
         mv1%o%g = x_ghost()
@@ -1091,7 +1091,7 @@
         if (error(FLERR,(size(cmat,1) /= nb) .or. (size(cmat,2) /= nb),"ERROR: improper size for cmat")) goto 100
 
         if (mv1%o%g_storage == mv2%o%g_storage) then
-          call warn("WARNING: Using matmul to perform mv operation")
+          call warn(FLERR,"Using matmul to perform mv operation")
           mv1%o%mat = c1*mv1%o%mat + c2*matmul(mv2%o%mat,cmat)
         else
           call start_timer("multivector: zgemm")
@@ -1131,7 +1131,7 @@
 
         allocate( mat_global(nb,nb), mat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
-          call warn("WARNING: Using matmul to perform mv operation")
+          call warn(FLERR,"Using matmul to perform mv operation")
           mat_local = matmul(transpose(conjg(mv1%o%mat)),mv2%o%mat)
           call allreduce(KGROUP,MPI_SUM,mat_local,mat_global)
           mv2%o%mat = cp1*mv2%o%mat + cm1*matmul(mv1%o%mat,mat_global)
@@ -1183,7 +1183,7 @@
 
         allocate( mat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
-          call warn("WARNING: Using matmul to perform mv operation")
+          call warn(FLERR,"Using matmul to perform mv operation")
           mat_local = matmul(transpose(conjg(mv1%o%mat)),mv2%o%mat)
           call allreduce(KGROUP,MPI_SUM,mat_local,mat)
           mv2%o%mat = cp1*mv2%o%mat + cm1*matmul(mv1%o%mat,mat)
@@ -1479,7 +1479,7 @@
 
         allocate( cmat_local(nb,nb) )
         if (mv1%o%g_storage == mv2%o%g_storage) then
-          call warn("WARNING: Using matmul to perform mv operation")
+          call warn(FLERR,"Using matmul to perform mv operation")
           cmat_local = matmul(transpose(conjg(mv1%o%mat)),mv2%o%mat)
         else
           cmat_local = (0.0_double,0.0_double)

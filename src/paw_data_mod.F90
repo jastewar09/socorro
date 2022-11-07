@@ -524,7 +524,7 @@
           elseif (token == "END") then
             continue
           else 
-            call warn("WARNING: unrecognized token in PAW file: ")
+            call warn(FLERR,"unrecognized token in PAW file: ")
           end if
           call get_next_word_i(wc,token)
           if (wc%error == w_eof) exit
@@ -1232,7 +1232,7 @@
             if (associated( pd%o%tpfo )) deallocate( pd%o%tpfo )
             if (associated( pd%o%g )) deallocate( pd%o%g )
             if (associated( pd%o%w_max )) deallocate( pd%o%w_max )
-            call warn("WARNING: real-space projectors are being re-optimized")
+            call warn(FLERR,"real-space projectors are being re-optimized")
             call optimize_nlp_i(pd%o) ; if (error()) goto 100
           end if
         end if

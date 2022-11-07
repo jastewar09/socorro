@@ -1862,7 +1862,7 @@
             call subdivide(block(i),bdims(i),1,dims(i),base(i),j,locdims(i))
           end do
         else
-          call warn("mpi_myproc(CONFIG) >= product(bdims)")
+          call warn(FLERR,"mpi_myproc(CONFIG) >= product(bdims)")
           locdims = (/0,0,0/)
           base = (/0,0,0/)
           block = (/0,0,0/)
@@ -1917,7 +1917,7 @@
             call subdivide(block(i),bdims(i),1,dims(i),base(i),j,locdims(i))
           end do
         else
-          call warn("mpi_myproc(SGROUP) >= product(bdims)")
+          call warn(FLERR,"mpi_myproc(SGROUP) >= product(bdims)")
           locdims = (/0,0,0/)
           base = (/0,0,0/)
           block = (/0,0,0/)
@@ -1972,7 +1972,7 @@
             call subdivide(block(i),bdims(i),1,dims(i),base(i),j,locdims(i))
           end do
         else
-          call warn("mpi_myproc(KGROUP) >= product(bdims)")
+          call warn(FLERR,"mpi_myproc(KGROUP) >= product(bdims)")
           locdims = (/0,0,0/)
           base = (/0,0,0/)
           block = (/0,0,0/)

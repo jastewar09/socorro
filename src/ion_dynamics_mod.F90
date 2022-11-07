@@ -428,7 +428,7 @@ end interface
 
         debug = .false.
 
-        if (debug) call warn('update_mdinfo::starting')
+        if (debug) call warn(FLERR,'update_mdinfo::starting')
 
         call my(cfg)
 
@@ -500,7 +500,7 @@ end interface
            close(unit=x_unit(iondynr%new_vel_file))
         end if
 
-        if (debug) call warn('update_mdinfo::checking to see if the nuclear positions need to be written out')
+        if (debug) call warn(FLERR,'update_mdinfo::checking to see if the nuclear positions need to be written out')
 
         !** Write the nuclear positions out to file if indicated by argvf parameters
         if (0 < iondynr%nucpos_interval) then
@@ -514,7 +514,7 @@ end interface
            end if
         end if
         
-!        if (debug) call warn('update_mdinfo::writing density out if indicating by argvf')
+!        if (debug) call warn(FLERR,'update_mdinfo::writing density out if indicating by argvf')
 !        !** Write out the density to file if indicated by argvf parameters.
 !        if (0 < iondynr%density_interval) then
 !           if (mod(iondynr%n_md_steps,iondynr%density_interval) == 0) then
@@ -531,11 +531,11 @@ end interface
 !           end if
 !        end if
 
-        if (debug) call warn('update_mdinfo::gleaning')
+        if (debug) call warn(FLERR,'update_mdinfo::gleaning')
 
 100     call glean(thy(cfg))
 
-        if (debug) call warn('update_mdinfo::exiting')
+        if (debug) call warn(FLERR,'update_mdinfo::exiting')
 
 
       end subroutine update_mdinfo_i
@@ -761,7 +761,7 @@ end interface
         if (i_access(restf)) tios = findfirsttag(restf,"ION_DYNAMICS")
         if (i_comm(restf)) call broadcast(MOD_SCOPE,tios)
         if (tios /= TAG_START_BLOCK) then
-           call warn("WARNING: ION_DYNAMICS block was not found - reverting to a standard construction")
+           call warn(FLERR,"ION_DYNAMICS block was not found - reverting to a standard construction")
            goto 100
         end if
         
@@ -995,7 +995,7 @@ end interface
 
         debug = .false.
 
-        if (debug) call warn('cons_tddft_ion_dynamics::starting')
+        if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::starting')
 
         call my(cfg)
 
@@ -1019,7 +1019,7 @@ end interface
 
         iondyn%o%n_md_steps = 0
 
-        if (debug) call warn('cons_tddft_ion_dynamics::calling read_params_i')
+        if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::calling read_params_i')
 
         if (error(FLERR,time_step < 0,"cons_tddft_ion_dynamics: time_step < 0")) goto 100
         
@@ -1027,7 +1027,7 @@ end interface
         
         call read_params_i(iondyn%o,cfg) ; if (error()) goto 100
 
-        if (debug) call warn('cons_tddft_ion_dynamics::setting constants')
+        if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::setting constants')
 
         iondyn%o%current%hoover_s = 0.0_double
         iondyn%o%current%hoover_xi = 0.0_double
@@ -1052,20 +1052,20 @@ end interface
         
         if (iondyn%o%md_method .ne. NONE) then
 
-           if (debug) call warn('cons_tddft_ion_dynamics::initializing md_file')
+           if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::initializing md_file')
 
            call my(file(trim(tddft_md_trajectory_path)),iondyn%o%md_file)
            if (i_access(iondyn%o%md_file)) open(x_unit(iondyn%o%md_file),file=x_name(iondyn%o%md_file))
            
-           if (debug) call warn('cons_tddft_ion_dynamics::initializing new_vel_file')
+           if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::initializing new_vel_file')
 
            call my(file(trim(new_velocity_path)),iondyn%o%new_vel_file)
 
-           if (debug) call warn('cons_tddft_ion_dynamics::calling x_cart_positions')
+           if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::calling x_cart_positions')
 
            call x_cart_positions(cfg,iondyn%o%current%pos_cart)
 
-           if (debug) call warn('cons_tddft_ion_dynamics::if(generate_velocities)...')
+           if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::if(generate_velocities)...')
 
            if (iondyn%o%generate_velocities == 0) then
               call my(file(trim(velocity_path)),iondyn%o%init_vel_file)
@@ -1093,7 +1093,7 @@ end interface
            end if
 
 
-           if (debug) call warn('cons_tddft_ion_dynamics::checking for restart file')
+           if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::checking for restart file')
            
            if (present(restf)) then
               call my(restf)
@@ -1104,19 +1104,19 @@ end interface
               !call update_config(cfg,iondyn%o%current%pos_cart)
               !if (error()) goto 100
            else ! Only call update mdinfo if NOT restarting!!!
-              if (debug) call warn('cons_tddft_ion_dynamics::no restart file, calling update_mdinfo')
+              if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::no restart file, calling update_mdinfo')
               call update_mdinfo_i(cfg,iondyn%o)
            end if
    
         end if
 
-        if (debug) call warn('cons_tddft_ion_dynamics::gleaning')
+        if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::gleaning')
 
 100     call glean(thy(cfg))
 
         if (error(FLERR,"Exit ion_dynamics_mod::cons_tddft_ion_dynamics")) continue
 
-        if (debug) call warn('cons_tddft_ion_dynamics::exiting')
+        if (debug) call warn(FLERR,'cons_tddft_ion_dynamics::exiting')
 
       end function cons_tddft_tags
 
@@ -1218,8 +1218,8 @@ end interface
         case ('no','false','.false.','off','none')
            iondynr%nucpos_file_type = NONE
         case default
-           call warn('Unrecognized option for nucpos_file_type.')
-           call warn('    not writing out separate MD files.')
+           call warn(FLERR,'Unrecognized option for nucpos_file_type.')
+           call warn(FLERR,'    not writing out separate MD files.')
            iondynr%nucpos_file_type = NONE
         end select
         
@@ -1236,8 +1236,8 @@ end interface
         case ('vtk')
            iondynr%mesh_file_type = VTK
         case default
-           call warn('Unrecognized option for mesh_file_type.')
-           call warn('        Not writing out seperate Ion_dynamics density files')
+           call warn(FLERR,'Unrecognized option for mesh_file_type.')
+           call warn(FLERR,'        Not writing out seperate Ion_dynamics density files')
         end select
 
 !        call arg("md_density_interval",interval,fnd)
@@ -1350,7 +1350,7 @@ end interface
         call my(cfg)
         call my(iondyn)
         
-        if (debug) call warn('ion_dynamics::v_verlet_tddft - starting')
+        if (debug) call warn(FLERR,'ion_dynamics::v_verlet_tddft - starting')
 
         natoms = x_n_atoms(cfg)
 
@@ -1375,7 +1375,7 @@ end interface
 
         iondyn%o%current%velocities = iondyn%o%current%velocities + (time_step/2.0_double)*accel
 
-        if (debug) call warn('ion_dynamics::v_verlet_tddft - about to call update()')
+        if (debug) call warn(FLERR,'ion_dynamics::v_verlet_tddft - about to call update()')
 
 !        call update_config(cfg,iondyn%o%current%pos_cart)
         if (error()) goto 100
@@ -1391,7 +1391,7 @@ end interface
 
         iondyn%o%n_md_steps = iondyn%o%n_md_steps + 1
 
-        if (debug) call warn('ion_dynamics::v_verlet_tddft - call update_mdinfo_i()')
+        if (debug) call warn(FLERR,'ion_dynamics::v_verlet_tddft - call update_mdinfo_i()')
 
         call update_mdinfo_i(cfg,iondyn%o)
 
@@ -1405,7 +1405,7 @@ end interface
 
         if (error(FLERR,"Exit ion_dynamics_mod:v_verlet_tddft")) continue
 
-        if (debug) call warn('ion_dynamics::v_verlet_tddft - exiting...')
+        if (debug) call warn(FLERR,'ion_dynamics::v_verlet_tddft - exiting...')
 
 
       end function
@@ -1739,19 +1739,19 @@ end interface
         
         debug = .false.
 
-        if (debug) call warn('ion_dynamics::write_pdb_file_i - starting')
+        if (debug) call warn(FLERR,'ion_dynamics::write_pdb_file_i - starting')
 
         call my(cfg)
 
         !** Construct a file name
         call get_nucpos_filename_i(iondynr%n_md_steps,filename,iondynr%nucpos_file_type)
 
-        if (debug) call warn('ion_dynamics::write_pdb_file_i - initializing the file object')
+        if (debug) call warn(FLERR,'ion_dynamics::write_pdb_file_i - initializing the file object')
 
         !** Initialize the file object
         call my(file(trim(filename)),f)
 
-        if (debug) call warn('ion_dynamics::write_pdb_file_i - open the file')
+        if (debug) call warn(FLERR,'ion_dynamics::write_pdb_file_i - open the file')
         
         !** Open the file
         if (i_access(f)) then
@@ -1762,7 +1762,7 @@ end interface
         if (i_comm(f)) call broadcast(MOD_SCOPE,ios)
         if (error(FLERR,ios /= 0,"ERROR: error opening file")) goto 100
 
-        if (debug) call warn('ion_dynamics::write_pdb_file_i - writing the file')
+        if (debug) call warn(FLERR,'ion_dynamics::write_pdb_file_i - writing the file')
 
         !** Write the postions of the atoms to a file in PDB file format
         if (i_access(f)) then
@@ -1785,7 +1785,7 @@ end interface
         call glean(thy(f))
         if (error(FLERR,"ion_dynamics::write_pdb_file_i")) continue
 
-        if (debug) call warn('ion_dynamics::write_pdb_file_i - exiting')
+        if (debug) call warn(FLERR,'ion_dynamics::write_pdb_file_i - exiting')
 
       end subroutine write_pdb_file_i
 

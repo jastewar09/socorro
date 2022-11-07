@@ -396,7 +396,7 @@
         at%o%atom_list(at%o%natoms)%tag = tag
         at%o%atom_list(at%o%natoms)%position = pos
         call centralize_position_i(at%o%atom_list(at%o%natoms)%position)
-        if (any(at%o%atom_list(at%o%natoms)%position /= pos)) call warn("WARNING: an atom was translated into the central cell")
+        if (any(at%o%atom_list(at%o%natoms)%position /= pos)) call warn(FLERR,"an atom was translated into the central cell")
         if (present(velocity)) then
           at%o%atom_list(at%o%natoms)%velocity = velocity
         else

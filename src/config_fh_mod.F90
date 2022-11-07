@@ -176,7 +176,7 @@
         if (i_access(restf)) tios = findfirsttag(restf,"NUMBER_OF_SGROUPS")
         if (i_comm(restf)) call broadcast(FILE_SCOPE,tios)
         if (tios == TAG_NOT_FOUND) then
-          call warn("Warning: NUMBER_OF_SGROUPS tag was not found - using the input value")
+          call warn(FLERR,"NUMBER_OF_SGROUPS tag was not found - using the input value")
           if (i_access(restf)) call rewind_tobeginning(restf)
         else
           if (i_access(restf)) then
@@ -431,7 +431,7 @@
           if (found) then
             site_data(4,is) = radius
           else
-            call warn("dcomp_radius tag was not found - using the value 3.0")
+            call warn(FLERR,"dcomp_radius tag was not found - using the value 3.0")
             site_data(4,is) = 3.0_double
           end if
         end do

@@ -848,7 +848,7 @@
           if (found) then
             site_data(4,is) = radius
           else
-            call warn("dcomp_radius tag was not found - using the value 2.5")
+            call warn(FLERR,"dcomp_radius tag was not found - using the value 2.5")
             site_data(4,is) = 2.5_double
           end if
         end do

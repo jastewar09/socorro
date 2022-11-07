@@ -1467,7 +1467,7 @@
         case("vtk","visualizationtoolkit","v")
            file_format = VTK
         case default
-           call warn("Unrecognized entry for write_file_format, setting to MATLAB")
+           call warn(FLERR,"Unrecognized entry for write_file_format, setting to MATLAB")
            file_format = MATLAB
         end select
 
@@ -1847,7 +1847,7 @@
             if (error(FLERR,.not.found,"ERROR: lmcc_site tag was not found")) goto 200
             s = fdr%lmcc_site
             call centralize_position_i(fdr%lmcc_site)
-            if (any(fdr%lmcc_site /= s)) call warn("WARNING: the counter charge was translated into the central parallelpiped")
+            if (any(fdr%lmcc_site /= s)) call warn(FLERR,"the counter charge was translated into the central parallelpiped")
             if (error(FLERR,.not.invariant_site(x_space_group(ext),fdr%lmcc_site),"ERROR: lmcc_site is not invariant")) goto 200
           end if
 

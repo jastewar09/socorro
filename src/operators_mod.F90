@@ -1377,7 +1377,7 @@
         case (FOURIER_SPACE)
           call projector_pressure_fs_i(v,h%o,wts,p2) ; if (error()) goto 100
         case (REAL_SPACE)
-          call warn("WARNING: pressure due to real-space projectors is not yet implemented")
+          call warn(FLERR,"pressure due to real-space projectors is not yet implemented")
           p2 = 0.0_double
         end select
         p = p1 + p2
@@ -1412,7 +1412,7 @@
         case (FOURIER_SPACE)
           call projector_stress_tensor_fs_i(v,h%o,wts,s2) ; if (error()) goto 100
         case (REAL_SPACE)
-          call warn("WARNING: stress tensor due to real-space projectors is not yet implemented")
+          call warn(FLERR,"stress tensor due to real-space projectors is not yet implemented")
           s2 = 0.0_double
         end select
         s = s1 + s2

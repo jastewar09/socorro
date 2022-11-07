@@ -901,7 +901,7 @@
         case ("off")
           continue
         case default
-          call warn("WARNING: mp_closure tag was not recognized - not using closure")
+          call warn(FLERR,"mp_closure tag was not recognized - not using closure")
         end select
 
         call arglc("mp_reduction",tag,found)
@@ -913,7 +913,7 @@
           allocate( tdeg(size(tsp,2)) )
           tdeg = 1
         case default
-          call warn("WARNING: mp_reduction tag was not recognized - using reduction")
+          call warn(FLERR,"mp_reduction tag was not recognized - using reduction")
           call reduction(dbl_grp,lat,tsp,tdeg) ; if (error()) goto 100
         end select
 
@@ -1072,7 +1072,7 @@
         case ("off")
           continue
         case default
-          call warn("WARNING: mp_closure tag was not recognized - not using closure")
+          call warn(FLERR,"mp_closure tag was not recognized - not using closure")
         end select
 
         call arglc("mp_reduction",tag,found)
@@ -1084,7 +1084,7 @@
           allocate( tdeg(size(tsp,2)) )
           tdeg = 1
         case default
-          call warn("WARNING: mp_reduction tag was not recognized - using reduction")
+          call warn(FLERR,"mp_reduction tag was not recognized - using reduction")
           call reduction(dbl_grp,lat,tsp,tdeg) ; if (error()) goto 100
         end select
 

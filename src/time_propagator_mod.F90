@@ -382,10 +382,10 @@
 
         debug = .false.
 
-        if (debug) call warn( "propagate starting ")
+        if (debug) call warn(FLERR, "propagate starting ")
 
 
-        if (debug) call warn( "propagate my... ")
+        if (debug) call warn(FLERR, "propagate my... ")
         call my(tp)
         call my(h)
         call my(v)
@@ -398,7 +398,7 @@
 
         if (tp%o%method == NONE) GOTO 100
 
-        if (debug) call warn( "propagate own_i ")
+        if (debug) call warn(FLERR, "propagate own_i ")
         call own_i(tp)
 
         !** Allocate the temporary multivectors and fill them with the current wavefuncs in v
@@ -439,7 +439,7 @@
            call ch_i(tp,h,v) ; if (error()) goto 100
         end select
 
-        if (debug) call warn( "propagate elapsed_time ")
+        if (debug) call warn(FLERR, "propagate elapsed_time ")
 
         !** Update the expectation values of the Hamiltonian (necessary to update energy)
         if (x_ghost(x_multibasis(v)) /= x_ghost(x_multibasis(tp%o%tmp_v))) tp%o%tmp_v = v
@@ -454,7 +454,7 @@
 
         if (error(FLERR,"Exit time_propagator_mod::propagate_tp")) continue
 
-        if (debug) call warn( "propagate ending" )
+        if (debug) call warn(FLERR, "propagate ending" )
 
       end subroutine
 

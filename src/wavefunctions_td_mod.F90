@@ -404,7 +404,7 @@
         
         debug = .false.
         
-        if (debug) call warn("wavefunctions_td::update_wf starting")
+        if (debug) call warn(FLERR,"wavefunctions_td::update_wf starting")
 
         call my(wf)
         call my(hc)
@@ -422,7 +422,7 @@
         wf%o%g = x_ghost()
         call update(wf%o%hk,hc) ; if (error()) goto 100
 
-        if (debug) call warn("wavefunctions_td::update_wf calling propagate")
+        if (debug) call warn(FLERR,"wavefunctions_td::update_wf calling propagate")
 
         call propagate(wf%o%tp,hamiltonian(wf%o%hk),wf%o%mv,wf%o%exps) ; if (error()) goto 100
 
@@ -432,7 +432,7 @@
 
         if (error(FLERR,"Exit wavefunctions_td_mod::update_wf")) continue
 
-        if (debug) call warn("wavefunctions_td::update_wf exiting")
+        if (debug) call warn(FLERR,"wavefunctions_td::update_wf exiting")
 
       end subroutine
 
@@ -824,7 +824,7 @@
       subroutine own_i(wf)
         type(wavefunctions_td_obj) :: wf, wft
         if (wf%ref < wf%o%ref) then
-          call warn("WARNING: wavefunctions mutation called: massive copy going on")
+          call warn(FLERR,"wavefunctions mutation called: massive copy going on")
           allocate( wft%o )
           wft%o%ref = 0
           wft%o%g = wf%o%g

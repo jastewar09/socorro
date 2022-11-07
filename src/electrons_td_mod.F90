@@ -841,7 +841,7 @@
         end do
         nb = b2 - b1 + 1
         if (nb < 0) then
-          call warn("WARNING: aborting decomposition because nb < 0")
+          call warn(FLERR,"aborting decomposition because nb < 0")
           goto 100
         end if
 
@@ -1230,7 +1230,7 @@
           goto 100
         end if
         if (mod(nk,mpi_nkgroups()) /= 0) then
-          call warn("WARNING: non-equal division of k-points among kgroups")
+          call warn(FLERR,"non-equal division of k-points among kgroups")
         end if
         allocate( elr%kgroup_index(nk) )
         do ik = 1,nk
