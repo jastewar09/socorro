@@ -62,34 +62,37 @@
 !cod$
          ! Create the runtime environment
 
-         call system_start() ; if ( error() ) goto 900
+         call system_start() ; if (error()) goto 900
 
          ! Determine check k-points status
 
-         call arglc("check_kpoints",mode,found) ; if ( .not.found ) mode = "no"
-         select case ( trim( mode ) )
-         case ( "y" , "yes" )
+         call arglc("check_kpoints",mode,found) ; if (.not.found) mode = "no"
+         select case (trim(mode))
+         case ("n","no")
+            continue
+         case ("y","yes")
             call check_kpoints() ; goto 900
+         case default
+            if (error(FLERR,.true.,"check_kpoints tag was not recognized")) goto 900
          end select
 
          ! Determine check symmetry status
 
-         call arglc("check_symmetry",mode,found) ; if ( .not.found ) mode = "no"
-         select case ( trim( mode ) )
-         case ( "y" , "yes" )
+         call arglc("check_symmetry",mode,found) ; if (.not.found) mode = "no"
+         select case (trim(mode))
+         case ("n","no")
+            continue
+         case ("y","yes")
             call check_symmetry() ; goto 900
+         case default
+            if (error(FLERR,.true.,"check_symmetry tag was not recognized")) goto 900
          end select
 
          ! Determine main calculation type
 
-         call arglc("config_type",mode,found) ; if ( .not.found ) mode = "none"
-         select case ( trim( mode ) )
-         case ( "fh" , "fixed-hamiltonian" )
-            call my(config_fh(),cfg_fh) ; if ( error() ) goto 900
-            call diary(cfg_fh)
-            call decompose(cfg_fh)
-            call glean(thy(cfg_fh))
-         case ( "sc" , "self-consistent" )
+         call arglc("config_type",mode,found) ; if (.not.found) mode = "none"
+         select case (trim(mode))
+         case ("sc","self-consistent")
             call my(config_sc(),cfg_sc)       ; if ( error() ) goto 900
             call diary(cfg_sc)
             call forces(cfg_sc)               ; if ( error() ) goto 100
@@ -118,17 +121,22 @@
             call write_els_potential(cfg_sc)  ; if ( error() ) goto 100
             call write_restart(cfg_sc)
 100         call glean(thy(cfg_sc))
-         case ( "td" , "time-dependent" )
+         case ("fh","fixed-hamiltonian")
+            call my(config_fh(),cfg_fh) ; if (error()) goto 900
+            call diary(cfg_fh)
+            call decompose(cfg_fh)
+            call glean(thy(cfg_fh))
+         case ("td","time-dependent")
             call ehrenfest_dynamics()
-         case ( "none" )
-            if ( error(FLERR,.true.,"A config_type was not provided") ) continue
+         case ("none")
+            if (error(FLERR,.true.,"config_type was not provided")) continue
          case default
-            if ( error(FLERR,.true.,"The config_type was not recognized") ) continue
+            if (error(FLERR,.true.,"config_type was not recognized")) continue
          end select
 
          ! Destroy the runtime environment
 
-900      if ( error(FLERR,"Exiting socorro") ) continue
+900      if (error(FLERR,"Exiting socorro")) continue
          call system_stop()
 
       end subroutine
