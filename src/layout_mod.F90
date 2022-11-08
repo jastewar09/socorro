@@ -1605,41 +1605,55 @@
 
           write(x_unit(diaryfile()),'(/,t4,"Mesh:")')
 
+          call fdel(g2,lay,S_TYPE)
+          npw = 0
+          do i3 = 1,size(g2,3)
+          do i2 = 1,size(g2,2)
+          do i1 = 1,size(g2,1)
+            if (g2(i1,i2,i3) <= lay%o%cutoff) npw = npw + 1
+          end do
+          end do
+          end do
+          deallocate( g2 )
+          write(x_unit(diaryfile()),'(/,t8,"Plane-wave cutoff energy = ",f0.1," Ryd")') lay%o%cutoff
+          write(x_unit(diaryfile()),'(/,t12,"Number of plane waves = ",i0)') npw
+
           dims = lay%o%dims
           do i = 1,3
             call get_nf(dims(i),n2(i),n3(i),n5(i),n7(i))
           end do
-          write(x_unit(diaryfile()),'(/,t6,"dimension 1 = ",i3,"  =  2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') &
-              dims(1), n2(1), n3(1), n5(1), n7(1)
-          write(x_unit(diaryfile()),'(  t6,"dimension 2 = ",i3,"  =  2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') &
-              dims(2), n2(2), n3(2), n5(2), n7(2)
-          write(x_unit(diaryfile()),'(  t6,"dimension 3 = ",i3,"  =  2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') &
-              dims(3), n2(3), n3(3), n5(3), n7(3)
-          write(x_unit(diaryfile()),'(/,t6,"Number of mesh points = ",i0)') product(dims)
+          write(x_unit(diaryfile()),'(/,t8,"Number of mesh points = ",i0)') product(dims)
+          write(x_unit(diaryfile()),'(/,t12,"Dimension 1: 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1," = ",i0)') n2(1),n3(1),n5(1),n7(1),dims(1)
+          write(x_unit(diaryfile()),'(  t12,"Dimension 2: 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1," = ",i0)') n2(2),n3(2),n5(2),n7(2),dims(2)
+          write(x_unit(diaryfile()),'(  t12,"Dimension 3: 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1," = ",i0)') n2(3),n3(3),n5(3),n7(3),dims(3)
+
+!          write(x_unit(diaryfile()),'(/,t12,"Dimension 1: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(1),n2(1),n3(1),n5(1),n7(1)
+!          write(x_unit(diaryfile()),'(  t12,"Dimension 2: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(2),n2(2),n3(2),n5(2),n7(2)
+!          write(x_unit(diaryfile()),'(  t12,"Dimension 3: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(3),n2(3),n3(3),n5(3),n7(3)
 
           if ( (mpi_nkgroups() == 1) .and. (mpi_nsgroups() == 1) ) then
 
-            write(x_unit(diaryfile()),'(/,t6,"Distribution:",/)')
+            write(x_unit(diaryfile()),'(/,t8,"Distribution:",/)')
             bdims = lay%o%config%bdims
             do i = 1,3
               if (bdims(i) == 1) then
-                write(x_unit(diaryfile()),'(t8,"dimension ",i1,": on processor")') i
+                write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": on processor")') i
               else
                 call subdivide(bdims(i),dims(i),nsize,slice,bigslice)
                 if (slice == 1) then
-                  write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
+                  write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
                 else
                   if (nsize == 1) then
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
                   else
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
                   end if
                 end if
                 if (bigslice /= 0) then
                   if (bigslice == 1) then
-                    write(x_unit(diaryfile()),'(t23,i0," group with ",i0," planes")') bigslice, (nsize + 1)
+                    write(x_unit(diaryfile()),'(t25,i0," group with ",i0," planes")') bigslice, (nsize + 1)
                   else
-                    write(x_unit(diaryfile()),'(t21,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
+                    write(x_unit(diaryfile()),'(t25,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
                   end if
                 end if
               end if
@@ -1650,27 +1664,27 @@
 
           else
 
-            write(x_unit(diaryfile()),'(/,t6,"config distribution:",/)')
+            write(x_unit(diaryfile()),'(/,t8,"Distribution - config:",/)')
             bdims = lay%o%config%bdims
             do i = 1,3
               if (bdims(i) == 1) then
-                write(x_unit(diaryfile()),'(t8,"dimension ",i1,": on processor")') i
+                write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": on processor")') i
               else
                 call subdivide(bdims(i),dims(i),nsize,slice,bigslice)
                 if (slice == 1) then
-                  write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
+                  write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
                 else
                   if (nsize == 1) then
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
                   else
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
                   end if
                 end if
                 if (bigslice /= 0) then
                   if (bigslice == 1) then
-                    write(x_unit(diaryfile()),'(t21,i0," group with ",i0," planes")') bigslice, (nsize + 1)
+                    write(x_unit(diaryfile()),'(t25,i0," group with ",i0," planes")') bigslice, (nsize + 1)
                   else
-                    write(x_unit(diaryfile()),'(t21,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
+                    write(x_unit(diaryfile()),'(t25,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
                   end if
                 end if
               end if
@@ -1681,28 +1695,28 @@
 
             if (mpi_nsgroups() /= 1) then
 
-              write(x_unit(diaryfile()),'(/,t6,"sgroup distribution:",/)')
+              write(x_unit(diaryfile()),'(/,t8,"Distribution - sgroup:",/)')
               bdims = lay%o%sgroup%bdims
               dims = lay%o%dims
               do i = 1,3
                 if (bdims(i) == 1) then
-                  write(x_unit(diaryfile()),'(t8,"dimension ",i1,": on processor")') i
+                  write(x_unit(diaryfile()),'(t12,"dimension ",i1,": on processor")') i
                 else
                   call subdivide(bdims(i),dims(i),nsize,slice,bigslice)
                   if (slice == 1) then
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
                   else
                     if (nsize == 1) then
-                      write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
+                      write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
                     else
-                      write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
+                      write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
                     end if
                   end if
                   if (bigslice /= 0) then
                     if (bigslice == 1) then
-                      write(x_unit(diaryfile()),'(t21,i0," group with ",i0," planes")') bigslice, (nsize + 1)
+                      write(x_unit(diaryfile()),'(t25,i0," group with ",i0," planes")') bigslice, (nsize + 1)
                     else
-                      write(x_unit(diaryfile()),'(t21,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
+                      write(x_unit(diaryfile()),'(t25,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
                     end if
                   end if
                 end if
@@ -1715,28 +1729,28 @@
 
             if (mpi_nkgroups() /= 1) then
 
-              write(x_unit(diaryfile()),'(/,t6,"kgroup distribution:",/)')
+              write(x_unit(diaryfile()),'(/,t8,"Distribution - kgroup:",/)')
               bdims = lay%o%kgroup%bdims
               dims = lay%o%dims
               do i = 1,3
                 if (bdims(i) == 1) then
-                  write(x_unit(diaryfile()),'(t8,"dimension ",i1,": on processor")') i
+                  write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": on processor")') i
                 else
                   call subdivide(bdims(i),dims(i),nsize,slice,bigslice)
                   if (slice == 1) then
-                    write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
+                    write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," group with ",i0," planes")') i, slice, nsize
                   else
                     if (nsize == 1) then
-                      write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
+                      write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," plane per group")') i, slice,nsize
                     else
-                      write(x_unit(diaryfile()),'(t8,"dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
+                      write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": ",i0," groups with ",i0," planes per group")') i,slice,nsize
                     end if
                   end if
                   if (bigslice /= 0) then
                     if (bigslice == 1) then
-                      write(x_unit(diaryfile()),'(t21,i0," group with ",i0," planes")') bigslice, (nsize + 1)
+                      write(x_unit(diaryfile()),'(t25,i0," group with ",i0," planes")') bigslice, (nsize + 1)
                     else
-                      write(x_unit(diaryfile()),'(t21,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
+                      write(x_unit(diaryfile()),'(t25,i0," groups with ",i0," planes per group")') bigslice, (nsize + 1)
                     end if
                   end if
                 end if
@@ -1748,19 +1762,6 @@
             end if
 
           end if
-
-          call fdel(g2,lay,S_TYPE)
-          npw = 0
-          do i3 = 1,size(g2,3)
-          do i2 = 1,size(g2,2)
-          do i1 = 1,size(g2,1)
-            if (g2(i1,i2,i3) <= lay%o%cutoff) npw = npw + 1
-          end do
-          end do
-          end do
-          deallocate( g2 )
-          write(x_unit(diaryfile()),'(/,t6,"Plane wave cutoff energy = ",f0.2," Ryd")') lay%o%cutoff
-          write(x_unit(diaryfile()),'(/,t8,"Number of plane waves = ",i0)') npw
 
         end if
 

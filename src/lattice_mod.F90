@@ -786,13 +786,13 @@
         call my(lat)
         if (i_access( diaryfile() )) then
           write(x_unit(diaryfile()),'(/,t4,"Primitive lattice vectors:")')
-          write(x_unit(diaryfile()),'(/,t6,"a1:",3f17.10)') lat%o%vectors(:,1)
-          write(x_unit(diaryfile()),'(  t6,"a2:",3f17.10)') lat%o%vectors(:,2)
-          write(x_unit(diaryfile()),'(  t6,"a3:",3f17.10)') lat%o%vectors(:,3)
-          write(x_unit(diaryfile()),'(/,t6,"b1:",3f17.10)') two_pi*lat%o%ivectors(1,:)
-          write(x_unit(diaryfile()),'(  t6,"b2:",3f17.10)') two_pi*lat%o%ivectors(2,:)
-          write(x_unit(diaryfile()),'(  t6,"b3:",3f17.10)') two_pi*lat%o%ivectors(3,:)
-          write(x_unit(diaryfile()),'(/,t6,"cell volume = ",f0.5)') x_cell_volume(lat)
+          write(x_unit(diaryfile()),'(/,t8,"a1:",3(1x,f17.10))') lat%o%vectors(:,1)
+          write(x_unit(diaryfile()),'(  t8,"a2:",3(1x,f17.10))') lat%o%vectors(:,2)
+          write(x_unit(diaryfile()),'(  t8,"a3:",3(1x,f17.10))') lat%o%vectors(:,3)
+          write(x_unit(diaryfile()),'(/,t8,"b1:",3(1x,f17.10))') two_pi*lat%o%ivectors(1,:)
+          write(x_unit(diaryfile()),'(  t8,"b2:",3(1x,f17.10))') two_pi*lat%o%ivectors(2,:)
+          write(x_unit(diaryfile()),'(  t8,"b3:",3(1x,f17.10))') two_pi*lat%o%ivectors(3,:)
+          write(x_unit(diaryfile()),'(/,t8,"Cell volume = ",f0.10)') x_cell_volume(lat)
         end if
         call glean(thy(lat))
       end subroutine

@@ -1289,8 +1289,8 @@
             case (DDFS_NATIVE)
               es = estring_i(xct%o)
               cs = cstring_i(xct%o)
-              write(x_unit(diaryfile()),'(/,t6,"Exchange    (native): ",a)') trim(es)
-              write(x_unit(diaryfile()),'(  t6,"Correlation (native): ",a)') trim(cs)
+              write(x_unit(diaryfile()),'(/,t8,"Exchange    (native): ",a)') trim(es)
+              write(x_unit(diaryfile()),'(  t8,"Correlation (native): ",a)') trim(cs)
             case (DDFS_LIBXC)
               select case (mpi_nsgroups())
               case (1)
@@ -1301,29 +1301,29 @@
               if (xct%o%functional > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%functional,spin_status)
                 call xc_f90_info_name(xc_info,str)
-                write(x_unit(diaryfile()),'(/,t6,"Exchange-Correlation (libxc): ",a)') trim(str)
+                write(x_unit(diaryfile()),'(/,t8,"Exchange-Correlation (libxc): ",a)') trim(str)
                 call xc_f90_func_end(xc_func)
               end if
               if (xct%o%exchange > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%exchange,spin_status)
                 call xc_f90_info_name(xc_info, str)
-                write(x_unit(diaryfile()),'(/,t6,"Exchange    (libxc): ",a)') trim(str)
+                write(x_unit(diaryfile()),'(/,t8,"Exchange    (libxc): ",a)') trim(str)
                 call xc_f90_func_end(xc_func)
               end if
               if (xct%o%correlation > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%correlation,spin_status)
                 call xc_f90_info_name(xc_info, str)
-                write(x_unit(diaryfile()),'(t6,"Correlation (libxc): ",a)') trim(str)
+                write(x_unit(diaryfile()),'(t8,"Correlation (libxc): ",a)') trim(str)
                 call xc_f90_func_end(xc_func)
               end if
             end select
           case (FD_ORBITAL)
             write(x_unit(diaryfile()),'(/,t4,"Orbital-dependent functional:")')
-            write(x_unit(diaryfile()),'(/,t6,"Exchange    (native): EXX")')
-            write(x_unit(diaryfile()),'(  t6,"Correlation (native): None")')
+            write(x_unit(diaryfile()),'(/,t8,"Exchange    (native): EXX")')
+            write(x_unit(diaryfile()),'(  t8,"Correlation (native): None")')
           case (FD_HYBRID)
             write(x_unit(diaryfile()),'(/,t4,"Hybrid functional:")')
-            write(x_unit(diaryfile()),'(/,t6,"Exchange (native): EXX fraction = ",f0.3)') xct%o%hybrid_mixing
+            write(x_unit(diaryfile()),'(/,t8,"Exchange (native): EXX fraction = ",f0.3)') xct%o%hybrid_mixing
             select case(xct%o%ddf_source)
             case (DDFS_LIBXC)
               select case (mpi_nsgroups())
@@ -1335,33 +1335,33 @@
               if (xct%o%functional > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%functional,spin_status)
                 call xc_f90_info_name(xc_info,str)
-                write(x_unit(diaryfile()),'(t6,"Exchange-Correlation (libxc): ",a," fraction = ",f0.3)') &
+                write(x_unit(diaryfile()),'(t8,"Exchange-Correlation (libxc): ",a," fraction = ",f0.3)') &
                      & trim(str), (1.0_double - xct%o%hybrid_mixing)
                 call xc_f90_func_end(xc_func)
               end if
               if (xct%o%exchange > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%exchange,spin_status)
                 call xc_f90_info_name(xc_info, str)
-                write(x_unit(diaryfile()),'(t6,"Exchange    (libxc): ",a," fraction = ",f0.3)') &
+                write(x_unit(diaryfile()),'(t8,"Exchange    (libxc): ",a," fraction = ",f0.3)') &
                      & trim(str), (1.0_double - xct%o%hybrid_mixing)
                 call xc_f90_func_end(xc_func)
               end if
               if (xct%o%correlation > 0) then
                 call xc_f90_func_init(xc_func,xc_info,xct%o%correlation,spin_status)
                 call xc_f90_info_name(xc_info, str)
-                write(x_unit(diaryfile()),'(t6,"Correlation (libxc): ",a)') trim(str)
+                write(x_unit(diaryfile()),'(t8,"Correlation (libxc): ",a)') trim(str)
                 call xc_f90_func_end(xc_func)
               end if
             end select
           end select
-           
+
           select case (xct%o%dependence)
           case (FD_DENSITY,FD_HYBRID)
             select case (xct%o%derivative_method)
             case (XCD_ANALYTICAL)
-              write(x_unit(diaryfile()),'(/,t6,"Analytical expressions for the functional derivatives")')
+              write(x_unit(diaryfile()),'(/,t8,"Analytical expressions for the functional derivatives")')
             case (XCD_NUMERICAL)
-              write(x_unit(diaryfile()),'(/,t6,"Numerical expressions for the functional derivatives")')
+              write(x_unit(diaryfile()),'(/,t8,"Numerical expressions for the functional derivatives")')
             end select
           end select
 
@@ -1370,16 +1370,16 @@
             write(x_unit(diaryfile()),'(/,t4,"Using a standard Coulomb kernel in EXX calculations:")')
             select case (xct%o%auxiliary_type)
             case (AT_LEGACY)
-              write(x_unit(diaryfile()),'(t6,"- integrable divergences are ignored")')
+              write(x_unit(diaryfile()),'(t8,"- integrable divergences are ignored")')
             case (AT_STRUCTURE_DEPENDENT)
-              write(x_unit(diaryfile()),'(t6,"- integrable divergences are treated with a WCB formula")')
+              write(x_unit(diaryfile()),'(t8,"- integrable divergences are treated with a WCB formula")')
             end select
           case (CK_ATTENUATED)
             write(x_unit(diaryfile()),'(/,t4,"Using an attenuated Coulomb kernel in EXX calculations")')
           case (CK_SCREENED)
             write(x_unit(diaryfile()),'(/,t4,"Using a screened Coulomb kernel in EXX calculations")')
-            write(x_unit(diaryfile()),'(t6,"Orbital screening parameter, aka omega^HF  (a0^-1):   ",f0.3)') xct%o%omega_orb
-            write(x_unit(diaryfile()),'(t6,"Semilocal screening parameter, aka omega^PBE (a0^-1): ",f0.3)') xct%o%omega_den
+            write(x_unit(diaryfile()),'(t8,"Orbital screening parameter, aka omega^HF  (a0^-1):   ",f0.3)') xct%o%omega_orb
+            write(x_unit(diaryfile()),'(t8,"Semilocal screening parameter, aka omega^PBE (a0^-1): ",f0.3)') xct%o%omega_den
           end select
 
           select case (xct%o%dependence)

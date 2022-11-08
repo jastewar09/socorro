@@ -73,7 +73,7 @@
       end interface
 
       interface notify
-         module procedure notify_msg_integer, notify_msg_real, notify_msg_complex
+         module procedure notify_msg, notify_msg_integer, notify_msg_real, notify_msg_complex
       end interface
 
       contains
@@ -389,6 +389,21 @@
          select case (file_status)
          case (EF_ON)
             write(error_unit,'("WARNING: ",a," (",a,":",i0,")")') msg,basename(file),line
+            call flush_i()
+         end select
+
+      end subroutine
+
+      subroutine notify_msg(msg)
+!doc$ subroutine notify(msg)
+         character(*), intent(in) :: msg
+!        modifies: Error file.
+!        effects: Writes msg and n to error file.
+
+!cod$
+         select case (file_status)
+         case (EF_ON)
+            write(error_unit,'(a)') msg
             call flush_i()
          end select
 

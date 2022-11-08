@@ -884,22 +884,22 @@
             case (USER)
               write(x_unit(diaryfile()),'(/,t4,"Lattice symmetry (user supplied):")')
             end select
-            write(x_unit(diaryfile()),'(/,t6,a)') lattice_type
+            write(x_unit(diaryfile()),'(/,t8,a)') lattice_type
           end if
         case (SGRP)
           call get_point_group_type_i(op_type,pg_type) ; if (error()) goto 100
           if (i_access(diaryfile())) then
             if (ns == 1) then
-              write(x_unit(diaryfile()),'(/,t6,"The point group is ",a," with ",i0," operation")') trim(pg_type), ns
+              write(x_unit(diaryfile()),'(/,t8,"The point group is ",a," with ",i0," operation")') trim(pg_type), ns
             else
-              write(x_unit(diaryfile()),'(/,t6,"The point group is ",a," with ",i0," operations ")') trim(pg_type), ns
+              write(x_unit(diaryfile()),'(/,t8,"The point group is ",a," with ",i0," operations ")') trim(pg_type), ns
             end if
           end if
         end select
         if (list_local) then
           if (i_access(diaryfile())) then
             if (present(lat)) then
-              write(x_unit(diaryfile()),'(/,t6,"Point-group operations in the cartesian representation:")')
+              write(x_unit(diaryfile()),'(/,t8,"Point-group operations in the cartesian representation:")')
               do is = 1,ns
                 tm = lat2r(lat,pg%o%sym(is)%point_op)
                 write(x_unit(diaryfile()),'(/,t16,3f6.1)') tm(1,:)
@@ -907,7 +907,7 @@
                 write(x_unit(diaryfile()),'(t16,3f6.1)') tm(3,:)
               end do
             else
-              write(x_unit(diaryfile()),'(/,t6,"Point-group operations in the lattice representation:")')
+              write(x_unit(diaryfile()),'(/,t8,"Point-group operations in the lattice representation:")')
               do is = 1,ns
                 write(x_unit(diaryfile()),'(/,t16,3f6.1)') pg%o%sym(is)%point_op(1,:)
                 write(x_unit(diaryfile()),'(t6,i2,".",7x,3f6.1)') is, pg%o%sym(is)%point_op(2,:)
@@ -1782,13 +1782,13 @@
             write(x_unit(diaryfile()),'(/t4,"Crystal symmetry (off):")')
           end select
           if (ns*nt == 1) then
-            write(x_unit(diaryfile()),'(/,t6,"The space group has ",i0," operation with point group ",a)') ns*nt, trim(pg_type)
+            write(x_unit(diaryfile()),'(/,t8,"The space group has ",i0," operation with point group ",a)') ns*nt, trim(pg_type)
           else
-            write(x_unit(diaryfile()),'(/,t6,"The space group has ",i0," operations with point group ",a)') ns*nt, trim(pg_type)
+            write(x_unit(diaryfile()),'(/,t8,"The space group has ",i0," operations with point group ",a)') ns*nt, trim(pg_type)
           end if
           if (list_local) then
             if (present(lat)) then
-              write(x_unit(diaryfile()),'(/,t6,"Space-group operations in the cartesian representation:")')
+              write(x_unit(diaryfile()),'(/,t8,"Space-group operations in the cartesian representation:")')
               do is = 1,ns
                 tm = lat2r(lat,sg%o%sym(is)%point_op)
                 write(x_unit(diaryfile()),'(/,t16,3f6.1)') tm(1,:)
@@ -1800,7 +1800,7 @@
                 end do
               end do
             else
-              write(x_unit(diaryfile()),'(/,t6,"Space-group operations in the lattice representation:")')
+              write(x_unit(diaryfile()),'(/,t8,"Space-group operations in the lattice representation:")')
               do is = 1,ns
                 write(x_unit(diaryfile()),'(/,t16,3f6.1)') sg%o%sym(is)%point_op(1,:)
                 write(x_unit(diaryfile()),'(t6,i2,".",7x,3f6.1,7x,sp,3f15.10)') is, sg%o%sym(is)%point_op(2,:)

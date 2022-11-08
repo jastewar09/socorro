@@ -29,6 +29,10 @@
       use timing_mod
       use xc_type_mod
 
+#if defined(_OPENMP)
+      use omp_lib
+#endif
+
 !     One datatype is available here: type(multivector_obj).
 
 !     multivector_mod encapsulates the set of wave functions at a specific sampling point (k-point).

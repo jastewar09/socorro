@@ -683,7 +683,7 @@
           if (i_access( diaryfile() )) then
             write(x_unit(diaryfile()),'(/,t4,"Atom matching radii:",/)')
             do it = 1,x_n_types(extr%ao)
-              write(x_unit(diaryfile()),'(t7,a6,":",2x,f6.3)') trim(x_type_name(extr%ao,it)), x_type_matching_radius(extr%ao,it)
+              write(x_unit(diaryfile()),'(t8,a6,":",2x,f6.3)') trim(x_type_name(extr%ao,it)), x_type_matching_radius(extr%ao,it)
             end do
           end if
         end if
@@ -711,7 +711,7 @@
           end do
         end do
         if (i_access( diaryfile() )) then
-          write(x_unit(diaryfile()),'(/,t4,"Nearest-neighbor atoms (range = ",f0.3,"):")') x_neighbor_range(extr%crystal)
+          write(x_unit(diaryfile()),'(/,t4,"Nearest-neighbor atoms (range = ",f0.5,"):")') x_neighbor_range(extr%crystal)
           write(x_unit(diaryfile()),'(/,t7,"atom",5x,"neighbor:separation",/)')
           do ia = 1,na
             write(x_unit(diaryfile()),'(t7,i4,2x)',advance="no") ia
