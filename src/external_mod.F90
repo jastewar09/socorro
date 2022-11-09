@@ -714,15 +714,13 @@
         end do
         if (i_access( diaryfile() )) then
           write(x_unit(diaryfile()),'(/,t4,"Nearest-neighbor atoms (range = ",f0.5,"):")') x_neighbor_range(extr%crystal)
-          write(x_unit(diaryfile()),'(/,t4,a8,7x,a8)') "Atom","neigh:sep"
+          write(x_unit(diaryfile()),'(/,t4,a8,3x,a16)') "Atom","Atom: Separation"
           write(x_unit(diaryfile()),'(  t4,9("-"),1x,18("-"))')
-!          write(x_unit(diaryfile()),'(/,t7,"atom",5x,"neighbor:separation",/)')
           do ia = 1,na
-            write(x_unit(diaryfile()),'(t4,i8,2x)',advance="no") ia
+            write(x_unit(diaryfile()),'(t4,i8,1x)',advance="no") ia
             nn = x_n_neighbors(extr%crystal,ia)
             do in = 1,nn
-              write(x_unit(diaryfile()),'(2x,i4,":",f5.2)',advance="no") x_neighbor_index(extr%crystal,ia,in), &
-                                                                         x_neighbor_distance(extr%crystal,ia,in)
+              write(x_unit(diaryfile()),'(1x,i5,": ",f0.5)',advance="no") x_neighbor_index(extr%crystal,ia,in),x_neighbor_distance(extr%crystal,ia,in)
               if ((nn > in) .and. (mod(in,8) == 0)) write(x_unit(diaryfile()),'(/,t13)',advance="no")
             end do
             if (atom_overlap(ia)) then
