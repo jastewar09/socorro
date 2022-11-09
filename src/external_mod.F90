@@ -660,8 +660,8 @@
           end select
         end if
         call diary(extr%crystal)
-        call diary_matching_radii_i(extr)
         call diary_atom_neighbors_i(extr)
+        call diary_matching_radii_i(extr)
         call diary(extr%lattice_group,lat=x_lattice(extr%crystal))
         call diary(extr%space_group,lat=x_lattice(extr%crystal))
         if (sym_atoms) then
@@ -681,9 +681,11 @@
 
         if (x_type(extr%ao) == PAW) then
           if (i_access( diaryfile() )) then
-            write(x_unit(diaryfile()),'(/,t4,"Atom matching radii:",/)')
+            write(x_unit(diaryfile()),'(/,t4,"Atom matching radii:")')
+            write(x_unit(diaryfile()),'(/,t4,a8,7x,a8)') "Type","Radius"
+            write(x_unit(diaryfile()),'(  t4,9("-"),1x,18("-"))')
             do it = 1,x_n_types(extr%ao)
-              write(x_unit(diaryfile()),'(t8,a6,":",2x,f6.3)') trim(x_type_name(extr%ao,it)), x_type_matching_radius(extr%ao,it)
+              write(x_unit(diaryfile()),'(t4,a8,2x,f17.10)') trim(x_type_name(extr%ao,it)), x_type_matching_radius(extr%ao,it)
             end do
           end if
         end if
@@ -712,9 +714,11 @@
         end do
         if (i_access( diaryfile() )) then
           write(x_unit(diaryfile()),'(/,t4,"Nearest-neighbor atoms (range = ",f0.5,"):")') x_neighbor_range(extr%crystal)
-          write(x_unit(diaryfile()),'(/,t7,"atom",5x,"neighbor:separation",/)')
+          write(x_unit(diaryfile()),'(/,t4,a8,7x,a8)') "Atom","neigh:sep"
+          write(x_unit(diaryfile()),'(  t4,9("-"),1x,18("-"))')
+!          write(x_unit(diaryfile()),'(/,t7,"atom",5x,"neighbor:separation",/)')
           do ia = 1,na
-            write(x_unit(diaryfile()),'(t7,i4,2x)',advance="no") ia
+            write(x_unit(diaryfile()),'(t4,i8,2x)',advance="no") ia
             nn = x_n_neighbors(extr%crystal,ia)
             do in = 1,nn
               write(x_unit(diaryfile()),'(2x,i4,":",f5.2)',advance="no") x_neighbor_index(extr%crystal,ia,in), &
