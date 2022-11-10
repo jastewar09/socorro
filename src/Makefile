@@ -47,6 +47,13 @@ help	:
 	@ echo '... or a new Makefile.machine can be created and placed in src/MAKE/MINE for use'
 	@ echo ''
 
+# ----- Git version information -------------------------------------- #
+
+gitinfo :
+        @ echo 'Gathering git version information ...'
+        @ echo 'Branch:' $$(git rev-parse --abbrev-ref HEAD)
+        @ echo 'Commit:' $$(git rev-parse HEAD)
+
 # ----- Create a tar file of the src dir ----------------------------- #
 
 tar	:
