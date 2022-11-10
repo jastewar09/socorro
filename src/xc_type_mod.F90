@@ -1370,9 +1370,9 @@
             write(x_unit(diaryfile()),'(/,t4,"Using a standard Coulomb kernel in EXX calculations:")')
             select case (xct%o%auxiliary_type)
             case (AT_LEGACY)
-              write(x_unit(diaryfile()),'(/,t8,"- Integrable divergences are ignored")')
+              write(x_unit(diaryfile()),'(/,t8,"Integrable divergences are ignored")')
             case (AT_STRUCTURE_DEPENDENT)
-              write(x_unit(diaryfile()),'(/,t8,"- Integrable divergences are treated with a WCB formula")')
+              write(x_unit(diaryfile()),'(/,t8,"Integrable divergences are treated with a WCB formula")')
             end select
           case (CK_ATTENUATED)
             write(x_unit(diaryfile()),'(/,t4,"Using an attenuated Coulomb kernel in EXX calculations")')
@@ -1385,7 +1385,7 @@
           select case (xct%o%dependence)
           case (FD_HYBRID)
             if (xct%o%uses_nlcc) then
-              write(x_unit(diaryfile()),'(t4,"Applying nonlinear correction to EXX portion of exchange")')
+              write(x_unit(diaryfile()),'(/,t4,"Applying nonlinear correction to EXX portion of exchange")')
             endif
           end select
 
