@@ -20,7 +20,7 @@
 !cod$
       implicit none ; private
 
-      character(line_len), parameter :: socorro_release = "(13 May 2022)"
+      character(line_len), parameter :: socorro_release = "(9 Nov 2022)"
 
 !doc$
       public :: x_version
