@@ -50,9 +50,9 @@ help	:
 # ----- Git version information -------------------------------------- #
 
 gitinfo :
-        @ echo 'Gathering git version information ...'
-        @ echo 'Branch:' $$(git rev-parse --abbrev-ref HEAD)
-        @ echo 'Commit:' $$(git rev-parse HEAD)
+	@ echo 'Gathering git version information ...'
+	@ echo 'Branch:' $$(git rev-parse --abbrev-ref HEAD)
+	@ echo 'Commit:' $$(git rev-parse HEAD)
 
 # ----- Create a tar file of the src dir ----------------------------- #
 
