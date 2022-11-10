@@ -22,6 +22,7 @@ help	:
 	@ echo ''
 	@ echo 'make doc                     Create the documentation files for socorro'
 	@ echo 'make tar                     Create socorro_src.tar.gz for the src dir'
+	@ echo 'make git                     Print git version information'
 	@ echo ''
 	@ echo 'make clean                   Delete the object files in src'
 	@ echo 'make purge                   Delete all build related files in src'
@@ -49,10 +50,11 @@ help	:
 
 # ----- Git version information -------------------------------------- #
 
-gitinfo :
+git	:
 	@ echo 'Gathering git version information ...'
-	@ echo 'Branch:' $$(git rev-parse --abbrev-ref HEAD)
-	@ echo 'Commit:' $$(git rev-parse HEAD)
+	@ echo 'Commit:  ' $$(git rev-parse HEAD)
+	@ echo 'Branch:  ' $$(git rev-parse --abbrev-ref HEAD)
+	@ echo 'Describe:' $$(git describe --tags)
 
 # ----- Create a tar file of the src dir ----------------------------- #
 
