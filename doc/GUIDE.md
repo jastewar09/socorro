@@ -1029,9 +1029,8 @@ Exact -Exchange related tags:
   - prefix is exx_
 
     exx_coulomb_kernel: Type of Coulomb-potential kernel to use in EXX calculations
-        character; normal, attenuated, screened; none
+        character; normal, attenuated, screened; normal
         xc_type_mod; xc_type_obj; xc%o%coulomb_kernel
-        run aborts
 
     exx_auxiliary_type: Type of auxiliary function used to treat integrable divergences.
         character; legacy, structure_dependent; legacy
