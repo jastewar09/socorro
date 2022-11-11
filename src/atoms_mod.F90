@@ -514,16 +514,6 @@
              pos_cart = lat2r(lat,pos_lat)
              write(x_unit(diaryfile()),'(t4,i8,2x,a8,2(2x,3(2x,f17.10)))') ia,trim(at%o%atom_list(ia)%tag),pos_cart,pos_lat
           end do
-
-          !write(x_unit(diaryfile()),'(/,t4,"Atom Positions:")')
-          !write(x_unit(diaryfile()),'(/,t8,"atom",4x," type ",11x,"x",10x,"y",10x,"z",15x,"a1",9x,"a2",9x,"a3")')
-          !write(x_unit(diaryfile()),'(t7,"----------------    ---------------------------------     -----------", &
-          !                             &  "----------------------")')
-          !do ia = 1,at%o%natoms
-          !  pos_lat = at%o%atom_list(ia)%position
-          !  pos_cart = lat2r(lat,pos_lat)
-          !  write(x_unit(diaryfile()),'(t7,i4,6x,a6,2(5x,3(f9.5,2x)))') ia, at%o%atom_list(ia)%tag, pos_cart, pos_lat
-          !end do
         end if
         call glean(thy(at))
         call glean(thy(lat))

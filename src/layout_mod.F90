@@ -1627,10 +1627,6 @@
           write(x_unit(diaryfile()),'(  t12,"Dimension 2: 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1," = ",i0)') n2(2),n3(2),n5(2),n7(2),dims(2)
           write(x_unit(diaryfile()),'(  t12,"Dimension 3: 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1," = ",i0)') n2(3),n3(3),n5(3),n7(3),dims(3)
 
-!          write(x_unit(diaryfile()),'(/,t12,"Dimension 1: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(1),n2(1),n3(1),n5(1),n7(1)
-!          write(x_unit(diaryfile()),'(  t12,"Dimension 2: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(2),n2(2),n3(2),n5(2),n7(2)
-!          write(x_unit(diaryfile()),'(  t12,"Dimension 3: ",i0," = 2^",i1," * 3^",i1," * 5^",i1," * 7^",i1)') dims(3),n2(3),n3(3),n5(3),n7(3)
-
           if ( (mpi_nkgroups() == 1) .and. (mpi_nsgroups() == 1) ) then
 
             write(x_unit(diaryfile()),'(/,t8,"Distribution:",/)')
@@ -1700,7 +1696,7 @@
               dims = lay%o%dims
               do i = 1,3
                 if (bdims(i) == 1) then
-                  write(x_unit(diaryfile()),'(t12,"dimension ",i1,": on processor")') i
+                  write(x_unit(diaryfile()),'(t12,"Dimension ",i1,": on processor")') i
                 else
                   call subdivide(bdims(i),dims(i),nsize,slice,bigslice)
                   if (slice == 1) then
