@@ -54,7 +54,7 @@ git	:
 	@ echo 'Gathering git version information ...'
 	@ echo 'Commit:  ' $$(git rev-parse HEAD)
 	@ echo 'Branch:  ' $$(git rev-parse --abbrev-ref HEAD)
-	@ echo 'Describe:' $$(git describe --tags)
+	@ echo 'Describe:' $$(git describe --abbrev=0 --tags)
 
 # ----- Create a tar file of the src dir ----------------------------- #
 
