@@ -306,7 +306,7 @@ Electrons related tags:
            where n is the number of sampling points, rep is the representation (lattice or cartesian), ki(j) is the j'th
            coordinate of the i'th sampling point, and d(i) is the degeneracy. The points are assumed to consistent with the
            lattice group and space group.
-        
+
     kgroups: The number of kgroups (groups of k-points) to be run independently
         integer; >= 1; 1
         mpi_mod; the_mpi; nkgroups
@@ -630,11 +630,6 @@ Eigensolver related tags:
         default is used
         LAPACK invokes LAPACK diagonalization routines
         SCALAPACK invokes ScaLAPACK diagonalization routines
-        CMMF invokes Mark Sears' CMMF diagonalization routines (not available for public release)
-        Note: to use the CMMF diagonalization routine, do the following before compiling:
-          1. Remove the # in the following line in make.conf: #USE_CMMF = 1
-          2. Search for the phrase "Sandia build" in eigensolver_mod.f90 and follow the instructions.
-          3. Copy cmmf.c to the src directory.
 
     blocksize: Blocksize for use in scalapack routines.
         integer; > 0; 30
@@ -901,7 +896,7 @@ Symmetry related tags:
         character; .true., .false.; .false.
         check_symmetry_mod, external_mod; NA; NA
         default is used
-        
+
     list_lattice_group: Prints the lattice-group operations to diaryf.
         logical; .TRUE., .FALSE.; .FALSE.
         symmetry_mod; NA; NA
@@ -926,6 +921,7 @@ Symmetry related tags:
            <space>
            .
            .
+
     save_space_group; .true., .false.; .false.
         symmetry_mod; NA; NA
         default is used
@@ -1024,7 +1020,7 @@ Exchange-Correlation-Type related tags:
         xc_type_mod; xc_type_obj; xct%o%sd_aux_form
         run aborts
 
-Exact -Exchange related tags:
+Exact-Exchange related tags:
   - provides instructions and parameters for calculating the exchange energy and derivative
   - prefix is exx_
 
