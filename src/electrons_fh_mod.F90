@@ -1456,6 +1456,7 @@
           exit
         end do
 
+        call flushbuf(diaryfile())
         if (present(restf)) call glean(thy(restf))
 
         if (error(FLERR,"Exit electrons_fh_mod::diary_construction_i")) continue

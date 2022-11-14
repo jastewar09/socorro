@@ -2275,7 +2275,6 @@
           eigs_kg(ik,:) = eigs_k
         end do
         call xcomm_allreduce(XKGROUP,MPI_SUM,eigs_kg,elr%eigs)
-
         if (allocated( eigs_k)) deallocate( eigs_k )
         if (allocated( eigs_kg )) deallocate( eigs_kg )
 
@@ -2732,6 +2731,7 @@
           exit
         end do
 
+        call flushbuf(diaryfile())
         if (present(restf)) call glean(thy(restf))
 
         if (error(FLERR,"Exit electrons_sc_mod::diary_construction_i")) continue

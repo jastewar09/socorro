@@ -679,6 +679,7 @@
            end do
         end if
 
+        call flushbuf(diaryfile())
         call glean(thy(el))
 
       end subroutine
