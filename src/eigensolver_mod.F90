@@ -546,7 +546,7 @@
             if (error(FLERR,.true.,"ERROR: GCG solver is not supported for non-identity overlap")) goto 100
           end if
         case (BD)
-          if (overlap_is_identity(h)) then  
+          if (overlap_is_identity(h)) then
             call solve_bd_i(es,h,v,evals,rnorm) ; if (error()) goto 100
           else
             call solve_bdgen_i(es,h,v,evals,rnorm) ; if(error()) goto 100
@@ -1009,11 +1009,11 @@
         logical :: converged
         integer :: ib, id, max_dir, nb, nd
         real(double) :: res_tol
-        real(double), dimension(:), allocatable :: res, res_norm, evals_red 
-        complex(double) :: cz, cp1 
+        real(double), dimension(:), allocatable :: res, res_norm, evals_red
+        complex(double) :: cz, cp1
         complex(double), dimension(:), allocatable :: evals_cmplx
         complex(double), dimension(:,:), allocatable :: cmat, h_mat, o_mat
-        type(multivector_obj) :: hv, r, hr  
+        type(multivector_obj) :: hv, r, hr
 
         call my(es)
         call my(h)
@@ -1099,7 +1099,6 @@
           o_mat(1:nb,nb+1:2*nb) = cmat
           call overlap(r,cmat) ; if (error()) goto 100  ! <r|r> --> cmat
           o_mat(nb+1:2*nb,nb+1:2*nb) = cmat
-
           select case (es%o%diagonalization_method)
           case (LAPACK)
             call diagonalize_gen_lapack_i(h_mat,o_mat,evals_red)
@@ -1107,9 +1106,8 @@
             call diagonalize_gen_scalapack_i(h_mat,o_mat,evals_red)
           end select
           if (error()) goto 100
-
           evals = evals_red(1:nb)
-          
+
           cmat = h_mat(1:nb,1:nb)
           call transform(v,cmat) ; if (error()) goto 100
           call transform(hv,cmat) ; if (error()) goto 100
@@ -1119,7 +1117,6 @@
 
           evals_cmplx = cmplx(evals,0,double)
           call residual(v,hv,evals_cmplx,r)
-          
           call multiply(r,res) ; if (error()) goto 100
           res = sqrt(res)
 
