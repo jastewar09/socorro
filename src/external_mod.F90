@@ -670,6 +670,7 @@
         end if
         call diary(extr%layout)
         call diary(extr%xc_type)
+        call flushbuf(diaryfile())
         if (error(FLERR,"Exit external_mod::diary_construction_i")) continue
       end subroutine
 

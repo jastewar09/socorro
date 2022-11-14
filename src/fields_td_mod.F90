@@ -1417,7 +1417,8 @@
 
         end if
 
-      call glean(thy(ao))
+        call flushbuf(diaryfile())
+        call glean(thy(ao))
 
       end subroutine
 

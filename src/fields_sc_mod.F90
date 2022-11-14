@@ -2208,6 +2208,7 @@
           end if
         end if
 
+        call flushbuf(diaryfile())
         call glean(thy(ao))
 
       end subroutine
