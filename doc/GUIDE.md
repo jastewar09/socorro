@@ -625,7 +625,7 @@ Eigensolver related tags:
         MPI invokes the MPI_ALLTOALLV routine
 
     diagonalization_method: Type of diagonalization routine to use.
-        character; LAPACK, SCALAPACK, CMMF; LAPACK
+        character; LAPACK, SCALAPACK; LAPACK
         eigensolver_mod; eigensolver_obj; es%o%diagonalization_method
         default is used
         LAPACK invokes LAPACK diagonalization routines
