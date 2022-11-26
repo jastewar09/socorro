@@ -452,9 +452,9 @@
         case (DDFS_NATIVE)
           call xc_grid_pressure(xcd%xcd_native,n,p)
         case (DDFS_LIBXC)
-          if (error(FLERR,.true.,"ERROR: grid_pressure routine is not currently available")) continue
+          if (error(FLERR,.true.,"grid_pressure routine is not currently available")) continue
 !          call xc_grid_pressure(xcd%xcd_libxc,n,p)
-        end select 
+        end select
         call glean(thy(n))
         if (error(FLERR,"Exit xc_density_mod::xc_grid_pressure_xcd")) continue
       end subroutine
@@ -473,9 +473,9 @@
         case (DDFS_NATIVE)
           call xc_grid_stress_tensor(xcd%xcd_native,n_g,s)
         case (DDFS_LIBXC)
-          if (error(FLERR,.true.,"ERROR: grid_stress_tensor routine is not currently available")) continue
+          if (error(FLERR,.true.,"grid_stress_tensor routine is not currently available")) continue
 !          call xc_grid_stress_tensor(xcd%xcd_libxc,n_g,s)
-        end select 
+        end select
         call glean(thy(n_g))
         if (error(FLERR,"Exit xc_density_mod::xc_grid_stress_tensor_xcd")) continue
       end subroutine
