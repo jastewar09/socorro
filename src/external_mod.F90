@@ -258,7 +258,7 @@
 
         ! close the EXTERNAL block
 200     if (present(restf)) then
-          if (i_access(restf)) call closeblock(restf)           
+          if (i_access(restf)) call closeblock(restf)
         end if
 
 300     if (allocated( pos )) deallocate( pos )
@@ -668,10 +668,13 @@
           if (i_access(diaryfile())) write(x_unit(diaryfile()),'(/,t4,"Symmetrizing the atom coordinates")')
           if (i_access(diaryfile())) write(x_unit(diaryfile()),'(t4,"Updating the space group")')
         end if
+
         call diary(extr%layout)
         call diary(extr%xc_type)
         call flushbuf(diaryfile())
+
         if (error(FLERR,"Exit external_mod::diary_construction_i")) continue
+
       end subroutine
 
       subroutine diary_matching_radii_i(extr)
