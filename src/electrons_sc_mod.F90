@@ -3137,7 +3137,7 @@
         case ( VTK )
            fname(pos:(pos+3)) = ".vtk"
         case default
-           if (error(FLERR,.true.,"Error! Unrecognized file type")) goto 100
+           if (error(FLERR,.true.,"Error: Unrecognized file type")) goto 100
         end select
 
 
