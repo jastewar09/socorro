@@ -1583,7 +1583,7 @@
 
           ! Diagonalize matrix
           cmach = 's'
-          abstol = 2*pdlamch(comm,cmach)
+          abstol = 2.0_double*pdlamch(comm,cmach)
           orfac = -1.0_double
           call pzhegvx(type,jobz,range,uplo,na,as,i1,i1,desc_as,bs,i1,i1,desc_as,r0,r0,i0,i0,abstol,nef,nec,w,orfac, &
                        & zs,i1,i1,desc_as,work,lwork,rwork,lrwork,iwork,liwork,fail,clustr,gap,info)
