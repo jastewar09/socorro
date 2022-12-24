@@ -10,7 +10,7 @@
       program main
 !doc$ program main
 
-!     Main program to instantiate a socorro calculation.
+!     Instantiate a socorro calculation.
 
       use socorro_mod
 
