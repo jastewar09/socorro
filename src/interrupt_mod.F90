@@ -19,7 +19,7 @@
       use path_mod
       use error_mod
       use io_mod
-      use utils_mod
+      use utilities_mod
 
 !cod$
       implicit none ; private

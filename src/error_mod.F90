@@ -27,7 +27,7 @@
       use kind_mod
       use mpi
       use path_mod
-      use utils_mod
+      use utilities_mod
 
 !cod$
       implicit none ; private

@@ -15,7 +15,7 @@
 !     Comments ...
 
       use kind_mod
-      use utils_mod
+      use utilities_mod
 
 !cod$
       implicit none ; private

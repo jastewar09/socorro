@@ -16,7 +16,7 @@ module timing_mod
    use io_mod
    use kind_mod
    use mpi_mod
-   use utils_mod
+   use utilities_mod
 
    implicit none ; private
 

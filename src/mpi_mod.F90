@@ -54,7 +54,7 @@
       use error_mod
       use kind_mod
       use mpi
-      use utils_mod
+      use utilities_mod
 #if defined(_OPENMP)
       use omp_lib
 #endif
