@@ -263,11 +263,11 @@ contains
    subroutine write_timers_()
 
       integer :: unit
-      character(line_len) :: fmt = '(t4,a45,3(3x,a15))'
+      character(line_len) :: fmt = '(a45,3(3x,a15))'
 
       if ( i_access( diaryfile() ) ) then
          unit = x_unit(diaryfile())
-         write(unit,'(/,"Runtime task breakdown:",/)')
+         write(unit,'(/,/,"Runtime task breakdown:",/)')
          write(unit,fmt) "Timer                                        ",          "Calls",   "CPU Time (s)",  "Wall Time (s)"
          write(unit,fmt) "---------------------------------------------","---------------","---------------","---------------"
       end if
@@ -688,7 +688,7 @@ contains
       integer :: ii, ncalls
       real(double) :: cpu_time, wall_time
       character(line_len) :: name
-      character(line_len) :: fmt = '(t4,a45,3x,i15,3x,2(f15.2,3x))'
+      character(line_len) :: fmt = '(a45,3x,i15,3x,2(f15.2,3x))'
 
       ncalls = 0
       call reduce(CONFIG,MPI_SUM, timer%ncalls, ncalls)
