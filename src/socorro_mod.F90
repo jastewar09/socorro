@@ -12,9 +12,7 @@
       module socorro_mod
 !doc$ module socorro_mod
 
-!     This socorro module determines if the pre-processing checks
-!     or the main electronic structure calculations are performed
-!     and executes them accordingly.
+!     This module determines the task or calculation to be performed and drives the execution.
 
       use arg_mod
       use born_oppenheimer_mod
@@ -52,8 +50,10 @@
       subroutine socorro()
 !doc$ subroutine socorro()
 !        effects:
-!        errors:
 !        requires:
+!        modifies:
+!        errors:
+!        warns:
 !        notes:
 
 !cod$

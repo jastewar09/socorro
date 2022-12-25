@@ -12,12 +12,12 @@
       module create_eos_mod
 !doc$ module create_eos_mod
 
-!     This create_eos module ...
+!     This module fits energy vs. volume data to an equation-of-state (EOS).
 
+      use diary_mod
+      use error_mod
       use kind_mod
       use mpi_mod
-      use error_mod
-      use diary_mod
       use timing_mod
 
 !cod$
@@ -34,8 +34,11 @@
       subroutine create_eos()
 !doc$ subroutine create_eos()
 !        effects:
-!        errors:
 !        requires:
+!        modifies:
+!        errors:
+!        warns:
+!        notes:
 
 !cod$
          call start_timer("create_eos: total time")
