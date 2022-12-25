@@ -23,6 +23,7 @@
       use config_fh_mod
       use config_sc_mod
       use config_td_mod
+      use create_eos_mod
       use ehrenfest_mod
       use error_mod
       use kind_mod
@@ -44,15 +45,11 @@
       public :: socorro
 
 !cod$
-      interface socorro
-         module procedure socorro_
-      end interface
-
       contains
 
 ! *** Public routines
 
-      subroutine socorro_()
+      subroutine socorro()
 !doc$ subroutine socorro()
 !        effects:
 !        errors:
@@ -64,68 +61,80 @@
 
          call system_start() ; if (error()) goto 900
 
-         ! Determine check k-points status
+         ! Determine if to check the k-points
 
          call arglc("check_kpoints",mode,found) ; if (.not.found) mode = "no"
          select case (trim(mode))
-         case ("n","no")
+         case ("n","no","off")
             continue
-         case ("y","yes")
+         case ("y","yes","on")
             call check_kpoints() ; goto 900
          case default
             if (error(FLERR,.true.,"check_kpoints tag was not recognized")) goto 900
          end select
 
-         ! Determine check symmetry status
+         ! Determine if to check the symmetry
 
          call arglc("check_symmetry",mode,found) ; if (.not.found) mode = "no"
          select case (trim(mode))
-         case ("n","no")
+         case ("n","no","off")
             continue
-         case ("y","yes")
+         case ("y","yes","on")
             call check_symmetry() ; goto 900
          case default
             if (error(FLERR,.true.,"check_symmetry tag was not recognized")) goto 900
          end select
 
-         ! Determine main calculation type
+         ! Determine if to fit an equation-of-state
+
+         call arglc("create_eos",mode,found) ; if (.not.found) mode = "no"
+         select case (trim(mode))
+         case ("n","no","off")
+            continue
+         case ("y","yes","on")
+            call create_eos() ; goto 900
+         case default
+            if (error(FLERR,.true.,"create_eos tag was not recognized")) goto 900
+         end select
+
+         ! Determine the main calculation type
 
          call arglc("config_type",mode,found) ; if (.not.found) mode = "none"
          select case (trim(mode))
-         case ("sc","self-consistent")
-            call my(config_sc(),cfg_sc)       ; if ( error() ) goto 900
-            call diary(cfg_sc)
-            call forces(cfg_sc)               ; if ( error() ) goto 100
-            call diary_forces(cfg_sc)
-            if ( born_oppenheimer_dynamics(cfg_sc) ) then
-               if ( error() ) goto 100
-               call diary(cfg_sc)
-            end if
-            if ( many_body_theory(cfg_sc) ) then
-               if ( error() ) goto 100
-               call diary(cfg_sc)
-            end if
-            if ( optimize_structure(cfg_sc) ) then
-               if ( error() ) goto 100
-               call diary(cfg_sc)
-            end if
-            if ( transition_state(cfg_sc) ) then
-               if ( error() ) goto 100
-               call diary(cfg_sc)
-            end if
-            call pressure(cfg_sc)             ; if ( error() ) goto 100
-            call diary_pressure(cfg_sc)
-            call stress_tensor(cfg_sc)        ; if ( error() ) goto 100
-            call diary_stress_tensor(cfg_sc)
-            call decompose(cfg_sc)            ; if ( error() ) goto 100
-            call write_els_potential(cfg_sc)  ; if ( error() ) goto 100
-            call write_restart(cfg_sc)
-100         call glean(thy(cfg_sc))
          case ("fh","fixed-hamiltonian")
             call my(config_fh(),cfg_fh) ; if (error()) goto 900
             call diary(cfg_fh)
             call decompose(cfg_fh)
             call glean(thy(cfg_fh))
+         case ("sc","self-consistent")
+            call my(config_sc(),cfg_sc) ; if (error()) goto 900
+            call diary(cfg_sc)
+            call forces(cfg_sc) ; if (error()) goto 100
+            call diary_forces(cfg_sc)
+            if (born_oppenheimer_dynamics(cfg_sc)) then
+               if (error()) goto 100
+               call diary(cfg_sc)
+            end if
+            if (many_body_theory(cfg_sc)) then
+               if (error()) goto 100
+               call diary(cfg_sc)
+            end if
+            if (optimize_structure(cfg_sc)) then
+               if (error()) goto 100
+               call diary(cfg_sc)
+            end if
+            if (transition_state(cfg_sc)) then
+               if (error()) goto 100
+               call diary(cfg_sc)
+            end if
+            call pressure(cfg_sc) ; if (error()) goto 100
+            call diary_pressure(cfg_sc)
+            call stress_tensor(cfg_sc) ; if (error()) goto 100
+            call diary_stress_tensor(cfg_sc)
+            call decompose(cfg_sc) ; if (error()) goto 100
+            call write_els_potential(cfg_sc) ; if (error()) goto 100
+            call write_restart(cfg_sc)
+100         call glean(thy(cfg_sc))
          case ("td","time-dependent")
             call ehrenfest_dynamics()
          case ("none")
@@ -139,6 +148,6 @@
 900      if (error(FLERR,"Exiting socorro")) continue
          call system_stop()
 
-      end subroutine
+      end subroutine socorro
 
       end module socorro_mod
