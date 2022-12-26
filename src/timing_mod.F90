@@ -71,8 +71,8 @@ module timing_mod
 
    !* Publicly available parameters and procedures
 
-   public :: timer_ctor
-   public :: timer_dtor
+   public :: timer_start
+   public :: timer_stop
 
    public :: start_timer
    public :: stop_timer
@@ -83,11 +83,11 @@ module timing_mod
 
    !* Interfaces for the publicly available procedures
 
-   interface timer_ctor
+   interface timer_start
       module procedure timer_ctor_
    end interface
 
-   interface timer_dtor
+   interface timer_stop
       module procedure timer_dtor_
    end interface
 
