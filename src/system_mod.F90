@@ -189,7 +189,7 @@
             call notify("processes          ",mpi_nprocs(KGROUP))
             call notify("  kgroup number    ",mpi_mykgroup())
             call notify("  rank             ",mpi_myproc(KGROUP))
-            call notify(" ")
+            call notify("")
             call notify("  XKGROUP")
             call notify("  communicator     ",mpi_comm(XKGROUP))
             call notify("  processes        ",mpi_nprocs(XKGROUP))
