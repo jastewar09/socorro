@@ -31,8 +31,8 @@
 
 ! directories
 
-      character(line_len), parameter :: input_directory = ""  ! change to "" if Sandia build
-      character(line_len), parameter :: potential_directory = ""  ! change to "" if Sandia build
+      character(line_len), parameter :: potential_directory = ""
+      character(line_len), parameter :: input_directory = ""
       character(line_len), parameter :: output_directory = ""
 
 ! run directory file names
