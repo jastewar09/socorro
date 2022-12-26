@@ -77,13 +77,13 @@
 
          if ( mpi_first(world) ) argc = command_argument_count()
          call broadcast_seh(argc)
-         if ( argc == 0 ) call interrupt_stop(FLERR,"No command-line arguments given")
+         if ( argc == 0 ) call interrupt(FLERR,"No command-line arguments given")
 
          iarg = 1
          do while ( iarg < argc + 1 )
             call get_command_argument(iarg,value)
             if ( trimstr(value) == "-in" .or. trimstr(value) == "-i" ) then
-               if ( iarg + 1 > argc ) call interrupt_stop(FLERR,"Invalid command-line argument")
+               if ( iarg + 1 > argc ) call interrupt(FLERR,"Invalid command-line argument")
                inflag = iarg + 1
                iarg = iarg + 2
             else
@@ -93,7 +93,7 @@
 
          ! Check the status of required command line arguments
 
-         if ( inflag == 0 ) call interrupt_stop(FLERR,"The '-in' command-line switch was not found")
+         if ( inflag == 0 ) call interrupt(FLERR,"The '-in' command-line switch was not found")
 
          ! Process the input file arguments
 
@@ -102,11 +102,11 @@
             inquire(file=trim(infile),exist=found)
          end if
          call broadcast_seh(found)
-         if ( .not.found ) call interrupt_stop(FLERR,"The input file '"//trimstr(infile)//"' was not found")
+         if ( .not.found ) call interrupt(FLERR,"The input file '"//trimstr(infile)//"' was not found")
 
          if ( mpi_first(world) ) open(newunit=inunit,file=trim(infile),status="unknown",iostat=iostatus)
          call broadcast_seh(iostatus)
-         if ( iostatus /= 0 ) call interrupt_stop(FLERR,"The input file '"//trimstr(infile)//"' could not be opened")
+         if ( iostatus /= 0 ) call interrupt(FLERR,"The input file '"//trimstr(infile)//"' could not be opened")
 
          ! Allocate space for the argument parameter list
 

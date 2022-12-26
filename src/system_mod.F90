@@ -64,17 +64,17 @@
          call arg('configs',nc,found)
          if (.not.found) nc = 1
          if (nc < 1) then
-            call interrupt_stop(FLERR,"Number of configurations is less than 1")
+            call interrupt(FLERR,"Number of configurations is less than 1")
          elseif (nc == 1) then
             continue
          elseif ((nc > 1).and.(nc < 99)) then
             if (mod(mpi_nprocs(WORLD),nc) /= 0) then
-               call interrupt_stop(FLERR,"Non-equal division of world processes among configurations")
+               call interrupt(FLERR,"Non-equal division of world processes among configurations")
             else
                call mpi_config_split(nc)
             end if
          else
-            call interrupt_stop(FLERR,"Number of configurations is greater than 98")
+            call interrupt(FLERR,"Number of configurations is greater than 98")
          end if
 
          ! Set the number of spin groups
@@ -82,17 +82,17 @@
          call arg('sgroups',nsg,found)
          if (.not.found) nsg = 1
          if (nsg < 1) then
-            call interrupt_stop(FLERR,"Number of spin groups is less than 1")
+            call interrupt(FLERR,"Number of spin groups is less than 1")
          elseif (nsg == 1) then
             continue
          elseif (nsg == 2) then
             if (mod(mpi_nprocs(CONFIG),nsg) /= 0) then
-               call interrupt_stop(FLERR,"Non-equal division of config processes among spin groups")
+               call interrupt(FLERR,"Non-equal division of config processes among spin groups")
             else
                call mpi_sgroup_split(nsg)
             end if
          else
-            call interrupt_stop(FLERR,"Number of spin groups is greater than 2")
+            call interrupt(FLERR,"Number of spin groups is greater than 2")
          end if
 
          ! Set the number of k-point groups
@@ -100,12 +100,12 @@
          call arg('kgroups',nkg,found)
          if (.not.found) nkg = 1
          if (nkg < 1) then
-            call interrupt_stop(FLERR,"Number of k-point groups is less than 1")
+            call interrupt(FLERR,"Number of k-point groups is less than 1")
          elseif (nkg == 1) then
             continue
          else
             if (mod(mpi_nprocs(SGROUP),nkg) /= 0) then
-               call interrupt_stop(FLERR,"Non-equal division of spin group processes among k-point groups")
+               call interrupt(FLERR,"Non-equal division of spin group processes among k-point groups")
             else
                call mpi_kgroup_split(nkg)
             end if
@@ -117,9 +117,9 @@
          if (.not.found) tag = "none"
          select case (trim(tag))
          case ("dimer","dmr")
-            if (nc /= 2) call interrupt_stop(FLERR,"Number of configurations is not equal to 2 for a dimer calculation")
+            if (nc /= 2) call interrupt(FLERR,"Number of configurations is not equal to 2 for a dimer calculation")
          case ("neb")
-            if (nc == 1) call interrupt_stop(FLERR,"Number of configurations is equal to 1 for a neb calculation")
+            if (nc == 1) call interrupt(FLERR,"Number of configurations is equal to 1 for a neb calculation")
          end select
 
          ! Set the input/ouput file paths
@@ -143,7 +143,7 @@
          case ("none")
             ef_status = "off"
          case default
-            call interrupt_stop(FLERR,"error_file_mode tag must be all, first, or none")
+            call interrupt(FLERR,"error_file_mode tag must be all, first, or none")
          end select
 
          call error_start(mpi_comm(CONFIG),mpi_comm(SGROUP),mpi_comm(KGROUP),mpi_myproc(CONFIG),mpi_first(WORLD),tag,ef_status)
@@ -249,7 +249,6 @@
             call write_timers()
          end if
 
-         call interrupt()
          call diary_stop()
          call io_stop()
          call error_stop()

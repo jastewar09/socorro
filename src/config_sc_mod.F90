@@ -1178,7 +1178,7 @@
 
         lc = 0
         do
-          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_stop(),"USER INITIATED STOP")) goto 100
           lc = lc + 1
           !write(*,*) "Here 1",mpi_myproc(world)
           call update(cfgr%fields,cfgr%external,cfgr%electrons) ; if (error()) goto 100

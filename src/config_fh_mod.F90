@@ -517,7 +517,7 @@
 
         lc = 0
         do
-          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_stop(),"USER INITIATED STOP")) goto 100
           lc = lc + 1
           call check_convergence_i(cfgr,lc,done)
           if (done) exit

@@ -12,12 +12,11 @@
       module interrupt_mod
 !doc$ module interrupt_mod
 
-!     Interrupt_mod encapsulates procedures for interrupting a run.
+!     This module provides routines for interrupting a calculation.
 
       use kind_mod
       use mpi_mod
       use path_mod
-      use error_mod
       use io_mod
       use utilities_mod
 
@@ -25,121 +24,68 @@
       implicit none ; private
 
 !doc$
-      public :: user_abort
       public :: user_stop
       public :: interrupt
-      public :: interrupt_stop
 
 !cod$
-
-      interface interrupt_stop
-         module procedure interrupt_stop_
-      end interface interrupt_stop
-
       contains
-
-      function user_abort() result(ua)
-!doc$ function user_abort() result(ua)
-        logical :: ua
-!       effects: Returns .true. iff file "stop_name" exists and contains the command "ABORT".
-
-!cod$
-        logical :: ex
-        character(line_len) :: cmd
-        integer :: ios
-        type(file_obj) :: f
-
-        call my(file(trim(stop_name)),f)
-
-        ua = .false.
-
-        if (i_access(f)) inquire(file=x_name(f),exist=ex)
-        if (i_comm(f)) call broadcast(FILE_SCOPE,ex)
-        if (ex) then
-          if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
-          if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) cmd
-          if (i_comm(f)) call broadcast(FILE_SCOPE,cmd)
-          select case (trim(adjustl(cmd)))
-          case ("ABORT","Abort","abort","A","a")
-            ua = .true.
-          end select
-          if (i_access(f)) close(unit=x_unit(f))
-        end if
-
-        call glean(thy(f))
-
-      end function
 
       function user_stop() result(us)
 !doc$ function user_stop() result(us)
-        logical :: us
-!       effects: Returns .true. iff file "stop_name" exists and contains the command "STOP".
+         logical :: us
+!        effects: Returns .true. iff file "stop_name" exists and contains the command "STOP".
+!        requires:
+!        modifies:
+!        errors:
+!        warns:
+!        notes:
 
 !cod$
-        logical :: ex
-        character(line_len) :: cmd
-        integer :: ios
-        type(file_obj) :: f
+         logical :: ex
+         character(line_len) :: cmd
+         integer :: ios
+         type(file_obj) :: f
 
-        call my(file(trim(stop_name)),f)
+         call my(file(trim(stop_name)),f)
 
-        us = .false.
+         us = .false.
 
-        if (i_access(f)) inquire(file=x_name(f),exist=ex)
-        if (i_comm(f)) call broadcast(FILE_SCOPE,ex)
-        if (ex) then
-          if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
-          if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) cmd
-          if (i_comm(f)) call broadcast(FILE_SCOPE,cmd)
-          select case (trim(adjustl(cmd)))
-          case ("STOP","Stop","stop","S","s")
-            us = .true.
-          end select
-          if (i_access(f)) close(unit=x_unit(f))
-        end if
+         if (i_access(f)) inquire(file=x_name(f),exist=ex)
+         if (i_comm(f)) call broadcast(FILE_SCOPE,ex)
+         if (ex) then
+            if (i_access(f)) open(unit=x_unit(f),file=x_name(f),status='old',iostat=ios)
+            if (i_access(f)) read(x_unit(f),'(a)',iostat=ios) cmd
+            if (i_comm(f)) call broadcast(FILE_SCOPE,cmd)
+            select case (trim(adjustl(cmd)))
+            case ("STOP","Stop","stop","S","s")
+               us = .true.
+            case ("ABORT","Abort","abort","A","a")
+               us = .true.
+            end select
+            if (i_access(f)) close(unit=x_unit(f))
+         end if
 
-        call glean(thy(f))
+         call glean(thy(f))
 
       end function
 
-      subroutine interrupt()
-!doc$ subroutine interrupt()
-!       effects: If present, removes the interrupt file.
-
-!cod$
-        logical :: ex
-        integer :: ios
-
-        if (mpi_first(WORLD)) then
-          inquire(file=trim(stop_name),exist=ex)
-          if (ex) then
-            open(unit=INTERRUPT_UNIT,file=trim(stop_name),status='old',iostat=ios)
-            if (ios /= 0) then
-              call warn(FLERR,"The interrupt file could not be opened")
-              goto 100
-            end if
-            close(unit=INTERRUPT_UNIT,status='delete')
-          end if
-        end if
-
-100     call barrier(WORLD)
-
-      end subroutine
-
-      !* Method to terminate execution due to the provided fatal error message
-
-      subroutine interrupt_stop_( file , line , mesg )
-
+      subroutine interrupt(file,line,mesg)
+!doc$ subroutine system_stop()
          character(*) :: file, mesg
          integer :: line
+!        effects: Calls routines that write an error message and immediately terminates execution.
+!        requires:
+!        modifies:
+!        errors:
+!        warns:
+!        notes:
 
-         if ( mpi_first( world ) ) then
-            write(*,'(/,"ERROR: ",a," (src/",a,":",a,")")') trimstr(mesg),basename(file),num2str(line)
-         end if
+!cod$
+         if (mpi_first(WORLD)) write(*,'(/,"ERROR: ",a," (src/",a,":",i0,")")') trim(mesg),basename(file),line
 
          call mpi_stop()
          stop
 
-      end subroutine interrupt_stop_
+      end subroutine interrupt
 
-      end module
+      end module interrupt_mod

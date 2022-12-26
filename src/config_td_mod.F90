@@ -491,7 +491,7 @@
         lc = 0
         done = .false.
         do while (.not. done)
-          if (error(FLERR,user_abort(),"USER INITIATED ABORT")) goto 100
+          if (error(FLERR,user_stop(),"USER INITIATED STOP")) goto 100
           lc = lc + 1
           call update(cfg%o%adiabatic_el,ext,x_potential(cfg%o%fields)) ; if (error()) goto 100
           rn = x_residual_norm(cfg%o%adiabatic_el)
