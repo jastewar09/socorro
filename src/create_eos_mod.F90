@@ -12,7 +12,7 @@
       module create_eos_mod
 !doc$ module create_eos_mod
 
-!     This module fits energy vs. volume data to an equation-of-state (EOS).
+!     This module provides routines to fit energy vs. volume data to an equation-of-state (EOS).
 
       use diary_mod
       use error_mod
