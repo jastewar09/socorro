@@ -474,7 +474,7 @@
 
          call locase_arg_i(val)
 
-      end subroutine
+      end subroutine read_arglc_i
 
       subroutine upcase_arg_i(s)
 
