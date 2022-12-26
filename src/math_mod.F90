@@ -130,7 +130,7 @@
       public :: simpson_integral
       public :: gauss_legendre
       public :: atom_dot_product
-      public :: init_machine_constants
+      public :: set_machine_constants
       public :: chebyshev_initialize
       public :: chebyshev_accelerate
       public :: besjn
@@ -178,8 +178,8 @@
       interface atom_dot_product
         module procedure all_atom_dot_product_1, all_atom_dot_product_2
       end interface
-      interface init_machine_constants
-        module procedure init_constants
+      interface set_machine_constants
+        module procedure set_constants
       end interface
       interface besjn
         module procedure bessj
@@ -1375,8 +1375,8 @@
       end function
 
 
-      subroutine init_constants()
-!doc$ subroutine init_machine_constants()
+      subroutine set_constants()
+!doc$ subroutine set_machine_constants()
 !       effects: ?
 
 !cod$
