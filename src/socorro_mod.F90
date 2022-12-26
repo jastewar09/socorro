@@ -25,7 +25,7 @@
       use ehrenfest_mod
       use error_mod
       use kind_mod
-      use many_body_theory_mod
+      use many_body_mod
       use relax_mod
       use system_mod
       use transition_state_mod
