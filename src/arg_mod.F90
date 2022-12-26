@@ -12,16 +12,14 @@
       module arg_mod
 !doc$ module arg_mod
 
-!     This arg module provides routines for reading and distributing
-!     control parameters from the input file. The input file is read
-!     once and the results are cached for later retrieval.
+!     This module provides routines for reading and distributing control parameters from the
+!     input file. The input file is read once and the results are cached for later retrieval.
 
       use error_mod
       use interrupt_mod
       use kind_mod
       use mpi_mod
       use path_mod
-      use utilities_mod
 
 !cod$
       implicit none ; private
@@ -60,132 +58,100 @@
       subroutine arg_start()
 !doc$ subroutine arg_start()
 !        effects: Starts the argument retrieval system.
+!        requires:
+!        modifies:
 !        errors: Problems locating or opening the arguments file.
+!        warns:
+!        notes:
 
 !cod$
          integer :: citeflag, inflag, logflag, screenflag
-         integer :: inunit, argc, iarg, iostatus, nlines, il
+         integer :: inunit, argc, iarg, iostat, nlines, il
          logical :: found
          character(line_len) :: infile, value, buffer
 
-         ! Process the command line arguments
+         ! Process the command-line arguments
 
          citeflag = 0
          inflag = 0
          logflag = 0
          screenflag = 0
 
-         if ( mpi_first(world) ) argc = command_argument_count()
+         if (mpi_first(WORLD)) argc = command_argument_count()
          call broadcast_seh(argc)
-         if ( argc == 0 ) call interrupt(FLERR,"No command-line arguments given")
+         if (argc == 0) call interrupt(FLERR,"No command-line arguments were given")
 
          iarg = 1
-         do while ( iarg < argc + 1 )
-            call get_command_argument(iarg,value)
-            if ( trimstr(value) == "-in" .or. trimstr(value) == "-i" ) then
-               if ( iarg + 1 > argc ) call interrupt(FLERR,"Invalid command-line argument")
+         do while (iarg < argc + 1)
+            if (mpi_first(WORLD)) call get_command_argument(iarg,value)
+            call broadcast_seh(value)
+            select case (trim(value))
+            case ("-i","-in")
+               if (iarg + 1 > argc) call interrupt(FLERR,"Invalid command-line argument")
                inflag = iarg + 1
                iarg = iarg + 2
-            else
+            case default
                iarg = iarg + 1
-            end if
+            end select
          end do
 
-         ! Check the status of required command line arguments
+         ! Check the status of required command-line arguments
 
-         if ( inflag == 0 ) call interrupt(FLERR,"The '-in' command-line switch was not found")
+         if (inflag == 0) call interrupt(FLERR,"The '-in' command-line argument was not found")
 
-         ! Process the input file arguments
+         ! Process the input file
 
-         if ( mpi_first(world) ) then
+         if (mpi_first(WORLD)) then
             call get_command_argument(inflag,infile)
             inquire(file=trim(infile),exist=found)
          end if
          call broadcast_seh(found)
-         if ( .not.found ) call interrupt(FLERR,"The input file '"//trimstr(infile)//"' was not found")
+         if (.not.found) call interrupt(FLERR,"The input file '"//trim(infile)//"' was not found")
 
-         if ( mpi_first(world) ) open(newunit=inunit,file=trim(infile),status="unknown",iostat=iostatus)
-         call broadcast_seh(iostatus)
-         if ( iostatus /= 0 ) call interrupt(FLERR,"The input file '"//trimstr(infile)//"' could not be opened")
+         if (mpi_first(WORLD)) open(newunit=inunit,file=trim(infile),status="unknown",iostat=iostat)
+         call broadcast_seh(iostat)
+         if (iostat /= 0) call interrupt(FLERR,"The input file '"//trim(infile)//"' could not be opened")
 
-         ! Allocate space for the argument parameter list
+         ! Allocate space for the input file parameters
 
-         if ( mpi_first(world) ) then
+         if (mpi_first(WORLD)) then
             nlines = -1
-            iostatus = 0
-            do while ( iostatus == 0 )
+            iostat = 0
+            do while (iostat == 0)
                nlines = nlines + 1
-               read(inunit,'(a)',iostat=iostatus) buffer
+               read(inunit,'(a)',iostat=iostat) buffer
             end do
-            rewind( inunit )
+            rewind(inunit)
          end if
 
          call broadcast_seh(nlines)
-         allocate( arg_params(nlines) )
+         allocate(arg_params(nlines))
 
-         ! Read and broadcast the contents of the input file
+         ! Read and broadcast the input file parameters
 
          do il = 1,nlines
-            if ( mpi_first(world) ) read(inunit,'(a)') buffer
+            if (mpi_first(WORLD)) read(inunit,'(a)') buffer
             call broadcast_seh(buffer)
             call arg_split_i(buffer,arg_params(il))
          end do
 
-         if ( mpi_first(world) ) close( inunit )
+         if (mpi_first(WORLD)) close(inunit)
 
-      end subroutine
+      end subroutine arg_start
 
       subroutine arg_stop()
 !doc$ subroutine arg_stop()
 !        effects: Stops the argument retrieval system.
+!        requires:
+!        modifies:
+!        errors:
+!        warns:
+!        notes:
 
 !cod$
-         if ( allocated(arg_params) ) deallocate( arg_params )
-      end subroutine
+         if (allocated(arg_params)) deallocate(arg_params)
 
-      subroutine read_arg_log(name,value,found)
-!doc$ subroutine arg(name,value,found)
-         character(*), intent(in) :: name
-         logical, intent(out):: value
-         logical, intent(out), optional :: found
-
-!cod$
-         character(line_len) :: var, buf
-         logical :: fnd
-         integer :: ios = 0
-         var = name
-         call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
-            found = fnd
-            if ( .not.fnd ) goto 100
-         else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
-         end if
-         read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to logical") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_log") ) continue
-      end subroutine
-
-      subroutine read_arg_str(name,value,found)
-!doc$ subroutine arg(name,value,found)
-         character(*), intent(in) :: name
-         character(*), intent(out) :: value
-         logical, intent(out), optional :: found
-
-!cod$
-         character(line_len) :: var, buf
-         logical :: fnd
-         var = name
-         call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
-            found = fnd
-            if ( .not.fnd ) goto 100
-         else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
-         end if
-         value = buf
-100      if ( error(FLERR,"Exit arg_mod::read_arg_str") ) continue
-      end subroutine
+      end subroutine arg_stop
 
       subroutine read_arg_int(name,value,found)
 !doc$ subroutine arg(name,value,found)
@@ -196,19 +162,24 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
-         integer :: ios = 0
+         integer :: ios
+
+         ios = 0
          var = name
+
          call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_int") ) continue
-      end subroutine
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to integer")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_int")) continue
+
+      end subroutine read_arg_int
 
       subroutine read_arg_int_1d(name,value,found)
 !doc$ subroutine arg(name,value,found)
@@ -219,19 +190,24 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
-         integer :: ios = 0
+         integer :: ios
+
+         ios = 0
          var = name
+
          call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to integer(:)") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_int_1d") ) continue
-      end subroutine
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to integer(:)")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_int_1d")) continue
+
+      end subroutine read_arg_int_1d
 
       subroutine read_arg_dpr(name,value,found)
 !doc$ subroutine arg(name,value,found)
@@ -242,19 +218,24 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
-         integer :: ios = 0
+         integer :: ios
+
+         ios = 0
          var = name
+
          call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_dpr") ) continue
-      end subroutine
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to real(double)")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_dpr")) continue
+
+      end subroutine read_arg_dpr
 
       subroutine read_arg_dpr_1d(name,value,found)
 !doc$ subroutine arg(name,value,found)
@@ -265,19 +246,24 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
-         integer :: ios = 0
+         integer :: ios
+
+         ios = 0
          var = name
+
          call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to real(double)(:)") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_dpr_1d") ) continue
-      end subroutine
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to real(double)(:)")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_dpr_1d")) continue
+
+      end subroutine read_arg_dpr_1d
 
       subroutine read_arg_dpc(name,value,found)
 !doc$ subroutine arg(name,value,found)
@@ -288,19 +274,77 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
-         integer :: ios = 0
+         integer :: ios
+
+         ios = 0
          var = name
+
          call read_arg_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          read(buf,*,iostat=ios) value
-         if ( error(FLERR,ios /= 0,"ERROR: "//buf(1:len_trim(buf))//" to complex") ) goto 100
-100      if ( error(FLERR,"Exit arg_mod::read_arg_dpc") ) continue
-      end subroutine
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to complex")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_dpc")) continue
+
+      end subroutine read_arg_dpc
+
+      subroutine read_arg_log(name,value,found)
+!doc$ subroutine arg(name,value,found)
+         character(*), intent(in) :: name
+         logical, intent(out):: value
+         logical, intent(out), optional :: found
+
+!cod$
+         character(line_len) :: var, buf
+         logical :: fnd
+         integer :: ios
+
+         ios = 0
+         var = name
+
+         call read_arg_i(var,buf,fnd)
+         if (present(found)) then
+            found = fnd
+            if (.not.fnd) goto 100
+         else
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
+         end if
+         read(buf,*,iostat=ios) value
+
+         if (error(FLERR,ios /= 0,"Problem converting '"//buf(1:len_trim(buf))//"' to logical")) goto 100
+100      if (error(FLERR,"Exiting arg_mod::read_arg_log")) continue
+
+      end subroutine read_arg_log
+
+      subroutine read_arg_str(name,value,found)
+!doc$ subroutine arg(name,value,found)
+         character(*), intent(in) :: name
+         character(*), intent(out) :: value
+         logical, intent(out), optional :: found
+
+!cod$
+         character(line_len) :: var, buf
+         logical :: fnd
+
+         var = name
+
+         call read_arg_i(var,buf,fnd)
+         if (present(found)) then
+            found = fnd
+            if (.not.fnd) goto 100
+         else
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
+         end if
+         value = buf
+
+100      if (error(FLERR,"Exiting arg_mod::read_arg_str")) continue
+
+      end subroutine read_arg_str
 
       subroutine read_arglc(name,value,found)
 !doc$ subroutine arglc(name,value,found)
@@ -311,115 +355,157 @@
 !cod$
          character(line_len) :: var, buf
          logical :: fnd
+
          var = name
+
          call read_arglc_i(var,buf,fnd)
-         if ( present(found) ) then
+         if (present(found)) then
             found = fnd
-            if ( .not.fnd ) goto 100
+            if (.not.fnd) goto 100
          else
-            if ( error(FLERR,.not.fnd,"ERROR: "//name//" not found") ) goto 100
+            if (error(FLERR,.not.fnd,"The input flag '"//trim(name)//"' was not found")) goto 100
          end if
          value = buf
-100      if ( error(FLERR,"Exit arg_mod::read_arglc") ) continue
-      end subroutine
+
+100      if (error(FLERR,"Exiting arg_mod::read_arglc")) continue
+
+      end subroutine read_arglc
 
 ! *** Private routines
 
       subroutine arg_split_i(s,p)
+
          character(line_len), intent(inout) :: s
          type(arg_param), intent(out) :: p
+
          integer :: k
+
          call trim_comments_i(s)
          call trim_whitespace_i(s)
+
          do k = 1,line_len
-            if ( s(k:k) == ' ' ) exit
+            if (s(k:k) == ' ') exit
          end do
+
          p%var = s(1:k-1)
          p%val = s(k+1:line_len)
+
          call upcase_arg_i(p%var)
          call trim_whitespace_i(p%val)
-      end subroutine
+
+      end subroutine arg_split_i
 
       subroutine trim_comments_i(s)
+
          character(line_len) :: s
+
          integer :: k
+
          do k = 1,line_len
-            if ( s(k:k) == '!' ) exit
+            if (s(k:k) == '!') exit
          end do
+
          s = s(1:k-1)
-      end subroutine
+
+      end subroutine trim_comments_i
 
       subroutine trim_whitespace_i(s)
+
          character(line_len) :: s
+
          integer :: k
+
          do k = 1,line_len
-            if ( s(k:k) == ' ' ) cycle
-            if ( s(k:k) == '	' ) cycle
+            if (s(k:k) == ' ') cycle
+            if (s(k:k) == '	') cycle
             exit
          end do
+
          s = s(k:line_len)
-      end subroutine
+
+      end subroutine trim_whitespace_i
 
       subroutine read_arg_i(var,val,found)
+
          character(line_len), intent(inout)  :: var
          character(line_len), intent(out)  :: val
          logical, intent(out) :: found
+
          integer :: i, j
+
          found = .false.
+
          call trim_whitespace_i(var)
          call upcase_arg_i(var)
+
          j = len_trim(var)
          do i = 1,size(arg_params)
-            if ( var(1:j) == arg_params(i)%var(1:j) ) then
+            if (var(1:j) == arg_params(i)%var(1:j)) then
                found = .true.
                val = arg_params(i)%val
                exit
             end if
          end do
-      end subroutine
+
+      end subroutine read_arg_i
 
       subroutine read_arglc_i(var,val,found)
+
          character(line_len), intent(inout)  :: var
          character(line_len), intent(out)  :: val
          logical, intent(out) :: found
+
          integer :: i, j
-         found = .false.
+
          val = ''
+         found = .false.
+
          call trim_whitespace_i(var)
          call upcase_arg_i(var)
+
          j = len_trim(var)
          do i = 1,size(arg_params)
-            if ( var(1:j) == arg_params(i)%var(1:j) ) then
+            if (var(1:j) == arg_params(i)%var(1:j)) then
                found = .true.
                val = arg_params(i)%val
                exit
             end if
          end do
+
          call locase_arg_i(val)
+
       end subroutine
 
       subroutine upcase_arg_i(s)
+
          character(line_len) :: s
-         integer i, lstr, c
+
+         integer lstr, i, c
          integer, parameter :: a = iachar('a'), z = iachar('z'), shift = (iachar('A') - iachar('a'))
+
          lstr = len_trim(s)
          do i = 1,lstr
             c = iachar(s(i:i))
-            if ( (c >= a) .and. (c <= z) ) c = c + shift
+            if ((c >= a).and.(c <= z)) c = c + shift
             s(i:i) = achar(c)
          end do
-      end subroutine
+
+      end subroutine upcase_arg_i
 
       subroutine locase_arg_i(s)
+
          character(line_len) :: s
-         integer i, lstr, c
+
+         integer lstr, i, c
          integer, parameter :: a = iachar('A'), z = iachar('Z'), shift = (iachar('A') - iachar('a'))
+
          lstr = len_trim(s)
          do i = 1,lstr
             c = iachar(s(i:i))
-            if ( (c >= a) .and. (c <= z) ) c = c - shift
+            if ((c >= a).and.(c <= z)) c = c - shift
             s(i:i) = achar(c)
          end do
-      end subroutine
 
-      end module
+      end subroutine locase_arg_i
+
+      end module arg_mod
