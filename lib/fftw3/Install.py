@@ -87,7 +87,7 @@ if cloneflag:
 
 # --- Build the Library ---------------------------------------------- #
 
-cmd = 'cd %s && ./configure --prefix=%s --enable-threads CC=mpicc CFLAGS="-O3" && make && make install' % (buildpath,libprefix)
+cmd = 'cd %s && ./configure --prefix=%s --enable-threads CC=mpicc CFLAGS="-g -O3" && make && make install' % (buildpath,libprefix)
 
 if buildflag:
    success = False
