@@ -44,7 +44,7 @@ if not buildflag and not cleanflag:
 
 # --- Build the Library ---------------------------------------------- #
 
-cmd = 'cd %s && make minpack FC=mpif90 FCFLAGS="-g -O"' % (buildpath)
+cmd = 'cd %s && make minpack FC=mpif90 FCFLAGS="-g -O3"' % (buildpath)
 
 if buildflag:
    success = False
