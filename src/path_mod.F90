@@ -50,6 +50,7 @@
 
 ! input file names and file paths
 
+      character(line_len), parameter :: eos_name           = "eosf"
       character(line_len), parameter :: crystal_name       = "crystal"
       character(line_len), parameter :: kpoints_name       = "kpoints"
       character(line_len), parameter :: dsites_name        = "dsites"
@@ -59,6 +60,7 @@
       character(line_len), parameter :: bulk_crystal_name  = "bulk_crystal"
       character(line_len), parameter :: bulk_restart_name  = "bulk_restartf"
 
+      character(line_len) :: eos_path
       character(line_len) :: crystal_path
       character(line_len) :: kpoints_path
       character(line_len) :: dsites_path
@@ -115,6 +117,7 @@
 !doc$
       public :: first_unit
       public :: last_unit
+      public :: eos_path
       public :: arg_name
       public :: stop_name
       public :: ncp_path
@@ -176,6 +179,7 @@
         ncp_path           = trim(potential_directory)//trim(ncp_name)
         paw_path           = trim(potential_directory)//trim(paw_name)
 
+        eos_path           = trim(input_dir)//trim(eos_name)
         crystal_path       = trim(input_dir)//trim(crystal_name)
         kpoints_path       = trim(input_dir)//trim(kpoints_name)
         dsites_path        = trim(input_dir)//trim(dsites_name)
