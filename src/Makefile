@@ -78,7 +78,7 @@ purge	:
 
 lib-%	:
 	@ if [ -e ../lib/$(LIB_DIR)/Install.py ] ; then \
-	  echo -e "Installing ../lib/$(@:lib-%=%)\n" ; \
+	  echo -e "Executing ../lib/$(@:lib-%=%)/Install.py \n" ; \
 	  ( cd ../lib/$(LIB_DIR) ; $(PYTHON) Install.py $(args) ) ; \
 	else \
 	  echo "Install.py file for lib $(@:lib-%=%) does not exist" ; \
