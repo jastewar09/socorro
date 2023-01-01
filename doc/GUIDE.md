@@ -25,7 +25,6 @@ What is needed to compile:
   7) ScaLAPACK library
   8) Gnu make or equivalent
   9) MPI library
- 10) CMMF library (optional)
 
   Detailed instructions can be found in /socorro/INSTALL.
 
