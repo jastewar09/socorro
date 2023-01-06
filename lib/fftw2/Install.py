@@ -9,7 +9,7 @@ This is used to automate steps described in the README file in this dir.
 
 from __future__ import print_function
 from argparse import ArgumentParser
-import os,shutil,subprocess,sys
+import os, shutil, subprocess, sys
 
 # --- Library Version ------------------------------------------------ #
 
@@ -51,7 +51,7 @@ if not cloneflag and not buildflag and not cleanflag:
    parser.print_help()
    sys.exit(HELP_MESSAGE)
 
-# *** Download the library ******************************************* #
+# --- Download the library ------------------------------------------- #
 
 src = 'fftw-' + version
 out = src + '.tar.gz'
@@ -82,7 +82,7 @@ if cloneflag:
       print('Failed to download source code with "wget" or "curl"')
       sys.exit(1)
    else:
-      print("Applying kludge to prevent FFTW2 vs FFTW3 race condition ...")
+      print("Applying kludge to prevent FFTW2 vs. FFTW3 race condition ...")
       cmd = 'tar -zxf %s && mv %s %s && rm %s' % (out,src,clonepath,out)
       subprocess.check_output(cmd, shell = True, stderr = subprocess.STDOUT).decode('UTF-8')
       try:
@@ -98,7 +98,7 @@ if cloneflag:
          print("Applying kludge failed with:\n%s" % e.output.decode('UTF-8'))
          sys.exit(1)
 
-# *** Build the library ********************************************** #
+# --- Build the library ---------------------------------------------- #
 
 cmd = 'cd %s && ./configure --prefix=%s CC=mpicc CFLAGS="-O3" && make && make install' % (buildpath,libprefix)
 
@@ -116,7 +116,7 @@ if buildflag:
          print("Build using make failed with:\n%s" % e.output.decode('UTF-8'))
          sys.exit(1)
 
-# *** Clean the build space ****************************************** #
+# --- Clean the build space ------------------------------------------ #
 
 cmd = 'cd %s && make clean' % (buildpath)
 
@@ -134,4 +134,4 @@ if cleanflag:
          print("Clean using make failed with:\n%s" % e.output.decode('UTF-8'))
          sys.exit(1)
 
-# *** End of the file ************************************************ #
+# --- End of the file ------------------------------------------------ #

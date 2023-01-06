@@ -9,7 +9,7 @@ This is used to automate steps described in the README file in this dir.
 
 from __future__ import print_function
 from argparse import ArgumentParser
-import os,shutil,subprocess,sys
+import os, shutil, subprocess, sys
 
 # --- Input Arguments ------------------------------------------------ #
 
