@@ -12,5 +12,5 @@ minpack/minpack/*.a
 # ... except these
 
 !.gitignore
-!README.md
+!README
 !Install.py
