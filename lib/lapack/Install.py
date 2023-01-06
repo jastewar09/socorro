@@ -13,7 +13,7 @@ import os, shutil, subprocess, sys
 
 # --- Library Version ------------------------------------------------ #
 
-version = "v3.10.1"
+version = "v3.11.0"
 
 # --- Input Arguments ------------------------------------------------ #
 
