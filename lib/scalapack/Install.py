@@ -74,9 +74,9 @@ if cloneflag:
 # --- Build the Library ---------------------------------------------- #
 
 if args.x:
-   cmd = 'cd %s && cp SLmake.inc.example SLmake.inc && make lib FC=mpif90 FCFLAGS="-g -O3 -fallow-argument-mismatch" CC=mpicc CCFLAGS="-g -O3 -Wno-error=implicit-function-declaration"' % (buildpath)
+   cmd = 'cd %s && cp SLmake.inc.example SLmake.inc && make lib FC=mpif90 FCFLAGS="-O3 -fallow-argument-mismatch" CC=mpicc CCFLAGS="-O3 -Wno-error=implicit-function-declaration"' % (buildpath)
 else:
-   cmd = 'cd %s && cp SLmake.inc.example SLmake.inc && make lib FC=mpif90 FCFLAGS="-g -O3" CC=mpicc CCFLAGS="-g -O3 -Wno-error=implicit-function-declaration"' % (buildpath)
+   cmd = 'cd %s && cp SLmake.inc.example SLmake.inc && make lib FC=mpif90 FCFLAGS="-O3" CC=mpicc CCFLAGS="-O3 -Wno-error=implicit-function-declaration"' % (buildpath)
 
 if buildflag:
    success = False

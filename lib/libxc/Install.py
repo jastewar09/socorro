@@ -70,7 +70,7 @@ if cloneflag:
 
 # --- Build the Library ---------------------------------------------- #
 
-cmd = 'cd %s && autoreconf -i && ./configure FC=mpif90 FCFLAGS="-g -O3" CC=mpicc CFLAGS="-g -O3" --prefix=%s && make && make install' % (buildpath,libprefix)
+cmd = 'cd %s && autoreconf -i && ./configure FC=mpif90 FCFLAGS="-O3" CC=mpicc CFLAGS="-O3" --prefix=%s && make && make install' % (buildpath,libprefix)
 
 if buildflag:
    success = False

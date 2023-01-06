@@ -70,7 +70,7 @@ if cloneflag:
 
 # --- Build the Library ---------------------------------------------- #
 
-cmd = 'cd %s && cp make.inc.example make.inc && make blaslib lapacklib FC=mpif90 FFLAGS="-g -O3" CC=mpicc CFLAGS="-g -O3" TIMER="NONE"' % (buildpath)
+cmd = 'cd %s && cp make.inc.example make.inc && make blaslib lapacklib FC=mpif90 FFLAGS="-O3" CC=mpicc CFLAGS="-O3" TIMER="NONE"' % (buildpath)
 
 if buildflag:
    success = False
