@@ -3,7 +3,7 @@
 #* ---------------------------------------------------------------------
 
 FC		:= mpif90
-FC_FLAGS	:= -O3 -ffree-line-length-none #-fallow-argument-mismatch
+FC_FLAGS	:= -O3 -fopenmp -ffree-line-length-none #-fallow-argument-mismatch
 
 CC		:= mpicc
 CC_FLAGS	:= -O3 -std=c11

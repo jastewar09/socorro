@@ -2,11 +2,11 @@
 #  Compiler and compiler flags
 #* ---------------------------------------------------------------------
 
-FC              := mpif90
-FC_FLAGS        := -O2 -g -fopenmp -ffree-line-length-none #-fallow-argument-mismatch
+FC		:= mpif90
+FC_FLAGS	:= -O2 -g -ffree-line-length-none #-fallow-argument-mismatch
 
-CC              := mpicc
-CC_FLAGS        := -O2 -g -std=c11
+CC		:= mpicc
+CC_FLAGS	:= -O2 -g -std=c11
 
 #* ---------------------------------------------------------------------
 #  Linker and linker flags
