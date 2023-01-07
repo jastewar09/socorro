@@ -163,7 +163,7 @@ def read_data():
         print("\nERROR: The input file %s could not be opened" % (fname))
         sys.exit()
 
-    data = np.genfromtxt(fname, dtype = float, skip_header = 1, delimiter = " ")
+    data = np.genfromtxt(fname, dtype = float, skip_header = 0, delimiter = " ")
 
     return data[:,0], data[:,1]
 
