@@ -1,0 +1,9 @@
+# Ignore everything ...
+
+fhi98PP/*
+
+# ... except these
+
+!.gitignore
+!README
+!Install.py
