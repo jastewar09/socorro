@@ -34,6 +34,7 @@ help	:
 	@ echo ''
 	@ echo 'make depends                 Build the Fortran module dependency list'
 	@ echo 'make machine                 Build socorro using Makefile.machine settings'
+	@ echo 'make install                 Install socorro into ../build'
 	@ echo ''
 	@ echo 'where Makefile.machine is one of these files from src/MAKE/OPTIONS:'
 	@ echo ''
@@ -118,6 +119,5 @@ install	:
 	@ make f90mods ; mv Makefile.depends $(OBJ_DIR)
 	@ echo "Compiling Socorro with Makefile.$@ settings ..."
 	@ cd $(OBJ_DIR) ; $(MAKE) "OBJ = $(OBJS)" "EXE = ../$(EXE)"
-	@ make install
 
 # ----- End of the makefile ------------------------------------------ #
