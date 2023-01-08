@@ -36,10 +36,10 @@
 
       type :: paw_data_rep
         integer :: ref                                              ! reference count
-        character(tag_sz) :: name                                   ! name of this data type
+        character(tag_size) :: name                                   ! name of this data type
         real(double) :: valence_electrons                           ! number of valence electrons
         real(double) :: matching_radius                             ! matching radius for smooth basis functions
-        character(tag_sz) :: xc_type                                ! exchange-correlation type
+        character(tag_size) :: xc_type                                ! exchange-correlation type
         real(double) :: mass                                        ! mass (a.u.)
         real(double), dimension(:), pointer :: r_sg                 ! standard grid: values
         real(double), dimension(:), pointer :: r2_sg                !                values^2
@@ -337,8 +337,8 @@
 
 !cod$
         logical :: found
-        character(tag_sz) :: shape_type
-        character(17+tag_sz) :: pr_tag
+        character(tag_size) :: shape_type
+        character(17+tag_size) :: pr_tag
         character(line_len) :: token
         integer :: base_i, base_j, i, j, k, l, m, n, nili, njlj, grid_type
         integer :: basis_size, denvhat_size, hartree_size, lcao_size, grid_size_sg, grid_size_cg, nlm_size, overlap_size
@@ -885,7 +885,7 @@
       function pd_xc_type(pd) result(t)
 !doc$ function x_xc_type(pd) result(t)
         type(paw_data_obj) :: pd
-        character(tag_sz) :: t
+        character(tag_size) :: t
 
 !cod$
         call my(pd)

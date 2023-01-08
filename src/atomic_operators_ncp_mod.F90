@@ -39,7 +39,7 @@
 
       type :: type_data
         type(ncp_data_obj) :: ncpd                          ! ncp data object
-        character(tag_sz) :: tag                            ! tag
+        character(tag_size) :: tag                            ! tag
         real(double) :: valence                             ! number of valence electrons
         integer, dimension(:), pointer :: pl                ! projector l values
         integer, dimension(:), pointer :: pm                ! projector m values
@@ -288,8 +288,8 @@
 !cod$
         logical :: match
         character(1) :: tios
-        character(tag_sz) :: tag
-        character(tag_sz), dimension(:), allocatable :: tags
+        character(tag_size) :: tag
+        character(tag_size), dimension(:), allocatable :: tags
         integer :: ia, il, ios, ip, it, itp, l, m, na, np, nt, c, nl
         integer :: r_nt
         integer(long) :: dsize, iosl, ndata, s4
@@ -690,7 +690,7 @@
 !doc$ function x_type_name(ao,it) result(tag)
         type(atomic_operators_ncp_obj) :: ao
         integer :: it
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
 !       effects: Returns the name of type it.
 
 !cod$

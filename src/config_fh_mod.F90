@@ -357,9 +357,9 @@
 
 !cod$
         logical :: exist_file, found
-        character(tag_sz) :: type
+        character(tag_size) :: type
         character(line_len) :: mode, switch
-        character(14+tag_sz) :: dr_tag
+        character(14+tag_size) :: dr_tag
         integer :: ia, ios, is, na, ns, nu
         real(double) :: radius
         real(double), dimension(3) :: pos_lat, pos_xyz

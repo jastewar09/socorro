@@ -21,7 +21,7 @@
 
       ! Data types
 
-      integer, parameter :: tag_sz = 8
+      integer, parameter :: tag_size = 8
       integer, parameter :: line_len = 132
 
       integer, parameter :: single = kind(1.0e0)

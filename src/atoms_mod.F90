@@ -31,7 +31,7 @@
       private
 
       type :: atom
-        character(tag_sz) :: tag                 ! string indicating the associated atomic_operator_mod data
+        character(tag_size) :: tag                 ! string indicating the associated atomic_operator_mod data
         real(double), dimension(3) :: position   ! position in the lattice representation
         real(double), dimension(3) :: velocity   ! velocity
       end type
@@ -173,7 +173,7 @@
           allocate( at%o%atom_list(at%o%natoms) )
           if (i_access(restf)) then
             do ia = 1,at%o%natoms
-              dsize = 1 ; ndata = tag_sz
+              dsize = 1 ; ndata = tag_size
               call readf(at%o%atom_list(ia)%tag,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
               dsize = sizeof_double ; ndata = 3
               call readf(at%o%atom_list(ia)%position,dsize,ndata,x_tagfd(restf),x_swapbytes(restf),iosl)
@@ -299,7 +299,7 @@
       function at_type(at) result(atg)
 !doc$ function x_type(at) result(atg)
         type(atoms_obj) :: at
-        character(tag_sz), dimension(at%o%natoms) :: atg
+        character(tag_size), dimension(at%o%natoms) :: atg
 !       effects: Returns strings identifying the atom types.
 
 !cod$
@@ -315,7 +315,7 @@
 !doc$ function x_type(at,ia) result(atg)
         type(atoms_obj) :: at
         integer, intent(in) :: ia
-        character(tag_sz) :: atg
+        character(tag_size) :: atg
 !       effects: Returns a string identifying the type of atom ia.
 !       errors: ia out of range.
 
@@ -374,7 +374,7 @@
       subroutine add_at(at,tag,pos,velocity)
 !doc$ subroutine add(at,tag,pos,velocity)
         type(atoms_obj) :: at
-        character(tag_sz), intent(in) :: tag
+        character(tag_size), intent(in) :: tag
         real(double), dimension(3), intent(in) :: pos
         real(double), dimension(3), intent(in), optional :: velocity
 !       modifies: at
@@ -546,7 +546,7 @@
           ! write the atom tags, positions, and velocities
           call writetag(nrestf,"ATOM_INFORMATION")
           do ia = 1,at%o%natoms
-            dsize = 1 ; ndata = tag_sz
+            dsize = 1 ; ndata = tag_size
             call writef(at%o%atom_list(ia)%tag,dsize,ndata,x_tagfd(nrestf),iosl)
             dsize = sizeof_double ; ndata = 3
             call writef(at%o%atom_list(ia)%position,dsize,ndata,x_tagfd(nrestf),iosl)

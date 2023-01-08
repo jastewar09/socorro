@@ -44,7 +44,7 @@
 
       type :: type_data
         type(paw_data_obj) :: pawd                                ! paw data object
-        character(tag_sz) :: tag                                  ! tag
+        character(tag_size) :: tag                                  ! tag
         real(double) :: valence                                   ! number of valence electrons
         real(double) :: matching_radius                           ! matching radius
         integer, dimension(:), pointer :: pn                      ! projector basis index
@@ -687,7 +687,7 @@
 !doc$ function x_type_name(ao,it) result(tag)
         type(atomic_operators_paw_obj) :: ao
         integer :: it
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
 !       effects: Returns the name of type it.
 
 !cod$
@@ -1648,7 +1648,7 @@
 !       effects: Writes angular mesh information to the diary.
 
 !cod$
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
         integer :: it
 
         call my(ao)
@@ -1692,7 +1692,7 @@
 !       effects: Writes initial atomic occupation information to the diary.
 
 !cod$
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
         integer :: ib, it, mb, msg, nsg, nt
         real(double), dimension(:,:,:), allocatable :: o1, o2
 
@@ -2047,11 +2047,11 @@
 
         logical :: found, match
         character(1) :: tios
-        character(tag_sz) :: tag
-        character(11+tag_sz) :: pp_tag
-        character(13+tag_sz) :: tp_tag
-        character(19+tag_sz) :: bo_tag
-        character(tag_sz), dimension(:), allocatable :: tags
+        character(tag_size) :: tag
+        character(11+tag_size) :: pp_tag
+        character(13+tag_size) :: tp_tag
+        character(19+tag_size) :: bo_tag
+        character(tag_size), dimension(:), allocatable :: tags
         integer :: ia, ib, ios, ip, iph, it, ith, iv, lm_size, maxl, na, nb, np, nt, nv
         integer :: li, lj, mi, mj, oi, oj, osi, osj
         integer :: msg, nsg
@@ -2343,7 +2343,7 @@
       subroutine form_adata_i(aor)
         type(atomic_operators_paw_rep) :: aor
 
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
         integer :: ia, it, na, np
         real(double), parameter :: tol_val_sum = 1.0e-8_double
         real(double) :: occ_sum, occ_sum_sg, val_sum

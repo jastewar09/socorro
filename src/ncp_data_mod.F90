@@ -45,7 +45,7 @@
 
       type :: ncp_data_rep
         integer :: ref
-        character(tag_sz) :: name                     ! name associated with data
+        character(tag_size) :: name                     ! name associated with data
         real(double), dimension(:), pointer :: r      ! real-space radial grid
         real(double) :: exponent                      ! exponent for the long-ranged part of the local pseudopotential
         real(double), dimension(:), pointer :: lp     ! short-ranged part of the local pseudopotential on the real-space grid
@@ -215,7 +215,7 @@
 
       function constructor_pd(tag) result(pd)
 !doc$ function ncp_data(f,tag) result(pd)
-        character(tag_sz), intent(in) :: tag
+        character(tag_size), intent(in) :: tag
         type(ncp_data_obj) :: pd
 !        requires: f be open and pointing to a ncp data block.
 !        effects: Creates a new pd.
@@ -226,7 +226,7 @@
         type(file_obj) :: f
         logical :: found
         character(line_len) :: format_string, first_string
-        character(17+tag_sz) :: pr_tag
+        character(17+tag_size) :: pr_tag
         integer :: ios,i
 
         !call my(f)
@@ -413,7 +413,7 @@
       function pd_name(pd) result(n)
 !doc$ function x_name(pd) result(n)
         type(ncp_data_obj) :: pd
-        character(tag_sz) :: n
+        character(tag_size) :: n
 !       effects: Returns the name associated with pd.
 
 !cod$

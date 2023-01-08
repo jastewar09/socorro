@@ -156,7 +156,7 @@
 !cod$
         logical :: cartesian_mode, exist_file, linear_dependence
         character(line_len) :: tag_ls
-        character(tag_sz) :: tag_ts
+        character(tag_size) :: tag_ts
         integer :: ia, ios, na
         real(double) :: latc
         real(double), dimension(3) :: pos, v1, v2, v3
@@ -672,7 +672,7 @@
 
 !cod$      
         logical :: cartesian_mode, exist_file
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
         integer :: ia, ios, na
         real(double) :: latc
         real(double), dimension(3) :: v

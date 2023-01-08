@@ -553,7 +553,7 @@
 !doc$ function x_type_name(ao,it) result(tag)
         type(atomic_operators_obj) :: ao
         integer :: it
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
 !       effects: Returns the name of type it.
 
 !cod$

@@ -259,7 +259,7 @@
 
 !cod$
         logical :: fnd
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
 
         call my(lat)
 
@@ -983,7 +983,7 @@
 
 !cod$
         logical :: fnd
-        character(tag_sz) :: tag
+        character(tag_size) :: tag
         real(double) :: tol_in
         real(double), dimension(3) :: mag
 
@@ -2247,8 +2247,8 @@
 
         logical :: identity, mapped, mapped_local, new_type
         character(4) :: pg_type
-        character(tag_sz) :: type_min
-        character(tag_sz), dimension(:), allocatable :: temp_type
+        character(tag_size) :: type_min
+        character(tag_size), dimension(:), allocatable :: temp_type
         integer :: i1, i2, i3, ia, ip, ipt, is, it, l, na, ns, ns_pg, nt, slot
         integer :: base_num, first_a, last_a, na_proc
         integer, dimension(1) :: min_slot

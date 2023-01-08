@@ -869,7 +869,7 @@
         logical :: found, match
         integer :: ia, iat, na
         character(line_len) :: tag
-        character(tag_sz), dimension(:), allocatable :: tags
+        character(tag_size), dimension(:), allocatable :: tags
         real(double) :: fdotv, mass
         real(double), dimension(:), allocatable :: masses
         real(double), dimension(:,:), allocatable :: accelerations, forces, positions, velocities ! cartesian representation

@@ -218,7 +218,7 @@
 !doc$ function x_type(cfg,ia) result(atg)
         type(config_sc_obj) :: cfg
         integer, intent(in) :: ia
-        character(tag_sz) :: atg
+        character(tag_size) :: atg
 !       requires: ia be between 1 and x_n_atoms(cfg)
 !       effects: Returns the identifying atom tag of the ia'th atom in cfg.
 
@@ -232,7 +232,7 @@
 !doc$ function x_type(cfg,ia) result(atg)
         type(config_td_obj) :: cfg
         integer, intent(in) :: ia
-        character(tag_sz) :: atg
+        character(tag_size) :: atg
 !       requires: ia be between 1 and x_n_atoms(cfg)
 !       effects: Returns the identifying atom tag of the ia'th atom in cfg.
 

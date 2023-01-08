@@ -216,7 +216,7 @@
 !cod$
         logical :: exist_file, found, match
         character(line_len) :: tag
-        character(tag_sz), dimension(:), allocatable :: tags
+        character(tag_size), dimension(:), allocatable :: tags
         integer :: i, j, na, ios, status
         real(double) :: mass_temp
 
