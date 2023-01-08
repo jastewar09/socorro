@@ -5,12 +5,13 @@ PYTHON	= python
 
 # ----- Definitions -------------------------------------------------- #
 
+EXE	= socorro.x
+
 FSRC	= $(shell ls *.F90)
 CSRC	= $(shell ls *.c)
+OBJS	= $(FSRC:.F90=.o) $(CSRC:.c=.o)
 
-EXE	= socorro
-OBJ	= $(FSRC:.F90=.o) $(CSRC:.c=.o)
-
+BIN_DIR	= ../build
 OBJ_DIR	= Obj_build
 LIB_DIR	= $(@:lib-%=%)
 
@@ -26,7 +27,7 @@ help	:
 	@ echo 'make tar                     Create socorro_src.tar.gz for the src dir'
 	@ echo ''
 	@ echo 'make clean                   Delete the object files in src'
-	@ echo 'make purge                   Delete all build related files in src'
+	@ echo 'make purge                   Delete all build related files'
 	@ echo ''
 	@ echo 'make lib-package             Print help message to download/build a package in ../lib'
 	@ echo 'make lib-package args="..."  Download/build a package in ../lib'
@@ -52,33 +53,33 @@ help	:
 # ----- Git version information -------------------------------------- #
 
 git	:
-	@ echo 'Gathering git version information ...'
-	@ echo 'Commit:  ' $$(git rev-parse HEAD)
-	@ echo 'Branch:  ' $$(git rev-parse --abbrev-ref HEAD)
-	@ echo 'Describe:' $$(git describe --abbrev=0 --tags)
-
-# ----- Create a tar file of the src dir ----------------------------- #
-
-tar	:
-	@ echo 'Creating socorro_src.tar.gz ...'
-	@ make  purge && cd ../ && tar -czf socorro_src.tar.gz src
-	@ echo 'Finished socorro_src.tar.gz'
+	@ echo "Gathering git version information"
+	@ echo "Commit:  " $$(git rev-parse HEAD)
+	@ echo "Branch:  " $$(git rev-parse --abbrev-ref HEAD)
+	@ echo "Describe:" $$(git describe --abbrev=0 --tags)
 
 # ----- Cleanup build files ------------------------------------------ #
 
 clean	:
-	@ echo 'Removing the object files in src ...'
+	@ echo "Removing the object files in src"
 	@ rm -rf $(OBJ_DIR)
 
 purge	:
-	@ echo 'Removing all build related files in src ...'
-	@ rm -rf $(OBJ_DIR) $(EXE) Makefile.depends
+	@ echo "Removing all build related files"
+	@ rm -rf $(OBJ_DIR) Makefile.depends $(EXE) $(BIN_DIR)
+
+# ----- Create a tar file of the src dir ----------------------------- #
+
+tar	:
+	@ echo "Creating socorro_src.tar.gz"
+	@ make  purge && cd ../ && tar -czf socorro_src.tar.gz src
+	@ echo "Finished socorro_src.tar.gz"
 
 # ----- Library compilation ------------------------------------------ #
 
 lib-%	:
-	@ if [ -e ../lib/$(LIB_DIR)/Install.py ] ; then \
-	  echo -e "Executing ../lib/$(@:lib-%=%)/Install.py \n" ; \
+	@ if [ -f ../lib/$(LIB_DIR)/Install.py ] ; then \
+	  echo "Executing ../lib/$(@:lib-%=%)/Install.py" ; \
 	  ( cd ../lib/$(LIB_DIR) ; $(PYTHON) Install.py $(args) ) ; \
 	else \
 	  echo "Install.py file for lib $(@:lib-%=%) does not exist" ; \
@@ -90,8 +91,17 @@ f90mods	:
 	@ rm -rf Makefile.depends ; MAKE/TOOLS/f90makedep.pl $(FSRC)
 
 depends	:
-	@ echo 'Creating the module dependency list ...'
+	@ echo "Creating the module dependency list"
 	@ make f90mods
+
+install	:
+	@ if [ ! -f $(EXE) ] ; then \
+	  echo "ERROR: Executable $(EXE) does not exist" ; exit 0 ; \
+	else \
+	  echo "Installing $(EXE) into $(BIN_DIR)" ; \
+	  if [ ! -d $(BIN_DIR) ] ; then mkdir $(BIN_DIR) ; fi ; \
+	  mv $(EXE) $(BIN_DIR) ; \
+	fi
 
 .DEFAULT:
 	@ test -f MAKE/MACHINES/Makefile.$@ -o \
@@ -106,7 +116,8 @@ depends	:
 	@ if [ -f MAKE/OPTIONS/Makefile.$@ ] ; \
 	  then cp MAKE/OPTIONS/Makefile.$@ $(OBJ_DIR)/Makefile ; fi
 	@ make f90mods ; mv Makefile.depends $(OBJ_DIR)
-	@ echo 'Compiling socorro with Makefile.$@ settings ...'
-	@ cd $(OBJ_DIR) ; $(MAKE) "OBJ = $(OBJ)" "EXE = ../$(EXE)"
+	@ echo "Compiling Socorro with Makefile.$@ settings ..."
+	@ cd $(OBJ_DIR) ; $(MAKE) "OBJ = $(OBJS)" "EXE = ../$(EXE)"
+	@ make install
 
 # ----- End of the makefile ------------------------------------------ #
