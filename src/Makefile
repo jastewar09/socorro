@@ -26,7 +26,7 @@ help	:
 	@ echo 'make doc                     Create the documentation files for socorro'
 	@ echo 'make tar                     Create socorro_src.tar.gz for the src dir'
 	@ echo ''
-	@ echo 'make clean                   Delete the object files in src'
+	@ echo 'make clean                   Delete the build related files in src'
 	@ echo 'make purge                   Delete all build related files'
 	@ echo ''
 	@ echo 'make lib-package             Print help message to download/build a package in ../lib'
@@ -62,18 +62,18 @@ git	:
 # ----- Cleanup build files ------------------------------------------ #
 
 clean	:
-	@ echo "Removing the object files in src"
-	@ rm -rf $(OBJ_DIR)
+	@ echo "Removing the build related files in src"
+	@ rm -rf $(OBJ_DIR) $(EXE) Makefile.depends
 
 purge	:
 	@ echo "Removing all build related files"
-	@ rm -rf $(OBJ_DIR) Makefile.depends $(EXE) $(BIN_DIR)
+	@ rm -rf $(OBJ_DIR) $(EXE) Makefile.depends $(BIN_DIR)
 
 # ----- Create a tar file of the src dir ----------------------------- #
 
 tar	:
 	@ echo "Creating socorro_src.tar.gz"
-	@ make  purge && cd ../ && tar -czf socorro_src.tar.gz src
+	@ make  clean && cd ../ && tar -czf socorro_src.tar.gz src
 	@ echo "Finished socorro_src.tar.gz"
 
 # ----- Library compilation ------------------------------------------ #
@@ -97,7 +97,7 @@ depends	:
 
 install	:
 	@ if [ ! -f $(EXE) ] ; then \
-	  echo "ERROR: Executable $(EXE) does not exist" ; exit 0 ; \
+	  echo "ERROR: Executable $(EXE) does not exist" ; exit ; \
 	else \
 	  echo "Installing $(EXE) into $(BIN_DIR)" ; \
 	  if [ ! -d $(BIN_DIR) ] ; then mkdir $(BIN_DIR) ; fi ; \
