@@ -82,12 +82,12 @@
          if (argc == 0) call interrupt(FLERR,"No command-line arguments were given")
 
          iarg = 1
-         do while (iarg < argc + 1)
+         do while (iarg <= argc)
             if (mpi_first(WORLD)) call get_command_argument(iarg,value)
             call broadcast_seh(value)
             select case (trim(value))
             case ("-i","-in")
-               if (iarg + 1 > argc) call interrupt(FLERR,"Invalid command-line argument")
+               if (iarg + 2 > argc + 1) call interrupt(FLERR,"Invalid command-line argument")
                inflag = iarg + 1
                iarg = iarg + 2
             case default
