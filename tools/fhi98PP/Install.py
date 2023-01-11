@@ -50,7 +50,7 @@ if not cloneflag and not buildflag and not cleanflag:
 # --- Download the Library ------------------------------------------- #
 
 out = 'fhi98PP.tar.gz'
-url = 'https://th.fhi-berlin.mpg.de/th/fhi98md/download/fhi98PP.tar.gz'
+url = 'https://th.fhi-berlin.mpg.de/th/fhi98md/download/' + out
 
 if cloneflag:
    success = False
