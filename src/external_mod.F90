@@ -725,7 +725,7 @@
             nn = x_n_neighbors(extr%crystal,ia)
             do in = 1,nn
               write(x_unit(diaryfile()),'(1x,i5,": ",f0.5)',advance="no") x_neighbor_index(extr%crystal,ia,in),x_neighbor_distance(extr%crystal,ia,in)
-              if ((nn > in) .and. (mod(in,8) == 0)) write(x_unit(diaryfile()),'(/,t13)',advance="no")
+              if ((nn > in) .and. (mod(in,8) == 0)) write(x_unit(diaryfile()),'(/,12x)',advance="no")
             end do
             if (atom_overlap(ia)) then
               write(x_unit(diaryfile()),'(2x,"atom overlap")')
