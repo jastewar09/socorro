@@ -612,8 +612,6 @@
           case (2)
             allocate( dn_sg(2,numr) )
             dn_sg = 0.0_double
-            nder%dn = 0.0_double
-            nder%sigma = 0.0_double
             if (mpi_mysgroup() == 1) then
               dn_sg(1,:) = dn(:)
             elseif (mpi_mysgroup() == 2) then
