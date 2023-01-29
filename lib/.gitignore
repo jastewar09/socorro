@@ -6,9 +6,6 @@ lapack/*
 libxc/*
 scalapack/*
 
-minpack/minpack/*.o
-minpack/minpack/*.a
-
 # ... except these
 
 !.gitignore
