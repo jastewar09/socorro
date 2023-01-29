@@ -1,14 +1,14 @@
 # What is Socorro
 ------------------------------------------------------------------------
 
-Socorro is a plane-wave density functional theory code for solid-state
-electronic structure calculations.
+Socorro is a plane-wave density functional theory code
+for solid-state electronic structure calculations.
 
 This distribution contains the following files and directories:
 
 README     this file
 bench      benchmark problems
-cores      NCP and PAW files
+cores      ncp and paw files
 doc        documentation
 lib        external libraries
 src        source files
@@ -19,29 +19,17 @@ units      scripts and input for testing parts of Socorro
 # Availability 
 ------------------------------------------------------------------------
 
-The official home of Socorro and related information can be
-found at: https://dft.sandia.gov/.
+The official home of Socorro and related information can be found
+at https://dft.sandia.gov/ with development occuring on GitHub.
 
-# License 
+# Copyright and License
 ------------------------------------------------------------------------
 
-Socorro is an open-source project distributed under the
-modified Berkeley Software Distribution (BSD) License.
+Socorro is an open-source project that is distributed under the
+modified BSD license. See doc/LICENSE for more details.
 
-# Installing
+# Installing, Using, Contributing, etc.
 ------------------------------------------------------------------------
 
-Please refer to doc/INSTALL.md for detailed instructions on
-how to compile Socorro and the required external libraries.
-
-# Usage and Examples
-------------------------------------------------------------------------
-
-Please refer to (i) doc/GUIDE.md for a summary of Socorro's options
-and capababilites, and (ii) tests/ for various example input files.
-
-# Contributing to Socorro
-------------------------------------------------------------------------
-
-Please refer to doc/CONTRIBUTING.md for detailed instructions on
-extending and modifying Socorro's features, or reporting bugs and fixes.
+In general, please refer to the various files in doc for detailed
+information and instructions. See doc/README to get started.
