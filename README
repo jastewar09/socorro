@@ -7,7 +7,6 @@ electronic structure calculations.
 This distribution contains the following files and directories:
 
 README     this file
-LICENSE    the modified Berkeley Software Distribution (BSD) License
 bench      benchmark problems
 cores      NCP and PAW files
 doc        documentation
@@ -21,8 +20,7 @@ units      scripts and input for testing parts of Socorro
 ------------------------------------------------------------------------
 
 The official home of Socorro and related information can be
-found at: https://dft.sandia.gov/. Isolated development of
-Socorro is occuring through GitHub/GitLab.
+found at: https://dft.sandia.gov/.
 
 # License 
 ------------------------------------------------------------------------
