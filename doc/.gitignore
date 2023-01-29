@@ -1,0 +1,9 @@
+# Ignore everything ...
+
+#/*
+#/*/
+
+# ... except these
+
+#!.gitignore
+#!README
