@@ -16,7 +16,6 @@
 
       use arg_mod
       use born_oppenheimer_mod
-      use check_eos_mod
       use check_kpoints_mod
       use check_symmetry_mod
       use config_fh_mod
@@ -60,18 +59,6 @@
          ! Create the runtime environment
 
          call system_start() ; if (error()) goto 900
-
-         ! Determine if to fit an equation-of-state
-
-         call arglc("check_eos",mode,found) ; if (.not.found) mode = "no"
-         select case (trim(mode))
-         case ("n","no","off")
-            continue
-         case ("y","yes","on")
-            call check_eos() ; goto 900
-         case default
-            if (error(FLERR,.true.,"check_eos tag was not recognized")) goto 900
-         end select
 
          ! Determine if to check the k-points grid
 

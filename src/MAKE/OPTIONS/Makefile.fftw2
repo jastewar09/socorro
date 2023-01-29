@@ -31,10 +31,6 @@ LIBXC_PATH	:= ../../lib/libxc/libxc/bin
 LIBXC_INCS	:= -I $(LIBXC_PATH)/include
 LIBXC_LIBS	:= -L $(LIBXC_PATH)/lib -lxcf90 -lxc
 
-MINPACK_PATH	:= ../../lib/minpack/minpack
-MINPACK_INCS	:=
-MINPACK_LIBS	:= -L $(MINPACK_PATH) -lminpack
-
 BLAS_PATH	:= ../../lib/lapack/lapack
 BLAS_INCS	:=
 BLAS_LIBS	:= -L $(BLAS_PATH) -lrefblas
@@ -51,13 +47,13 @@ SCALAPACK_LIBS	:= -L $(SCALAPACK_PATH) -lscalapack
 #  Combined libraries and includes: Do not edit
 #* ---------------------------------------------------------------------
 
-FC_INCS		:= $(FFTW3_INCS) $(LIBXC_INCS) $(MINPACK_INCS) $(SCALAPACK_INCS) $(LAPACK_INCS) $(BLAS_INCS)
+FC_INCS		:= $(FFTW3_INCS) $(LIBXC_INCS) $(SCALAPACK_INCS) $(LAPACK_INCS) $(BLAS_INCS)
 FCFLAGS		:= $(FC_FLAGS) $(FC_INCS)
 
 CC_INCS		:= $(FFTW2_INCS)
 CCFLAGS		:= $(CC_FLAGS) $(CC_INCS)
 
-LD_LIBS		:= $(FFTW2_LIBS) $(FFTW3_LIBS) $(LIBXC_LIBS) $(MINPACK_LIBS) $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS)
+LD_LIBS		:= $(FFTW2_LIBS) $(FFTW3_LIBS) $(LIBXC_LIBS) $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(BLAS_LIBS)
 
 #* ---------------------------------------------------------------------
 #  Build rules: Do not edit

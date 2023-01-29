@@ -17,5 +17,4 @@ The libraries contained in this directory are the following:
 - fftw3       URL: http://www.fftw.org/
 - lapack      URL: http://www.netlib.org/lapack/
 - libxc       URL: https://tddft.org/programs/libxc/
-- minpack     URL: https://netlib.org/minpack/
 - scalapack   URL: http://www.netlib.org/scalapack/
