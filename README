@@ -6,8 +6,10 @@ electronic structure calculations.
 
 This distribution contains the following files and directories:
 
+README     this file
+LICENSE    the modified Berkeley Software Distribution (BSD) License
 bench      benchmark problems
-cores      pseudopotential files
+cores      NCP and PAW files
 doc        documentation
 lib        external libraries
 src        source files
@@ -27,7 +29,6 @@ Socorro is occuring through GitHub/GitLab.
 
 Socorro is an open-source project distributed under the
 modified Berkeley Software Distribution (BSD) License.
-See doc/LICENSE.md for details.
 
 # Installing
 ------------------------------------------------------------------------
