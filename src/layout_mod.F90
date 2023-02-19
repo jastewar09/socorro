@@ -276,9 +276,9 @@
         if (present(cutoff_in)) then
           lay%o%cutoff = cutoff_in
         else
-          call arg("den_cutoff",lay%o%cutoff,found)
+          call arg("density_cutoff",lay%o%cutoff,found)
           if (found) then
-            if (error(FLERR,lay%o%cutoff <= 0.0_double,"ERROR: den_cutoff <= 0")) goto 100
+            if (error(FLERR,lay%o%cutoff <= 0.0_double,"ERROR: density_cutoff <= 0")) goto 100
           else
             if (present(restf)) then
               if (i_access(restf)) tios = findfirsttag(restf,"CUTOFF")
@@ -290,7 +290,7 @@
               end if
               if (i_comm(restf)) call broadcast(FILE_SCOPE,lay%o%cutoff)
             else
-              if (error(FLERR,.true.,"ERROR: den_cutoff was not found")) goto 100
+              if (error(FLERR,.true.,"ERROR: density_cutoff was not found")) goto 100
             end if
           end if
         end if
