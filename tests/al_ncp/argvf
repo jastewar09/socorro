@@ -1,36 +1,70 @@
-!remap_type sjp
-kgroups   1
+! --- Control ------------------------------------------ !
 
-atomic_representation  ncp
+check_kpoints            no
+check_symmetry           no
 
-functional  lda
+restart                  off
+write_restart            off
 
-wf_cutoff    15.0d0  
-den_cutoff   60.0d0  
+forces                   off
+pressure                 off
 
-neighbor_range 6.0d0
+! --- Crystal structure and charge state --------------- !
 
-config_type         self-consistent
-config_steps        40
-config_convergence  density
-density_tolerance   1.0d-7
+neighbor_range           6.0d0
 
-nbands   4
+! --- Atomic representation ---------------------------- !
 
-kpoints   gmp
-mpparams  4 4 4
+atomic_representation    ncp
 
-kt   5.0d-3
+! --- Exchange-correlation ----------------------------- !
 
-solver_method      cg
-solver_directions  2
-solver_tolerance   1.0d-4
+!xctype_dependence       density
+!xctype_ddf_source       native
+!xctype_functional       lda
 
-forces   on
+xctype_dependence        density
+xctype_ddf_source        libxc
+xctype_exchange          1
+xctype_correlation       9
 
-mix_type    density
-mix_method  pulay
-mix_weight  0.95d0
+! --- Mesh --------------------------------------------- !
 
-restart         off
-write_restart   off
+density_cutoff           60.0d0
+
+! --- Electrons ---------------------------------------- !
+
+wf_cutoff                15.0d0
+
+nbands                   4
+kt                       5.0d-3
+
+kgroups                  1 !2
+kpoints                  gmp
+mpparams                 4 4 4
+
+! --- Calculation type --------------------------------- !
+
+config_type              self-consistent
+config_steps             50
+config_convergence       density
+density_tolerance        1.0d-8
+
+! --- Self-consistency --------------------------------- !
+
+self-consistency_method  mixing
+
+mix_type                 density
+mix_method               pulay
+mix_weight               0.95d0
+
+! --- Eigensolver -------------------------------------- !
+
+solver_method            cg
+solver_directions        3
+solver_tolerance         1.0d-5
+
+remap_type               sjp
+diagonalization_method   scalapack
+
+! --- End of the file ---------------------------------- !
