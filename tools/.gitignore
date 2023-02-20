@@ -1,9 +1,13 @@
 # Ignore everything ...
 
+ape/*
+atompaw/*
 fhi98PP/*
+opium/*
 
 # ... except these
 
 !.gitignore
 !README
 !Install.py
+!Convert.py
