@@ -39,11 +39,11 @@ wf_cutoff                15.0d0
 nbands                   4
 kt                       5.0d-3
 
-kgroups                  1 !2
+kgroups                  1
 kpoints                  gmp
 mpparams                 4 4 4
 
-! --- Calculation type --------------------------------- !
+! --- Configuration type ------------------------------- !
 
 config_type              self-consistent
 config_steps             50
