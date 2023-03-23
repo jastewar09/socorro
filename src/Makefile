@@ -1,11 +1,11 @@
-# ----- Socorro multi-machine makefile ------------------------------- #
+# ----- Socorro makefile --------------------------------------------- #
 
 SHELL	= /bin/bash
 PYTHON	= python
 
 # ----- Definitions -------------------------------------------------- #
 
-EXE	= socorro.x
+EXE	= socorro
 
 FSRC	= $(shell ls *.F90)
 CSRC	= $(shell ls *.c)
@@ -35,6 +35,7 @@ help	:
 	@ echo 'make depends                 Build the Fortran module dependency list'
 	@ echo 'make machine                 Build socorro using Makefile.machine settings'
 	@ echo 'make install                 Install socorro into ../build'
+	@ echo 'make socorro                 Shortcut for make release && make install using default options'
 	@ echo ''
 	@ echo 'where Makefile.machine is one of these files from src/MAKE/OPTIONS:'
 	@ echo ''
@@ -103,6 +104,9 @@ install	:
 	  if [ ! -d $(BIN_DIR) ] ; then mkdir $(BIN_DIR) ; fi ; \
 	  mv $(EXE) $(BIN_DIR) ; \
 	fi
+
+socorro	:
+	@ $(MAKE) release && make install
 
 .DEFAULT:
 	@ test -f MAKE/MACHINES/Makefile.$@ -o \
