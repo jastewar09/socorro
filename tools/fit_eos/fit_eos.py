@@ -4,12 +4,27 @@
 #
 """
 
+import os.path
 import sys
 import numpy as np
 
 from scipy.optimize import leastsq
 
-# --- Beginning of the main file --------------------------------------------------------------------------------------------- #
+# ---
+
+def FLERR():
+    """
+    Report a "file and line" string to the calling function.
+    """
+
+    frame = sys._getframe(1)
+
+    file = os.path.basename(frame.f_code.co_filename)
+    line = frame.f_lineno
+
+    return "(%s:%i)" % (file,line)
+
+# ---
 
 def birch_murnaghan(params, vol):
     """
@@ -135,10 +150,16 @@ def update_data(vol, nrg):
     else:
         vol_unit = read_arg("\nWhat are the lattice units (ang/bohr)", "ang", ["ang","bohr"])
         if (vol_unit == "bohr"): vol *= 0.529177249
-        lat = read_arg("\nWhat is the lattice type (sc/fcc/bcc)", "sc", ["sc","bcc","fcc"])
-        fac = 1.0
-        if (lat == "fcc"): fac = 0.25
-        if (lat == "bcc"): fac = 0.50
+        lat = read_arg("\nWhat is the lattice type (sc/bcc/fcc/hcp)", "sc", ["sc","bcc","fcc","hcp"])
+        if (lat == "sc"):
+            fac = 1.00
+        if (lat == "bcc"):
+            fac = 0.50
+        if (lat == "fcc"):
+            fac = 0.25
+        if (lat == "hcp"):
+            rat = read_arg("\nWhat is the c/a ratio", np.sqrt(8.0/3.0))
+            fac = np.sqrt( 3.0 / 4.0 )*( rat )
         vol = fac*(vol**3)
 
     nrg_unit = read_arg("\nWhat are the energy units (eV/Ry/Ha)", "eV", ["eV","Ry","Ha"])
@@ -155,12 +176,12 @@ def read_data():
     Load data from the input file.
     """
 
-    fname = read_arg("\nWhat is the filename containing the data", "energy.dat")
+    fname = read_arg("\nWhat is the name of the file containing the data", "energy.dat")
 
     try:
         f = open(fname, "rt") ; f.close()
     except:
-        print("\nERROR: The input file %s could not be opened" % (fname))
+        print("\nERROR: The input file %s could not be opened %s" % (fname,FLERR()))
         sys.exit()
 
     data = np.genfromtxt(fname, dtype = float, skip_header = 0, delimiter = " ")
@@ -174,7 +195,7 @@ def main():
     Execute the fitting and plotting routines.
     """
 
-    print("Welcome to eos_fit.py!")
+    print("\nWelcome to eos_fit.py!")
 
     vol, nrg = read_data()
     vol, nrg = update_data(vol, nrg)
@@ -201,31 +222,31 @@ def main():
     if (not no_plot):
 
         try:
-            import pylab as plt
+            import pylab as pl
         except:
-            print("\nERROR: pylab module not available, aborting plot")
+            print("\nERROR: The pylab module is not available %s" % (FLERR()))
             sys.exit()
 
         dat = np.linspace(np.min(vol),np.max(vol),100)
 
-        plt.rcParams['mathtext.fontset'] = 'cm'
-        plt.rcParams['font.family'] = 'serif'
-        plt.rcParams['font.serif'] = 'Times'
-        plt.rcParams['font.size'] = 12
-        plt.rcParams['figure.figsize'] = 6.0,4.5
+        pl.rcParams['mathtext.fontset'] = 'cm'
+        pl.rcParams['font.family'] = 'serif'
+        pl.rcParams['font.serif'] = 'Times'
+        pl.rcParams['font.size'] = 12
+        pl.rcParams['figure.figsize'] = 6.0,4.5
 
-        plt.plot(vol, nrg, "ro", label = "Data")
-        plt.plot(dat, birch_murnaghan(fit_bm, dat), label = 'Birch-Murnaghan EOS')
-        plt.plot(dat, murnaghan(fit_m, dat), label = 'Murnaghan EOS')
-        plt.plot(dat, universal(fit_u, dat), label = 'Universal EOS')
-        plt.plot(dat, poirier_tarantola(fit_pt, dat), label = 'Poirier-Tarantola EOS')
+        pl.plot(vol, nrg, "ro", label = "Raw Data")
+        pl.plot(dat, birch_murnaghan(fit_bm, dat), label = 'Birch-Murnaghan EOS')
+        pl.plot(dat, murnaghan(fit_m, dat), label = 'Murnaghan EOS')
+        pl.plot(dat, universal(fit_u, dat), label = 'Universal EOS')
+        pl.plot(dat, poirier_tarantola(fit_pt, dat), label = 'Poirier-Tarantola EOS')
 
-        plt.xlabel(r'Volume ($\mathrm{\AA}^3$)')
-        plt.ylabel(r'Energy (eV)')
+        pl.xlabel(r'Volume ($\mathrm{\AA}^3$)')
+        pl.ylabel(r'Energy (eV)')
 
-        plt.legend(loc = 'best')
-        plt.tight_layout()
-        plt.show()
+        pl.legend(loc = 'best')
+        pl.tight_layout()
+        pl.show()
 
     print("\nTask Finished.")
 
@@ -240,4 +261,4 @@ if  __name__ == "__main__":
 
     sys.exit(main())
 
-# --- End of the main file --------------------------------------------------------------------------------------------------- #
+# ---
