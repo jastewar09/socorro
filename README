@@ -8,13 +8,15 @@ This distribution contains the following files and directories:
 
 README     this file
 bench      benchmark problems
+build      install location
+cmake      cmake build files
 cores      ncp and paw files
-doc        documentation
-lib        external libraries
+input      simple test problems
+lib        third party libraries
+man        documentation
 src        source files
-tests      simple test problems
+tests      scripts and input for testing parts of Socorro
 tools      pre- and post-processing tools
-units      scripts and input for testing parts of Socorro
 
 # Availability 
 ------------------------------------------------------------------------
@@ -26,10 +28,10 @@ at https://dft.sandia.gov/ and https://www.osti.gov/biblio/1399221.
 ------------------------------------------------------------------------
 
 Socorro is an open-source project that is distributed under
-the modified BSD license. See doc/LICENSE for more details.
+the modified BSD license. See man/LICENSE for more details.
 
 # Installing, Using, Contributing, etc.
 ------------------------------------------------------------------------
 
-In general, please refer to the various files in doc for detailed
-information and instructions. See doc/README to get started.
+In general, please refer to the various files in man for detailed
+information and instructions. See man/README to get started.
